@@ -1,0 +1,94 @@
+<ion-view view-title="Goods">
+	<div class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
+		<div class="tabs">
+		  <a class="tab-item active" href="#">
+			<i class="icon ion-earth"></i>
+			Completed
+		  </a>
+		  <a class="tab-item" href="#">
+			<i class="icon ion-iphone"></i>
+			Incompleted
+		  </a>
+		</div>
+	  </div>
+	
+  <ion-content id="goods-list">
+  
+	
+	<div class="list" id="list-readmode" ng-hide="quickactions">
+		<a class="item item-thumbnail-left" href="#" on-hold="goodOnHold()">
+			
+		  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
+		  <h2>Basil Chicken</h2>
+		  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
+		</a>
+		<a class="item item-thumbnail-left" href="#">
+		
+		  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
+		  <h2>Festive quick salad with smoked chicken breast </h2>
+		  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
+		</a>
+		<a class="item item-thumbnail-left" href="#">
+		  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
+		  <h2>Beautiful tomato </h2>
+		  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
+		</a>
+		<a class="item item-thumbnail-left" href="#">
+		  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
+		  <h2>Festive salad with carrot </h2>
+		  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
+		</a>
+		<a class="item item-thumbnail-left" href="#">
+		  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
+		  <h2>Sausages on salad bed</h2>
+		  <p>Sausages on salad bed</p>
+		</a>
+	</div>
+	
+	<div class="list" id="list-editmode" ng-show="quickactions">
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
+			  <h2>Basil Chicken</h2>
+			  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
+			</a>
+		</ion-checkbox>
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
+			  <h2>Basil Chicken</h2>
+			  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
+			</a>
+		</ion-checkbox>
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			
+			  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
+			  <h2>Festive quick salad with smoked chicken breast </h2>
+			  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
+			</a>
+		</ion-checkbox>
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
+			  <h2>Beautiful tomato </h2>
+			  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
+			</a>
+		</ion-checkbox>
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
+			  <h2>Festive salad with carrot </h2>
+			  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
+			</a>
+		</ion-checkbox>
+		<ion-checkbox ng-model="filter.red">
+			<a class="item item-thumbnail-left" href="#">
+			  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
+			  <h2>Sausages on salad bed</h2>
+			  <p>Sausages on salad bed</p>
+			</a>
+		</ion-checkbox>
+	</div>
+  </ion-content>
+</ion-view>
