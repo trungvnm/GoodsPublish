@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'ionic'])
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'IonicGallery', 'ionic'])
 
    .run(function ($ionicPlatform) {
       $ionicPlatform.ready(function() {
@@ -45,12 +45,18 @@
 				    controller: 'QuickActionsCtrl'
 			    }
 		    }
-	      });
+	      })
+		.state('detail', {
+		    url: '/detail',
+			templateUrl: 'app/Goods/view/detail.html',
+			controller: 'DetailCtrl'
+		});
       $urlRouterProvider.otherwise('/app/completes');
     })
     
     angular.module('LelongApp.directives', []);
     angular.module('LelongApp.controllers', []);
     angular.module('LelongApp.services', ['ngResource']);
+	angular.module('IonicGallery', ['ionic','ion-gallery']);
 
 })();
