@@ -35,21 +35,14 @@
 
     <!-- Services -->
    
-     <!-- Directives -->
+    <!-- Directives -->
     <script src="js/directives/textChange.js"></script>
     <!-- Controllers -->
     <script src="js/controllers/homeCtrl.js"></script>
 
+	<script src="js/controllers.js"></script>
   </head>
   <body ng-app="LelongApp">
-    <ion-pane>
-        <section ng-controller="homeCtrl">
-            <ion-header-bar class="bar-stable">
-                <h1 class="title">LeLong Seller App</h1>
-            </ion-header-bar>
-            <ion-content>
-            </ion-content>
-        </section>
-    </ion-pane>
+	<ion-nav-view></ion-nav-view>
   </body>
 </html>
