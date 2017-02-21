@@ -5,9 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'ionic'])
+    var db=null;
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'ionic','ngCordova'])
 
-   .run(function ($ionicPlatform) {
+   .run(function ($ionicPlatform,$dbHelper) {
       $ionicPlatform.ready(function() {
         if(window.cordova && window.cordova.plugins.Keyboard) {
           // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -22,6 +23,8 @@
         if(window.StatusBar) {
           StatusBar.styleDefault();
         }
+        //initial db, table
+         db=$dbHelper.openDB(); 
       });
     })
 
