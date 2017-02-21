@@ -30,18 +30,18 @@
 	    .state('app', {
 		    url: '/app',
 		    abstract: true,
-		    templateUrl: 'templates/menu.html',
+		    templateUrl: 'app/Goods/menu.html',
 		    controller: 'MenuCtrl'
 	      })
         .state('app.completes', {
 		    url: '/completes',
 		    views: {
 			    'menuContent': {
-				    templateUrl: 'templates/completes.html',
+			        templateUrl: 'app/Goods/completes.html',
 				    controller: 'CompletesCtrl'
 			      },
 			      'quickActionsContent':{
-				    templateUrl: 'templates/quickactionsbar.html',
+			          templateUrl: 'app/Goods/quickactionsbar.html',
 				    controller: 'QuickActionsCtrl'
 			    }
 		    }
