@@ -6,7 +6,7 @@
         var params = {};
         params.isQuickActions = true;
         $scope.quickactions = true;
-        $rootScope.$broadcast('scanner-started', params);
+        $rootScope.$broadcast('updateIsQuickActions', params);
 		
 		
         document.addEventListener("backbutton", backButtonFunction, false);
