@@ -6,3 +6,13 @@
 #quick-actions-bar{position: fixed; top:0;left: 0; z-index: 20;height: 47px; background: #f8f8f8;}
 .button-clear.button-clear{    color: #b2b2b2;}
 .ionic .item-input-wrapper{    background: #eee}
+
+.list .detail-value{    color: #707070;
+    margin-top: 5px;
+    margin-bottom: 10px !important;
+	white-space: initial;}
+.list .input-label{font-weight: 500}
+
+.gallery-view .row{height: 100px !important; padding:0 !important}
+.gallery-view .row .image-container{display: inline-block; overflow: inherit;padding: 0;border-right: none;}
+.gallery-view .row .image-container img{position: initial}

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'ionic','ngCordova'])
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'IonicGallery', 'ionic', 'ngCordova'])
 
    .run(function ($ionicPlatform,$dbHelper,$rootScope) {
       $ionicPlatform.ready(function() {
@@ -29,31 +29,41 @@
     })
 
     .config(function($stateProvider, $urlRouterProvider) {
-      $stateProvider
-	    .state('app', {
-		    url: '/app',
-		    abstract: true,
-		    templateUrl: 'app/Goods/view/menu.html',
-		    controller: 'MenuCtrl'
-	      })
-        .state('app.completes', {
-		    url: '/completes',
-		    views: {
-			    'menuContent': {
-			        templateUrl: 'app/Goods/view/completes.html',
-				    controller: 'CompletesCtrl'
-			      },
-			      'quickActionsContent':{
-			          templateUrl: 'app/Goods/view/quickactionsbar.html',
-				    controller: 'QuickActionsCtrl'
-			    }
-		    }
-	      });
+        $stateProvider
+          .state('app', {
+              url: '/app',
+              abstract: true,
+              templateUrl: 'app/Goods/view/menu.html'
+              
+          })
+          .state('app.completes', {
+              url: '/completes',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'app/Goods/view/completes.html'
+                     
+                  },
+                  'quickActionsContent': {
+                      templateUrl: 'app/Goods/view/quickactionsbar.html'
+                     
+                  }
+              }
+          })
+          .state('detail', {
+              url: '/detail',
+              templateUrl: 'app/Goods/view/detail.html'
+              
+          })
+          .state('login', {
+              url: '/login',
+              templateUrl: 'app/Login/login.html'
+          });
       $urlRouterProvider.otherwise('/app/completes');
     })
     
     angular.module('LelongApp.directives', []);
     angular.module('LelongApp.controllers', []);
     angular.module('LelongApp.services', ['ngResource']);
+	angular.module('IonicGallery', ['ionic','ion-gallery']);
 
 })();

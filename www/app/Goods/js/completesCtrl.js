@@ -11,13 +11,7 @@
 		
         document.addEventListener("backbutton", backButtonFunction, false);
         function backButtonFunction(){
-            $("form").submit(function(e){
-                e.preventDefault();
-                alert("back pressed");
-                return false;
-				
-            });
-            return false;
+			e.preventDefault();
         }
     } 
 });
