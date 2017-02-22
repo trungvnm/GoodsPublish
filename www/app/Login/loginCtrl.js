@@ -11,7 +11,7 @@
         xhttpService.login(urlLogin, data).then(function (result) {
             // save user and token to localStogate
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
-            var token = { username: $scope.username, access_token: result.access_token, refresh_token: result.refresh_token };
+            var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
             tokenService.saveToken(token);
             $location.path('/app/completes');
             defer.resolve("success");

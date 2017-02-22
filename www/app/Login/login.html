@@ -1,6 +1,7 @@
 ﻿
 <ion-view view-title="Sign-In" name="login-view">
     <ion-content class="padding" ng-controller="loginCtrl">
+        <span style="color:red">{{errorMessage}}</span>
         <div class="list list-inset">
             <label class="item item-input">
                 <input type="text" placeholder="Username" ng-model="username">
