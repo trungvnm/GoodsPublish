@@ -38,31 +38,35 @@
     })
 
     .config(function($stateProvider, $urlRouterProvider) {
-      $stateProvider
-	    .state('app', {
-		    url: '/app',
-		    abstract: true,
-		    templateUrl: 'app/Goods/view/menu.html',
-		    controller: 'MenuCtrl'
-	      })
-        .state('app.completes', {
-		    url: '/completes',
-		    views: {
-			    'menuContent': {
-			        templateUrl: 'app/Goods/view/completes.html',
-				    controller: 'CompletesCtrl'
-			      },
-			      'quickActionsContent':{
-			          templateUrl: 'app/Goods/view/quickactionsbar.html',
-				    controller: 'QuickActionsCtrl'
-			    }
-		    }
-	      })
-		.state('detail', {
-		    url: '/detail',
-			templateUrl: 'app/Goods/view/detail.html',
-			controller: 'DetailCtrl'
-		});
+        $stateProvider
+          .state('app', {
+              url: '/app',
+              abstract: true,
+              templateUrl: 'app/Goods/view/menu.html'
+              
+          })
+          .state('app.completes', {
+              url: '/completes',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'app/Goods/view/completes.html'
+                     
+                  },
+                  'quickActionsContent': {
+                      templateUrl: 'app/Goods/view/quickactionsbar.html'
+                     
+                  }
+              }
+          })
+          .state('detail', {
+              url: '/detail',
+              templateUrl: 'app/Goods/view/detail.html'
+              
+          })
+          .state('login', {
+              url: '/login',
+              templateUrl: 'app/Login/login.html'
+          });
       $urlRouterProvider.otherwise('/app/completes');
     })
     
