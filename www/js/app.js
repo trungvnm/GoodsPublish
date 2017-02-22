@@ -23,17 +23,8 @@
           StatusBar.styleDefault();
         }
         //initial db, tables
-        var userFields="UserId integer primary key,UserName text,Password text,access_token text,refresh_token text,LoginAttempt integer,MaxPostingAllow integer,PostingAlready integer,NumberOfPhotosAllow integer";
-        var wizardFields="WizardId integer,DaysOfShip integer,ItemsCategory text,ShippingFee text";
-        var goodsPublishPhoto="Photoid integer,GoodPublishId integer,PhotoName text,PhotoUrl text,PhotoDescription text";
-        var goodsPublish="GoodPublishId integer,UserId integer,Title text,Subtitle text,Guid text,SalePrice real,msrp real,costprice real,SaleType text,Category integer,StoreCategory integer,Brand text,ShipWithin integer,ModelSkuCode text,State text,";
-        goodsPublish += "Link text,Description text,Video text,VideoAlign text,Active integer,Weight integer,Quantity integer,ShippingPrice text,WhoPay text,ShippingMethod text,ShipToLocation text,";
-        goodsPublish += "PaymentMethod text,GstType integer,OptionsStatus integer";
-        $rootScope.db= $dbHelper.openDB();  
-        $dbHelper.createTable("User",userFields);
-        $dbHelper.createTable("Wizard",wizardFields);
-        $dbHelper.createTable("GoodsPublish",goodsPublish);
-        $dbHelper.createTable("GoodsPublishPhoto",goodsPublishPhoto);
+        $rootScope.db= $dbHelper.openDB();         
+        $dbHelper.initialDB();                
       });
     })
 
