@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    angular.module("LelongApp.controllers").controller('homeCtrl', ['$scope', homeCtrl]);
+    angular.module("LelongApp.Home").controller('homeCtrl', ['$scope', homeCtrl]);
     /**
         home controller constructor
 	 */

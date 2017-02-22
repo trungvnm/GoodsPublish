@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.controllers").controller('CompletesCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
+﻿angular.module("LelongApp.Goods").controller('CompletesCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
     $scope.message = 'This is completes Page';
 	
     $scope.goodOnHold = function(){

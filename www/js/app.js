@@ -6,9 +6,18 @@
 
 (function () {
     angular.module('LelongApp', ['LelongApp.services', 'LelongApp.Goods', 'LelongApp.Home','LelongApp.Login', 'IonicGallery', 'ionic', 'ngCordova', 'ngIdle'])
+    .controller('idleCtrl', function ($scope, Idle, $location, $window) {
+        $scope.$on('IdleTimeout', function () {
+            console.log('time out after 30 minutes no action');
+            $window.localStorage.clear();
+            $location.path('/login');
+        });
 
-   .run(function ($ionicPlatform,$dbHelper,$rootScope) {
-      $ionicPlatform.ready(function() {
+    })
+   .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle) {
+       $ionicPlatform.ready(function () {
+        Idle.watch();
+        console.log('start watch app');
         if(window.cordova && window.cordova.plugins.Keyboard) {
           // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
           // for form inputs)
@@ -25,13 +34,13 @@
         //initial db, tables
         $rootScope.db= $dbHelper.openDB();         
         $dbHelper.initialDB();                
-        Idle.watch();
       });
     })
 
     .config(function ($stateProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
-        KeepaliveProvider.interval(10);
-        IdleProvider.windowInterrupt('focus');
+        IdleProvider.idle(5); // in seconds
+        IdleProvider.timeout(5); // in seconds
+        KeepaliveProvider.interval(2); // in seconds
 
         $stateProvider
           .state('app', {
