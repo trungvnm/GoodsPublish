@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'IonicGallery', 'ionic', 'ngCordova'])
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.Goods', 'LelongApp.Home','LelongApp.Login', 'IonicGallery', 'ionic', 'ngCordova', 'ngIdle'])
 
    .run(function ($ionicPlatform,$dbHelper,$rootScope) {
       $ionicPlatform.ready(function() {
@@ -33,11 +33,16 @@
         $dbHelper.createTable("User",userFields);
         $dbHelper.createTable("Wizard",wizardFields);
         $dbHelper.createTable("GoodsPublish",goodsPublish);
-        $dbHelper.createTable("GoodsPublishPhoto",goodsPublishPhoto);
+        $dbHelper.createTable("GoodsPublishPhoto", goodsPublishPhoto);
+
+        Idle.watch();
       });
     })
 
-    .config(function($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
+        KeepaliveProvider.interval(10);
+        IdleProvider.windowInterrupt('focus');
+
         $stateProvider
           .state('app', {
               url: '/app',
@@ -69,9 +74,12 @@
           });
       $urlRouterProvider.otherwise('/app/completes');
     })
-    
-    angular.module('LelongApp.directives', []);
-    angular.module('LelongApp.controllers', []);
+
+   
+    angular.module('LelongApp.Goods', []);
+    angular.module('LelongApp.Home', []);
+    angular.module('LelongApp.Login', []);
+
     angular.module('LelongApp.services', ['ngResource']);
 	angular.module('IonicGallery', ['ionic','ion-gallery']);
 

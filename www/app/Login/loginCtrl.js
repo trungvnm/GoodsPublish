@@ -1,4 +1,4 @@
-﻿angular.module('LelongApp.controllers', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService) {
+﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http, $location, xhttpService, tokenService) {
 
     $scope.username = "";
     $scope.password = "";
