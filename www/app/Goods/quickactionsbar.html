@@ -1,0 +1,14 @@
+<div class="button-bar" id="quick-actions-bar" ng-show="quickactions || searchaction">
+  <button class="button icon ion-upload" title="Upload" ng-show="quickactions"></button>
+  <button class="button icon ion-trash-b" ng-show="quickactions"></button>
+  <div class="bar bar-header item-input-inset" ng-show="searchaction">
+	  <label class="item-input-wrapper">
+		<i class="icon ion-ios-search placeholder-icon"></i>
+		<input type="search" placeholder="Search">
+	  </label>
+	  <button class="button button-clear" ng-click="cancelSearchingg()">
+		Cancel
+	  </button>
+	</div>
+</div>
+

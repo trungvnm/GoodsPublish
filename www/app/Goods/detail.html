@@ -1,0 +1,33 @@
+<ion-view view-title="Name of Good">
+	<ion-content>
+		<div class="button-bar" id="detail-actions">
+		  <a class="button button-positive">Edit</a>
+		  <a class="button button-positive" ng-click="goBack()">Back</a>
+		</div>
+		<ion-scroll direction="x" class="available-scroller" ng-load="modifyGallery()">
+		  <ion-gallery ion-gallery-items="photos" ion-gallery-row="30" ion-gallery-toggle="true"></ion-gallery>
+		</ion-scroll>
+		<div class="list">
+		  <label class="item item-input item-stacked-label">
+			<span class="input-label">Category</span>
+			<p class="detail-value">Air Cleaner / Refresher</p>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+			<span class="input-label">Name</span>
+			<p class="detail-value">Deerma Dem F330 Air Humidifier Aroma Air Purifier 3.8L Safety Mode</p>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+			<span class="input-label">Price</span>
+			<p class="detail-value">RM 58.00</p>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+			<span class="input-label">Ship To</span>
+			<p class="detail-value">Within Malaysia ,Ship By: Courier Services</p>
+		  </label>
+		  <label class="item item-input item-stacked-label">
+			<span class="input-label">Weight</span>
+			<p class="detail-value">1.2 (kg or dimension)</p>
+		  </label>
+		</div>
+	</ion-content>
+</ion-view>
