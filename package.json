@@ -21,7 +21,8 @@
     "cordova-plugin-device",
     "ionic-plugin-keyboard",
     "cordova-plugin-splashscreen",
-	  "cordova-sqlite-storage"
+	 "cordova-sqlite-storage",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "android"

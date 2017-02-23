@@ -77,7 +77,18 @@ a[disabled] {
 	color: white;
     padding-top: 4px;
 }
-
+/*Addnew page*/
+.button-width80px{
+    width: 80px;
+}
+#addnew-photo-preview{
+    height: 100px;
+    text-align: center;
+    padding: 0px;
+    color: #d6d6d6;
+    padding-top: 15px;
+}
+/*End Addnew page*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;
     opacity: 0.7;
