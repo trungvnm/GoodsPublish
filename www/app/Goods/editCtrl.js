@@ -1,4 +1,4 @@
-angular.module("LelongApp.controllers").controller("EditCtrl", function($scope, $rootScope){
+angular.module("LelongApp.Goods").controller("EditCtrl", function ($scope, $rootScope) {
 	
 	$scope.photos = [
 	  {

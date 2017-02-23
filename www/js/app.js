@@ -71,7 +71,7 @@
               url: '/login',
               templateUrl: 'app/Login/login.html'
           });
-      $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/app/completes');
     })
 
    
