@@ -38,7 +38,8 @@
       });
     })
 
-    .config(function ($stateProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
+    .config(function ($stateProvider, $ionicConfigProvider,$urlRouterProvider, IdleProvider, KeepaliveProvider) {
+		$ionicConfigProvider.tabs.position('bottom');
         IdleProvider.idle(5); // in seconds
         IdleProvider.timeout(18000); // in seconds
         KeepaliveProvider.interval(2); // in seconds
@@ -68,6 +69,11 @@
               url: '/detail',
               templateUrl: 'app/Goods/detail.html',
 			  controller: 'DetailCtrl'
+          })
+		  .state('edit', {
+              url: '/edit',
+              templateUrl: 'app/Goods/edit.html',
+			  controller: 'EditCtrl'
           })
           .state('login', {
               url: '/login',

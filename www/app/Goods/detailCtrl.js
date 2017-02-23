@@ -44,9 +44,11 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 	};
 	
 	$(document).ready(function(){
+		//Here your view content is fully loaded !!
 		var imagesInScreen = 3;
 		var imgWidth = $(window).width() / imagesInScreen;
+		var imgQuantity = $(".gallery-view .row .image-container img").length;
+		$(".gallery-view .row").width(imgWidth*imgQuantity);
 		$(".gallery-view .row .image-container img").width(imgWidth - 2);
-		
 	});
 });

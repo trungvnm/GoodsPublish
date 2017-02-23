@@ -13,7 +13,8 @@
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
             var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
             tokenService.saveToken(token);
-            $location.path('/app/completes');
+			window.location = '#/app/completes';
+            //$location.path('/app/completes');
             defer.resolve("success");
         }, function (err) {
             $scope.errorMessage ="invalid username or password. Please try again!"
