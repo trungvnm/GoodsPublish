@@ -49,7 +49,7 @@ a[disabled] {
 #addnew-button{
 	position: fixed;
     bottom: 60px;
-    right: 0;
+    right: 20px;
     background: #ff7676;
     z-index: 10;
     width: 55px;

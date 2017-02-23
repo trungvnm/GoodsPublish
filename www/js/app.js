@@ -53,12 +53,12 @@
               url: '/completes',
               views: {
                   'menuContent': {
-                      templateUrl: 'app/Goods/completes.html'
-                     
+                      templateUrl: 'app/Goods/completes.html',
+						controller: 'GoodsCtrl'
                   },
                   'quickActionsContent': {
-                      templateUrl: 'app/Goods/quickactionsbar.html'
-                     
+                      templateUrl: 'app/Goods/quickactionsbar.html',                     
+					  controller: 'QuickActionsCtrl'
                   }
               }
           })
