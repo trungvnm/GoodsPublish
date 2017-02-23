@@ -24,4 +24,11 @@
 			$scope.tabclass = '';
 		}
 	});
+	
+	$("#list-readmode > a.item .edit-button").on("click", function(){
+		$(this).closest("a.item").click(function(){
+			return false;
+		});
+		$(this).closest("a.item").css({"pointer-events": "none"});
+	});
 });
