@@ -13,6 +13,16 @@
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
             var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
             tokenService.saveToken(token);
+
+            //--key{wizardSetting: true}
+            // var wizardVal = $dbHelper.select("Setting", "SettingFieldId", " SettingFieldId = 'wizardSetting' ");
+            // if(wizardVal){
+            //     window.location = '#/app/completes';
+            //     defer.resolve("success");
+            // }
+            // $location.path('/wizard');
+            // defer.resolve("success");
+
 			window.location = '#/app/completes';
             //$location.path('/app/completes');
             defer.resolve("success");
