@@ -28,7 +28,7 @@
     <script src="lib/angular/angular-resource.min.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="lib/cordova/ng-cordova.min.js"></script>
+    <script src="js/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
     
     <!-- Initialize all the modules -->
@@ -40,23 +40,20 @@
     <script src="js/directives/textChange.js"></script>
     <!-- Controllers -->
     <script src="app/Home/homeCtrl.js"></script>
-	<script src="app/Goods/js/menuCtrl.js"></script>
-    <script src="app/Goods/js/completesCtrl.js"></script>
-    <script src="app/Goods/js/quickActionsCtrl.js"></script>
-	<script src="app/Goods/js/detailCtrl.js"></script>
-    <script src="app/Login/loginCtrl.js"></script>
-    <script src="app/services/tokenService.js"></script>
-    <script src="app/services/xhttpService.js"></script>
+	<script src="app/Goods/menuCtrl.js"></script>
+    <script src="app/Goods/completesCtrl.js"></script>
+    <script src="app/Goods/quickActionsCtrl.js"></script>
+	<script src="app/Goods/detailCtrl.js"></script>
+	<script src="app/Goods/editCtrl.js"></script>
 	
 	<!-- image gallery plugin -->
 	<link href="lib/ion-gallery/dist/ion-gallery.css" rel="stylesheet">
 	<script src="lib/ion-gallery/dist/ion-gallery.min.js"></script>
 	
 	<script src="lib/jquery/dist/jquery.min.js"></script>
-    <!-- ng-idle -->
-    <script src="app/directives/angular-idle.js"></script>
+
   </head>
-  <body ng-app="LelongApp" ng-controller="idleCtrl">
+  <body ng-app="LelongApp">
 	<ion-nav-view></ion-nav-view>
   </body>
 </html>

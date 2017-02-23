@@ -16,3 +16,52 @@
 .gallery-view .row{height: 100px !important; padding:0 !important}
 .gallery-view .row .image-container{display: inline-block; overflow: inherit;padding: 0;border-right: none;}
 .gallery-view .row .image-container img{position: initial}
+
+.tab-content{top:44px}
+a[disabled] {
+    pointer-events: none;
+}
+
+#list-readmode{margin-bottom: 80px}
+#list-readmode > a.item{left:0}
+#list-readmode > a.item.slided{
+	left: -100%;
+	-webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+#list-readmode > a.item .price{
+	color: #ff2424;
+	font-size: 16px;
+	position: absolute;
+    bottom: 7px;
+}
+#list-readmode > a.item .edit-button{
+	position: absolute;
+	right:10px;
+	bottom: 7px;
+	padding: 0 15px;
+	font-size: 15px
+}
+
+#addnew-button{
+	position: fixed;
+    bottom: 60px;
+    right: 0;
+    background: #ff7676;
+    z-index: 10;
+    width: 55px;
+    height: 55px;
+    text-align: center;
+    border-radius: 30px;
+	box-shadow: -1px 2px 3px 0px rgba(143, 143, 143, 0.52);
+}
+
+#addnew-button .button{
+	color: white;
+    padding-top: 4px;
+}
+
+#detail-actions .button{border-radius: 0}

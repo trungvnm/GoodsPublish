@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('LelongApp.Home').directive('tdTextChange', tdTextChange);
+    angular.module('LelongApp.directives').directive('tdTextChange', tdTextChange);
 
     /**
 	 * Factory function for the directive for ng-text-change.

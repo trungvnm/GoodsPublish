@@ -1,25 +1,25 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('LelongApp.services').service('tokenService', ['$q', '$window', '$http', TokenService]);
+    angular.module('LelongApp.services').service('tokenService', ['$q', '$window','$http', TokenService]);
 
     /**
 	 * @constructor
 	 */
-    function TokenService($q, $window, $http) {
+    function TokenService($q, $window) {
         this.$q = $q;
         this.$window = $window;
         this.$http = $http;
-        this.Token_Stogare_Key = "LelongToken_User_" + this.$window.localStorage.getItem("Lelong_UserLogined");
+        this.Token_key = "LelongToken_User_" + this.$window.localStorage.getItem("Lelong_UserLogined");
     }
 
     TokenService.prototype.Token = {
         username: "",
         access_token: "",
-        refresh_token: ""
+        refresh_token:""
     }
-
-
+    
+    TokenService.prototype.Token_Stogare_Key = this.Token_key;
 
     /**
 	 * Load Token data from the local storage.
@@ -35,8 +35,9 @@
         this.$window.localStorage.setItem(this.Token_Stogare_Key, angular.toJson(token));
     }
 
-    TokenService.prototype.refresh = function (refresh_token) {
-        var defer = this.$q.defer();
+    TokenService.prototype.refresh = function(refresh_token)
+    {
+        var defer = $q.defer();
         var request = {
             method: 'POST',
             url: "https://www.lelong.com.my/oauth2/token",
@@ -47,7 +48,7 @@
             data: 'cliend_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=refresh_token&refresh_token=' + encodeURIComponent(refresh_token)
         };
 
-        this.$http(request).success(function (result) {
+        $http(request).success(function (result) {
             // update token
             var token = this.getToken();
             token.refresh_token = result.refresh_token;
@@ -56,14 +57,14 @@
             defer.resolve(token);
         }).error(function (err, status) {
             // goto login page
-            defer.reject(err);
+            defer.reject(err); 
         });
         return defer.promise;
     }
 
     TokenService.prototype.verify = function () {
         var token = this.getToken();
-        var defer = this.$q.defer();
+        var defer = $q.defer();
         var request = {
             method: 'POST',
             url: "https://www.lelong.com.my/api/v2/verify",
@@ -73,10 +74,11 @@
             }
         };
 
-        this.$http(request).success(function (result) {
+        $http(request).success(function (result) {
             defer.resolve(token);
-        }).error(function (err, status) {
-            if (status === 400 && (err == "access token is valid but expired" || err == "access token is invalid")) {
+        }).error(function (err,status) {
+            if (status === 400 && (err == "access token is valid but expired" || err == "access token is invalid"))
+            {
                 // refresh token
                 this.refresh().then(function (token) {
                     defer.resolve(token);
