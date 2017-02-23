@@ -5,10 +5,19 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.controllers', 'LelongApp.directives', 'IonicGallery', 'ionic', 'ngCordova'])
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.Goods', 'LelongApp.Home','LelongApp.Login', 'IonicGallery', 'ionic', 'ngCordova', 'ngIdle'])
+    .controller('idleCtrl', function ($scope, Idle, $location, $window) {
+        $scope.$on('IdleTimeout', function () {
+            console.log('time out after 30 minutes no action');
+            $window.localStorage.clear();
+            $location.path('/login');
+        });
 
-   .run(function ($ionicPlatform,$dbHelper,$rootScope) {
-      $ionicPlatform.ready(function() {
+    })
+   .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle) {
+       $ionicPlatform.ready(function () {
+        Idle.watch();
+        console.log('start watch app');
         if(window.cordova && window.cordova.plugins.Keyboard) {
           // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
           // for form inputs)
@@ -23,57 +32,53 @@
           StatusBar.styleDefault();
         }
         //initial db, tables
-        var userFields="UserId integer primary key,UserName text,Password text,access_token text,refresh_token text,LoginAttempt integer,MaxPostingAllow integer,PostingAlready integer,NumberOfPhotosAllow integer";
-        var wizardFields="WizardId integer,DaysOfShip integer,ItemsCategory text,ShippingFee text";
-        var goodsPublishPhoto="Photoid integer,GoodPublishId integer,PhotoName text,PhotoUrl text,PhotoDescription text";
-        var goodsPublish="GoodPublishId integer,UserId integer,Title text,Subtitle text,Guid text,SalePrice real,msrp real,costprice real,SaleType text,Category integer,StoreCategory integer,Brand text,ShipWithin integer,ModelSkuCode text,State text,";
-        goodsPublish += "Link text,Description text,Video text,VideoAlign text,Active integer,Weight integer,Quantity integer,ShippingPrice text,WhoPay text,ShippingMethod text,ShipToLocation text,";
-        goodsPublish += "PaymentMethod text,GstType integer,OptionsStatus integer";
-        $rootScope.db= $dbHelper.openDB();  
-        $dbHelper.createTable("User",userFields);
-        $dbHelper.createTable("Wizard",wizardFields);
-        $dbHelper.createTable("GoodsPublish",goodsPublish);
-        $dbHelper.createTable("GoodsPublishPhoto",goodsPublishPhoto);
+        $rootScope.db= $dbHelper.openDB();         
+        $dbHelper.initialDB();                
       });
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-		$ionicConfigProvider.tabs.position('bottom'); // other values: top
-      $stateProvider
-	    .state('app', {
-		    url: '/app',
-		    abstract: true,
-		    templateUrl: 'app/Goods/menu.html',
-		    controller: 'MenuCtrl'
-	      })
-        .state('app.completes', {
-		    url: '/completes',
-		    views: {
-			    'menuContent': {
-			        templateUrl: 'app/Goods/completes.html',
-				    controller: 'CompletesCtrl'
-			      },
-			      'quickActionsContent':{
-			          templateUrl: 'app/Goods/quickactionsbar.html',
-				    controller: 'QuickActionsCtrl'
-			    }
-		    }
-	      })
-		.state('detail', {
-		    url: '/detail',
-			templateUrl: 'app/Goods/detail.html',
-			controller: 'DetailCtrl'
-		})
-		.state('edit', {
-		    url: '/edit',
-			templateUrl: 'app/Goods/edit.html',
-			controller: 'EditCtrl'
-		});
-      $urlRouterProvider.otherwise('/app/completes');
+    .config(function ($stateProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
+        IdleProvider.idle(5); // in seconds
+        IdleProvider.timeout(5); // in seconds
+        KeepaliveProvider.interval(2); // in seconds
+
+        $stateProvider
+          .state('app', {
+              url: '/app',
+              abstract: true,
+              templateUrl: 'app/Goods/menu.html'
+              
+          })
+          .state('app.completes', {
+              url: '/completes',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'app/Goods/completes.html'
+                     
+                  },
+                  'quickActionsContent': {
+                      templateUrl: 'app/Goods/quickactionsbar.html'
+                     
+                  }
+              }
+          })
+          .state('detail', {
+              url: '/detail',
+              templateUrl: 'app/Goods/detail.html'
+              
+          })
+          .state('login', {
+              url: '/login',
+              templateUrl: 'app/Login/login.html'
+          });
+      $urlRouterProvider.otherwise('/login');
     })
-    
-    angular.module('LelongApp.directives', []);
-    angular.module('LelongApp.controllers', []);
+
+   
+    angular.module('LelongApp.Goods', []);
+    angular.module('LelongApp.Home', []);
+    angular.module('LelongApp.Login', []);
+
     angular.module('LelongApp.services', ['ngResource']);
 	angular.module('IonicGallery', ['ionic','ion-gallery']);
 
