@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $ionicSideMenuDelegate) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService) {
     $scope.account = {};
     $scope.account.name = 'NGUYEN TIEN MANH';
     $scope.toggleLeft = function () {
@@ -16,5 +16,9 @@
 	$scope.$on('updateIsSearchFlag', function (event, args) {
         // do what you want to do
 		$scope.issearch = args.issearch;
-    });
+	});
+	$scope.logout = function () {
+	    tokenService.removeToken();
+	    $location.url('/login');
+	}
 })

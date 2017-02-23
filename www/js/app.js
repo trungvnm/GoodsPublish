@@ -9,13 +9,14 @@
     .controller('idleCtrl', function ($scope, Idle, $location, $window) {
         $scope.$on('IdleTimeout', function () {
             console.log('time out after 30 minutes no action');
-            $window.localStorage.clear();
+            tokenService.removeToken();
             $location.path('/login');
         });
 
     })
-   .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle) {
+   .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle,tokenService) {
        $ionicPlatform.ready(function () {
+        tokenService.checkUserLogin();
         Idle.watch();
         console.log('start watch app');
         if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -39,7 +40,7 @@
 
     .config(function ($stateProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
         IdleProvider.idle(5); // in seconds
-        IdleProvider.timeout(5); // in seconds
+        IdleProvider.timeout(18000); // in seconds
         KeepaliveProvider.interval(2); // in seconds
 
         $stateProvider

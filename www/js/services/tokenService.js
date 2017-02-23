@@ -1,16 +1,17 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('LelongApp.services').service('tokenService', ['$q', '$window', '$http', TokenService]);
+    angular.module('LelongApp.services').service('tokenService', ['$q', '$window', '$http', '$location', TokenService]);
 
     /**
 	 * @constructor
 	 */
-    function TokenService($q, $window, $http) {
+    function TokenService($q, $window, $http, $location) {
         this.$q = $q;
         this.$window = $window;
+        this.$location = $location;
         this.$http = $http;
-        this.Token_Stogare_Key = "LelongToken_User_" + this.$window.localStorage.getItem("Lelong_UserLogined");
+        this.Token_Stogare_Key = 'LelongToken_User_' + this.$window.localStorage.getItem('Lelong_UserLogined');
     }
 
     TokenService.prototype.Token = {
@@ -25,15 +26,27 @@
 	 * Load Token data from the local storage.
 	 */
     TokenService.prototype.getToken = function () {
-        return angular.fromJson(this.$window.localStorage.getItem(this.Token_Stogare_Key)) || [];
+        return JSON.parse(this.$window.localStorage.getItem(this.Token_Stogare_Key)) || [];
     };
 
     /**
 	 * Save Token data in the local storage.
 	 */
     TokenService.prototype.saveToken = function (token) {
-        this.$window.localStorage.setItem(this.Token_Stogare_Key, angular.toJson(token));
+        this.$window.localStorage.setItem(this.Token_Stogare_Key, JSON.stringify(token));
     }
+
+    TokenService.prototype.checkUserLogin = function () {
+        var token = this.getToken();
+        if (!token.access_token) {
+            this.$window.localStorage.removeItem(this.Token_Stogare_Key);
+            this.$location.path('/login');
+        }
+    }
+    TokenService.prototype.removeToken = function () {
+        this.$window.localStorage.removeItem(this.Token_Stogare_Key);
+    }
+
 
     TokenService.prototype.refresh = function (refresh_token) {
         var defer = this.$q.defer();
