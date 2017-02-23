@@ -46,7 +46,8 @@
           .state('app', {
               url: '/app',
               abstract: true,
-              templateUrl: 'app/Goods/menu.html'
+              templateUrl: 'app/Goods/menu.html',
+			  controller: 'MenuCtrl'
               
           })
           .state('app.completes', {
@@ -64,14 +65,14 @@
           })
           .state('detail', {
               url: '/detail',
-              templateUrl: 'app/Goods/detail.html'
-              
+              templateUrl: 'app/Goods/detail.html',
+			  controller: 'DetailCtrl'
           })
           .state('login', {
               url: '/login',
               templateUrl: 'app/Login/login.html'
           });
-        $urlRouterProvider.otherwise('/app/completes');
+        $urlRouterProvider.otherwise('/login');
     })
 
    

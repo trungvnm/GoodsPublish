@@ -2,84 +2,85 @@
 	<ion-content>
 		
 	</ion-content>
-	<ion-tabs class="tabs-positive tabs-icon-top">
+	<ion-tabs class="tabs-positive tabs-icon-top" ng-class="tabclass">
 
 	  <ion-tab title="All" icon-on="ion-grid" icon-off="ion-grid">
 		<!-- Tab 1 content -->
 		<ion-content class="has-header tab-content">
 			<div class="list" id="list-readmode" ng-hide="quickactions">
-				<a class="item item-thumbnail-left" ng-class="goodSlided" href="#/detail" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold()" ng-disabled="quickactions">
+				<a class="item item-thumbnail-left" ng-class="goodSlided" href="#/detail" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions">
 					
 				  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
 				  <h2>Basil Chicken</h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 12</span></p>
+					
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
 				  <h2>Festive quick salad with smoked chicken breast </h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 18</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
 				  <h2>Beautiful tomato </h2>
 				  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 06</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
 				  <h2>Festive salad with carrot </h2>
 				  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 28</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
 				  <h2>Sausages on salad bed</h2>
 				  <p>Sausages on salad bed</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 56</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 					
 				  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
 				  <h2>Basil Chicken</h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 31</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
 				  <h2>Festive quick salad with smoked chicken breast </h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 0</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
 				  <h2>Beautiful tomato </h2>
 				  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 04</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
 				  <h2>Festive salad with carrot </h2>
 				  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 08</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()" ng-disabled="quickactions" on-hold="goodOnHold('synced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
 				  <h2>Sausages on salad bed</h2>
 				  <p>Sausages on salad bed</p>
-				  <p class="price">RM 88.00</p>
+				  <p class="price"><span class="small">RM</span> 88.00<span class="quantity"><span class="small">QTY</span> 11</span></p>
 				  <button class="button button-small edit-button button-positive" ng-click="editButtonClick($event)">Edit</button>
 				</a>
 			</div>
@@ -133,60 +134,60 @@
 		</ion-content>
 	  </ion-tab>
 
-	  <ion-tab title="Unsynced" icon-on="ion-iphone" icon-off="ion-iphone">
+	  <ion-tab title="Unsync" icon-on="ion-iphone" icon-off="ion-iphone">
 		<!-- Tab 2 content -->
 		<ion-content class="has-header tab-content">
 			<div class="list" id="list-readmode" ng-hide="quickactions">
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 					
 				  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
 				  <h2>Basil Chicken</h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
 				  <h2>Festive quick salad with smoked chicken breast </h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
 				  <h2>Beautiful tomato </h2>
 				  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
 				  <h2>Festive salad with carrot </h2>
 				  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
 				  <h2>Sausages on salad bed</h2>
 				  <p>Sausages on salad bed</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold()">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 					
 				  <img src="http://static.oprah.com/images/201302/orig/201302-orig-beautiful-chicken-600x411.jpg">
 				  <h2>Basil Chicken</h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20120307-DSC_6933.jpg">
 				  <h2>Festive quick salad with smoked chicken breast </h2>
 				  <p>Basil Chicken with Grilled Kale and Heirloom Tomatoes</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121003-DSC_32146.jpg">
 				  <h2>Beautiful tomato </h2>
 				  <p>Beautiful tomato, cucumber, pepper, carrot, radish, olive, parsley and cheese cream festive salad</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121009-DSC_3625.jpg">
 				  <h2>Festive salad with carrot </h2>
 				  <p>Festive salad with carrot, cucumber, radish, pepper, cheese, parsley and dill on lettuce bed</p>
 				</a>
-				<a class="item item-thumbnail-left" href="#/detail">
+				<a class="item item-thumbnail-left" href="#/detail" on-hold="goodOnHold('unsynced')">
 				  <img src="http://vivianaball.ro/cookingwithvivi/wp-content/uploads/2012/11/20121002-DSC_3193.jpg">
 				  <h2>Sausages on salad bed</h2>
 				  <p>Sausages on salad bed</p>
@@ -250,4 +251,5 @@
 	<span id="addnew-button">
 		<a class="button button-icon icon ion-android-add" href="#/edit"></a>
 	</span>
+	
 </ion-view>

@@ -9,6 +9,12 @@
 	$scope.openSearch = function(){
 		var params = {};
 		params.issearch = true;
+		$scope.issearch = true;
         $rootScope.$broadcast('updateIsSearch', params);
 	};
+	
+	$scope.$on('updateIsSearchFlag', function (event, args) {
+        // do what you want to do
+		$scope.issearch = args.issearch;
+    });
 })

@@ -1,9 +1,14 @@
 /* Empty. Add your own CSS if you like */
+.small{font-size: 12px}
 #goods-list{top:93px}
 #menulist .icon{font-size: 26px; opacity: 0.8}
 #menulist a.item:hover{background: #d6d6d6}
 
 #quick-actions-bar{position: fixed; top:0;left: 0; z-index: 20;height: 47px; background: #f8f8f8;}
+#quick-actions-bar .back{display: block;
+    padding: 7px 10px;
+    color: #444;}
+
 .button-clear.button-clear{    color: #b2b2b2;}
 .ionic .item-input-wrapper{    background: #eee}
 
@@ -38,6 +43,15 @@ a[disabled] {
 	position: absolute;
     bottom: 7px;
 }
+#list-readmode > a.item .quantity{
+	color: black;
+    font-weight: bold;
+    font-size: 13px;
+    background: #e5e5e5;
+    padding: 0 7px;
+    margin-left: 20px;
+    border: solid 1px #d6d6d6;
+}
 #list-readmode > a.item .edit-button{
 	position: absolute;
 	right:10px;
@@ -65,3 +79,13 @@ a[disabled] {
 }
 
 #detail-actions .button{border-radius: 0}
+.pop-mask{    background: white;
+    opacity: 0.7;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;}
+
+.tabhide .tab-nav a{pointer-events: none; opacity: 0.3}
