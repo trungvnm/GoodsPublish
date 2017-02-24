@@ -94,6 +94,15 @@
               templateUrl: 'app/Goods/edit.html',
 			  controller: 'EditCtrl'
           })
+          .state('app.wizard', {
+              url: '/wizard',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'app/Wizard/wizard.html',
+						controller: 'WizardCtrl'
+                  }
+              }
+          })
           .state('login', {
               url: '/login',
               templateUrl: 'app/Login/login.html'
