@@ -1,0 +1,40 @@
+<ion-side-menus enable-menu-with-back-views="false" ng-controller="NavbarCtrl">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-stable" align-title="left">
+		<ion-nav-back-button>
+		</ion-nav-back-button>
+		<ion-nav-buttons side="left">
+			<button class="button button-icon button-clear ion-android-arrow-back" menu-toggle="left" ng-click="goBack()">
+			</button>
+		</ion-nav-buttons>
+		<ion-nav-buttons side="right" id="global-head-actions">
+			<button class="button global-action button-icon icon ion-ios-search-strong" ng-click="openSearch()" ng-show="isHasAction('search')"></button>
+			<button class="button global-action button-icon icon ion-ios-cloud-upload" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></button>
+			<button class="button global-action button-icon icon ion-android-sync" ng-click="exeMainAction('sync')()" ng-show="isHasAction('sync')"></button>
+			<button class="button global-action button-icon icon ion-archive" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></button>
+			<button class="button global-action button-icon icon ion-android-delete" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></button>
+			
+			<button class="button global-action button-icon icon ion-edit" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></button>
+			<button class="button global-action button-icon icon ion-android-cancel" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
+			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button>
+		</ion-nav-buttons>
+	</ion-nav-bar>
+    <ion-nav-view name="menuContent">
+	</ion-nav-view>
+	
+	<ion-nav-view name="searchContent">
+		<div class="button-bar" id="quick-actions-bar" ng-show="isSearchEnabled">
+		  <div class="bar bar-header item-input-inset">
+			  <label class="item-input-wrapper">
+				<i class="icon ion-ios-search placeholder-icon"></i>
+				<input type="search" placeholder="Search">
+			  </label>
+			  <button class="button button-clear" ng-click="cancelSearchingg()">
+				Cancel
+			  </button>
+			</div>
+		</div>
+	</ion-nav-view>
+	
+  </ion-side-menu-content>
+</ion-side-menus>

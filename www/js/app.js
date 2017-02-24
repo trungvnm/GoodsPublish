@@ -52,6 +52,13 @@
 			  controller: 'MenuCtrl'
               
           })
+		  .state('navbar', {
+              url: '/navbar',
+              abstract: true,
+              templateUrl: 'app/Global/navbar.html',
+			  controller: 'NavbarCtrl'
+              
+          })
           .state('app.completes', {
               url: '/completes',
               views: {
@@ -69,10 +76,14 @@
               templateUrl: 'app/Goods/addnew.html',
 			  controller: 'addnewCtrl'
           })
-          .state('detail', {
+          .state('navbar.detail', {
               url: '/detail',
-              templateUrl: 'app/Goods/detail.html',
-			  controller: 'DetailCtrl'
+			  views: {
+                  'menuContent': {
+                      templateUrl: 'app/Goods/detail.html',
+						controller: 'DetailCtrl'
+                  }
+              }
           })
 		  .state('edit', {
               url: '/edit',
@@ -90,6 +101,7 @@
     angular.module('LelongApp.Goods', []);
     angular.module('LelongApp.Home', []);
     angular.module('LelongApp.Login', []);
+	angular.module('LelongApp.Global', []);
 
     angular.module('LelongApp.services', ['ngResource']);
 	angular.module('IonicGallery', ['ionic','ion-gallery']);

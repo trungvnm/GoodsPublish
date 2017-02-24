@@ -43,6 +43,28 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		$rootScope.$ionicGoBack();
 	};
 	
+	var actions = [
+		{
+			name: 'edit',
+			action: function(){
+				window.location = '#/edit';
+			}
+		},
+		{
+			name: 'delete',
+			action: function(){
+				alert('delete action');
+			}
+		},
+		{
+			name: 'search',
+			action: function(){
+				window.location = '#/edit';
+			}
+		},
+	];
+	$rootScope.$broadcast("setMainActions", actions);
+	
 	$(document).ready(function(){
 		//Here your view content is fully loaded !!
 		var imagesInScreen = 3;

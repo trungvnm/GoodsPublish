@@ -41,16 +41,10 @@ a[disabled] {
 	color: #ff2424;
 	font-size: 16px;
 	position: absolute;
-    bottom: 7px;
+	/* bottom: 7px; */
 }
 #list-readmode > a.item .quantity{
-	color: black;
-    font-weight: bold;
-    font-size: 13px;
-    background: #e5e5e5;
-    padding: 0 7px;
-    margin-left: 20px;
-    border: solid 1px #d6d6d6;
+	font-size: 16px;
 }
 #list-readmode > a.item .edit-button{
 	position: absolute;
@@ -100,3 +94,5 @@ a[disabled] {
     z-index: 5;}
 
 .tabhide .tab-nav a{pointer-events: none; opacity: 0.3}
+.global-action{margin-left: 10px}
+.global-action:before{font-size: 25px !important;}
