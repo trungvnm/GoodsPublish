@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
@@ -27,6 +30,9 @@
         }
     },
     "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         }
