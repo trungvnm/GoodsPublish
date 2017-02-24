@@ -43,6 +43,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		$rootScope.$ionicGoBack();
 	};
 	
+	//-- setup action buttons
 	var actions = [
 		{
 			name: 'edit',
