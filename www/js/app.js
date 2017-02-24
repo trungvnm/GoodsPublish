@@ -71,10 +71,14 @@
 					  controller: 'QuickActionsCtrl'
                   }
               }
-          }).state('addnew', {
+          }).state('navbar.addnew', {
               url: '/addnew',
-              templateUrl: 'app/Goods/addnew.html',
-			  controller: 'addnewCtrl'
+              views: {
+                  'menuContent': {
+                      templateUrl: 'app/Goods/addnew.html',
+					  controller: 'addnewCtrl'
+                  }
+              }
           })
           .state('navbar.detail', {
               url: '/detail',
@@ -94,7 +98,7 @@
               url: '/login',
               templateUrl: 'app/Login/login.html'
           });
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/app/completes');
     })
 
    

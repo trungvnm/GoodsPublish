@@ -19,7 +19,7 @@
 		window.location = '#/edit';
 	};
 	$scope.addnewButtonClick = function(){
-		window.location = '#/addnew';
+		window.location = '#/navbar/addnew';
 	};
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
 		$scope.quickactions = args.quickactions;
