@@ -1,0 +1,86 @@
+<ion-view>
+<ion-header-bar class="bar-light" align-title="center">
+    <div>
+        <div class="h1 title">Add new</div>
+        <button class="button button-clear button-positive" ng-click="cancelClick()">Cancel</button>
+    </div>
+</ion-header-bar>
+<!--content-->
+<ion-content>
+    <div ng-controller="addnewCtrl">
+    <div class="list">
+        <!--Step 1-->
+        <div id="addnew-step1" ng-show="step==1">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Title</span>
+                <input type="text" placeholder="Title">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Category</span>
+                <input type="text" placeholder="Category">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Condition</span>
+                <input type="text" placeholder="Condition">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Brand</span>
+                <input type="text" placeholder="Brand">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Price</span>
+                <input type="text" placeholder="Price">
+            </label>
+        </div>
+        <!--Step 2 photo upload-->
+        <div id="addnew-step2" ng-show="step==2">
+            <div id="addnew-photo-preview">
+                <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" style="width: 80px;">
+                <img ng-show="imgURI === undefined" src="./img/ionic.png" style="width: 80px;">
+            </div>
+            <div style="display: flex;padding: 5px;">  
+                <button class="button icon ion-ios-camera button-width80px" ng-click="choosePhotoAction()"></button>
+            </div>
+        </div>
+        <!--Step 3 optional field-->
+        <div id="addnew-step3" ng-show="step==3">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Quantity</span>
+                <input type="number" placeholder="Quantity">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Weight</span>
+                <input type="number" placeholder="weight">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Whopay</span>
+                <input type="text" placeholder="whopay">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">shiptolocation</span>
+                <input type="text" placeholder="Shiptolocation">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Shippingmethod</span>
+                <input type="text" placeholder="Shippingmethod">
+            </label>
+        </div>
+    </div>
+    <div style="display: flex;padding: 5px;">
+        <div style="width: 50%">
+            <button class="button icon icon-save button-small button-positive button-width80px">
+                Save
+            </button>
+        </div>
+        <div style="text-align: right;width: 50%">
+            <button class="button button-small button-stable button-width80px" ng-show="step>=2" ng-click="prevClick()">
+                Previous
+            </button>
+            <button class="button button-small button-stable button-width80px" ng-disabled="step==3" ng-click="nextClick()">
+                Next
+            </button>
+        </div>
+    </div>
+    </div>
+</ion-content>
+</ion-view>

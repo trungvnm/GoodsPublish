@@ -6,7 +6,7 @@ angular.module('LelongApp.services')
 			    return dbConnect;
             },
             initialDB:function(){
-                var settingFields="SettingFieldId integer primary key,IsInstalled integer";
+                var settingFields="SettingFieldId text,IsInstalled text";
                 var userFields="UserId integer primary key,UserName text,Password text,access_token text,refresh_token text,LoginAttempt integer,MaxPostingAllow integer,PostingAlready integer,NumberOfPhotosAllow integer";
                 var wizardFields="WizardId  integer primary key,DaysOfShip integer,ItemsCategory text,ShippingFee text";
                 var goodsPublishPhoto="Photoid integer primary key,GoodPublishId integer,PhotoName text,PhotoUrl text,PhotoDescription text";
@@ -22,7 +22,7 @@ angular.module('LelongApp.services')
             select:function(tableName,fields,whereClause){
                 var whereCondition="";                
                 if(whereClause!==undefined && whereClause.trim().length>0){
-                    whereCondition= "WHERE " + whereCondition;
+                    whereCondition= "WHERE " + whereClause;
                 }
                 var command="SELECT " + fields + " FROM " + tableName + " " + whereCondition;
 
@@ -104,7 +104,7 @@ angular.module('LelongApp.services')
     function extractTableFieldsAndValues(objwithFieldsAndValues,isUpdate){
         var arrFields=[];
         var arrValues=[];
-        var arrKeys=['SettingFieldId','UserId','WizardId','Photoid','GoodPublishId'];
+        var arrKeys=['UserId','WizardId','Photoid','GoodPublishId'];
         var result;
         if(isUpdate){
             Object.keys(objwithFieldsAndValues).forEach(function(key){

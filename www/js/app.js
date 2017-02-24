@@ -64,6 +64,10 @@
 					  controller: 'QuickActionsCtrl'
                   }
               }
+          }).state('addnew', {
+              url: '/addnew',
+              templateUrl: 'app/Goods/addnew.html',
+			  controller: 'addnewCtrl'
           })
           .state('detail', {
               url: '/detail',
