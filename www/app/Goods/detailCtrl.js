@@ -55,13 +55,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 			action: function(){
 				alert('delete action');
 			}
-		},
-		{
-			name: 'search',
-			action: function(){
-				window.location = '#/edit';
-			}
-		},
+		}
 	];
 	$rootScope.$broadcast("setMainActions", actions);
 	
