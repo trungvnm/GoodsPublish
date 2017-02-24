@@ -22,7 +22,7 @@ angular.module('LelongApp.services')
             select:function(tableName,fields,whereClause){
                 var whereCondition="";                
                 if(whereClause!==undefined && whereClause.trim().length>0){
-                    whereCondition= "WHERE " + whereCondition;
+                    whereCondition= "WHERE " + whereClause;
                 }
                 var command="SELECT " + fields + " FROM " + tableName + " " + whereCondition;
 
