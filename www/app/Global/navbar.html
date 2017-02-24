@@ -12,7 +12,7 @@
 			<button class="button global-action button-icon icon ion-ios-cloud-upload" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></button>
 			<button class="button global-action button-icon icon ion-android-sync" ng-click="exeMainAction('sync')()" ng-show="isHasAction('sync')"></button>
 			<button class="button global-action button-icon icon ion-archive" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></button>
-			<button class="button global-action button-icon icon ion-android-delete" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></button>
+			<button class="button global-action button-icon icon ion-android-delete" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></button>
 			
 			<button class="button global-action button-icon icon ion-edit" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></button>
 			<button class="button global-action button-icon icon ion-android-cancel" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>

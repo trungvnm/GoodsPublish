@@ -1,8 +1,49 @@
 ﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService){
+	$scope.disabled = {};
 	$scope.mainActions = {};
 	$scope.subActions = {};
 	$scope.$on("setMainActions", function(event, actionsList){
 		$scope.mainActions = actionsList;
+	});
+	$scope.$on("setSubActions", function(event, actionsList){
+		$scope.subActions = actionsList;
+	});
+	$scope.$on("disableMainAction", function(event, name){
+		for (var i = 0; i < $scope.mainActions.length; i++){
+			var action = $scope.mainActions[i];
+			if (action.name == name){
+				$scope.disabled[name] = true;
+				return;
+			}
+		}
+	});
+	$scope.$on("enableMainAction", function(event, name){
+		for (var i = 0; i < $scope.mainActions.length; i++){
+			var action = $scope.mainActions[i];
+			if (action.name == name){
+				$scope.disabled[name] = false;
+				return;
+			}
+		}
+	});
+	
+	$scope.$on("disableSubAction", function(event, name){
+		for (var i = 0; i < $scope.subActions.length; i++){
+			var action = $scope.subActions[i];
+			if (action.name == name){
+				$scope.disabled[name] = true;
+				return;
+			}
+		}
+	});
+	$scope.$on("enableSubAction", function(event, name){
+		for (var i = 0; i < $scope.subActions.length; i++){
+			var action = $scope.subActions[i];
+			if (action.name == name){
+				$scope.disabled[name] = false;
+				return;
+			}
+		}
 	});
 	
 	$scope.isHasAction = function(name){
@@ -42,12 +83,10 @@
 	
 	// when click search button, open search box on header
 	$scope.openSearch = function(){
-		//var params = {};
-		//params.issearch = true;
 		$scope.isSearchEnabled = true;
-        //$rootScope.$broadcast('updateIsSearch', params);
 	};
 	
+	// action for cancel searching button
 	$scope.cancelSearchingg = function(){
 		$scope.isSearchEnabled = false;
 	}
