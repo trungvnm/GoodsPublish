@@ -1,0 +1,36 @@
+<ion-view view-title="Setup Wizards">
+<ion-content ng-controller="WizardCtrl" ng-init="initwizard()">
+    <span style="color:red">{{errorMessage}}</span>
+    <div class="list" id="detail-actions">
+        <button class="button button-icon icon ion-ios-arrow-back" ng-click="goBack()">          
+        </button>
+        <button class="button button-icon icon ion-ios-download" style="float: right" ng-click="save()">          
+        </button>
+        
+    </div> 
+    <div class="list">
+        <label class="item item-input item-stacked-label">
+        <span class="input-label">Your items will usually ship in</span>
+        <input type="number" placeholder="[choice of days]" ng-model="DaysOfShip"/>
+        </label>   
+    
+        <label class="item item-input item-stacked-label">
+            <span class="input-label">Select 3 of your items category</span>
+            <div style=" height: 200px;overflow-y: scroll;overflow-x: hidden">
+                <ion-checkbox ng-repeat="item in values"
+                    ng-model="checkItems[item.code]" >            
+                        {{ item.name }}
+                </ion-checkbox>
+            </div>
+            <div class="item" >
+                <pre ng-bind="values | json"></pre> 
+            </div>
+         </label>
+         <label class="item item-input item-stacked-label">
+            <span class="input-label">Shipping Fees for</span> 
+            <div><span style="font-weight: 500"> Peninsular <input placeholder="[per Item / KG / FOC]" ng-model="Pe"/></span></div>
+            <div><span style="font-weight: 500"> East Malaysia <input placeholder="[per Item / KG / FOC]" ng-model="EM"/></span></div>
+         </label>
+    </div>
+</ion-content>
+</ion-view>
