@@ -16,7 +16,8 @@
 			
 			<button class="button global-action button-icon icon ion-edit" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></button>
 			<button class="button global-action button-icon icon ion-android-cancel" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
-			<button class="button global-action button-icon icon ion-arrow-right-c" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></button>
+			<button class="button global-action button-icon icon ion-ios-arrow-left" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></button>
+			<button class="button global-action button-icon icon ion-ios-arrow-right" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></button>
 			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button>
 		</ion-nav-buttons>
 	</ion-nav-bar>
