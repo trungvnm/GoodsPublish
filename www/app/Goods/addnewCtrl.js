@@ -1,5 +1,5 @@
 angular.module("LelongApp.Goods")
-.controller("addnewCtrl",function($scope,$ionicActionSheet,$cordovaCamera){
+.controller("addnewCtrl",function($scope,$ionicActionSheet,$cordovaCamera,$ionicHistory){
     $scope.step=1;
 
     $scope.nextClick=function(){
@@ -9,6 +9,11 @@ angular.module("LelongApp.Goods")
     $scope.prevClick=function(){
          $scope.step -=1;
     }
+
+    $scope.cancelClick=function(){
+        $ionicHistory.goBack();    
+    }
+
 /* ActionSheet */
     $scope.choosePhotoAction = function() {
     

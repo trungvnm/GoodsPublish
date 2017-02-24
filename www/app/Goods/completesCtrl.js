@@ -18,6 +18,9 @@
 	$scope.editButtonClick = function($event){
 		window.location = '#/edit';
 	};
+	$scope.addnewButtonClick = function(){
+		window.location = '#/addnew';
+	};
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
 		$scope.quickactions = args.quickactions;
 		if (!$scope.quickactions){

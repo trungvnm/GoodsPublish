@@ -2,7 +2,7 @@
 <ion-header-bar class="bar-light" align-title="center">
     <div>
         <div class="h1 title">Add new</div>
-        <button class="button button-clear button-positive">Cancel</button>
+        <button class="button button-clear button-positive" ng-click="cancelClick()">Cancel</button>
     </div>
 </ion-header-bar>
 <!--content-->
@@ -41,6 +41,29 @@
             <div style="display: flex;padding: 5px;">  
                 <button class="button icon ion-ios-camera button-width80px" ng-click="choosePhotoAction()"></button>
             </div>
+        </div>
+        <!--Step 3 optional field-->
+        <div id="addnew-step3" ng-show="step==3">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Quantity</span>
+                <input type="number" placeholder="Quantity">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Weight</span>
+                <input type="number" placeholder="weight">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Whopay</span>
+                <input type="text" placeholder="whopay">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">shiptolocation</span>
+                <input type="text" placeholder="Shiptolocation">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Shippingmethod</span>
+                <input type="text" placeholder="Shippingmethod">
+            </label>
         </div>
     </div>
     <div style="display: flex;padding: 5px;">
