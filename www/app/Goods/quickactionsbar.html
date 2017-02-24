@@ -4,13 +4,11 @@
   <button class="button icon ion-upload" title="Upload" ng-show="quickactions && (list == 'all' || list == 'unsynced')"></button>
   <button class="button icon ion-trash-b" ng-show="quickactions"></button>
   <div class="bar bar-header item-input-inset" ng-show="searchaction">
-	  <label class="item-input-wrapper">
-		<i class="icon ion-ios-search placeholder-icon"></i>
+		<button class="button button-icon button-clear ion-android-arrow-back" ng-click="cancelSearchingg()">
+			</button>
+	  <label class="item-input-wrapper" style="background: none;">
 		<input type="search" placeholder="Search">
 	  </label>
-	  <button class="button button-clear" ng-click="cancelSearchingg()">
-		Cancel
-	  </button>
 	</div>
 </div>
 
