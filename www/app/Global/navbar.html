@@ -8,16 +8,27 @@
 			</button>
 		</ion-nav-buttons>
 		<ion-nav-buttons side="right" id="global-head-actions">
-			<button class="button global-action button-icon icon ion-ios-search-strong" ng-click="openSearch()" ng-show="isHasAction('search')"></button>
+			<!-- button class="button global-action button-icon icon ion-ios-search-strong" ng-click="openSearch()" ng-show="isHasAction('search')"></button>
 			<button class="button global-action button-icon icon ion-ios-cloud-upload" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></button>
 			<button class="button global-action button-icon icon ion-android-sync" ng-click="exeMainAction('sync')()" ng-show="isHasAction('sync')"></button>
 			<button class="button global-action button-icon icon ion-archive" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></button>
 			<button class="button global-action button-icon icon ion-android-delete" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></button>
-			
+			<i class="button button-icon global-action icon fa fa-bars" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></i>
 			<button class="button global-action button-icon icon ion-edit" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></button>
 			<button class="button global-action button-icon icon ion-android-cancel" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
 			<button class="button global-action button-icon icon ion-ios-arrow-left" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></button>
 			<button class="button global-action button-icon icon ion-ios-arrow-right" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></button>
+			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button -->
+			
+			<i class="button global-action button-icon icon fa fa-search" aria-hidden="true" ng-click="openSearch()" ng-show="isHasAction('search')"></i>
+			<i class="button global-action button-icon icon fa fa-upload" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
+			<i class="button global-action button-icon icon fa fa-refresh" aria-hidden="true" ng-click="exeMainAction('sync')()" ng-show="isHasAction('sync')"></i>
+			<i class="button global-action button-icon icon fa fa-floppy-o" aria-hidden="true" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></i>
+			<i class="button button-icon global-action icon fa fa-trash-o" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></i>
+			<i class="button global-action button-icon icon fa fa-pencil" aria-hidden="true" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></i>
+			<button class="button global-action button-icon icon ion-android-cancel" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
+			<i class="button global-action button-icon icon fa fa-angle-left" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
+			<i class="button global-action button-icon icon fa fa-angle-right" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button>
 		</ion-nav-buttons>
 	</ion-nav-bar>

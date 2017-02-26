@@ -1,8 +1,11 @@
-﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService) {
-
+﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper) {
+	
     $scope.username = "";
     $scope.password = "";
     $scope.errorMessage = "";
+	$scope.goNext = function(){
+		window.location = '#/app/completes';
+	};
     $scope.login = function () {
         $scope.errorMessage = "";
         var defer = $q.defer();
@@ -13,6 +16,24 @@
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
             var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
             tokenService.saveToken(token);
+			
+			// get user from User table
+			$dbHelper.selectRecords('User', 'UserId', 'UserName==\''+$scope.username+'\'', function(result){
+				if (result.length > 0){
+					$window.localStorage.setItem("userid", result[0].UserId);
+					$scope.goNext();
+				}
+				else{
+					// if current user has not stored before, save new one to User table, and get user id to go further
+					$dbHelper.insert('User', {
+						UserName: $scope.username, 
+						Password: encodeURIComponent($scope.password)
+					}, function(result){
+						$window.localStorage.setItem("userid", result.insertId);
+						$scope.goNext();
+					});
+				}
+			});
 
             //--key{wizardSetting: true}
             // var wizardVal = $dbHelper.select("Setting", "SettingFieldId", " SettingFieldId = 'wizardSetting' ");
@@ -23,8 +44,7 @@
             // $location.path('/wizard');
             // defer.resolve("success");
 
-			window.location = '#/app/completes';
-            //$location.path('/app/completes');
+			//window.location = '#/app/completes';
             defer.resolve("success");
         }, function (err) {
             $scope.errorMessage ="invalid username or password. Please try again!"

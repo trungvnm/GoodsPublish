@@ -1,5 +1,23 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
-    $scope.message = 'This is completes Page';
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window) {
+	$scope.init = function(){
+		$scope.goods = [];
+		// load goods data from local database
+		var userId = $window.localStorage.getItem("userid");
+		//$dbHelper.selectRecords('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'', function(result){
+		$dbHelper.selectRecords('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', '', function(result){
+			for (var i = 0; i<result.length;i++){
+				var good = result[i];
+				var photoWhere = 'GoodPublishId = \''+result+'\'';
+				$dbHelper.selectRecords('GoodsPublishPhoto', 'PhotoUrl', photoWhere, function(photoResult){
+					if (photoResult.length > 0){
+						good.photoUrl = photoResult[0].PhotoUrl;
+					}
+				});
+				$scope.goods.push(good);
+			}
+		});
+	};
+	
     $scope.goodOnHold = function(listType){
         var params = {};
         params.isQuickActions = true;
@@ -32,12 +50,7 @@
 		$("#list-readmode > a.item").click(function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
 				return false;
-			/*$(this).closest("a.item").click(function(){
-				return false;
-			});
-			$(this).closest("a.item").css({"pointer-events": "none"});*/
 		});
 
 	});
-	
 });

@@ -90,9 +90,10 @@ a[disabled] {
     z-index: 5;}
 
 .tabhide .tab-nav a{pointer-events: none; opacity: 0.3}
-.global-action{margin-left: 10px;}
+.global-action{margin-left: 10px; }
 .global-action:before{font-size: 25px !important;}
 
 #gallery{position: fixed; top: 45px}
 .detail-form{top:160px}
+
 

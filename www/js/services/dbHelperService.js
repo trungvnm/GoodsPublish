@@ -42,8 +42,34 @@ angular.module('LelongApp.services')
                     deferred.reject(err);
                 });
                 return deferred.promise;
-            },        
-            insert:function(table,obj){
+            },  
+			selectRecords:function(tableName,fields,whereClause, finishCallback){
+                var whereCondition="";                
+                if(whereClause!==undefined && whereClause.trim().length>0){
+                    whereCondition= "WHERE " + whereClause;
+                }
+                var command="SELECT " + fields + " FROM " + tableName + " " + whereCondition;
+
+                console.log("SELECT COMMAND: " + command);
+
+                var deferred =$q.defer();
+                var qr=runQuery(command,[],function(res){
+                   var result=[];
+                   if(res.rows.length>0){
+                       for(var i=0;i<res.rows.length;i++){
+                           result.push(res.rows.item(i));
+                       }
+                   }
+                   deferred.resolve(result);
+				   if (finishCallback != undefined)
+						finishCallback(result);
+                },function(err){
+                    console.log("ERROR: " + JSON.stringify(err));
+                    deferred.reject(err);
+                });
+                return deferred.promise;
+            },  
+            insert:function(table,obj, finishCallback){
                 var tbl=extractTableFieldsAndValues(obj,false);
                 var esValue=EscapeValues(tbl.fields);
                 var command="INSERT INTO " + table + " (" + tbl.fields + ") " + "VALUES(" + esValue + ")";
@@ -51,9 +77,11 @@ angular.module('LelongApp.services')
                 console.log("INSERT COMMAND: " + command);
 
                 var deferred =$q.defer();
-                var qr=runQuery(command,[tbl.values],function(res){
+                var qr=runQuery(command,tbl.values.split(','),function(res){
                      console.log("INSERT SUCCESS: " + res.insertId);
                      deferred.resolve(res);
+					 if (finishCallback != undefined)
+						finishCallback(res);
                 },function(err){
                     console.log("INSERT FAILED: " + JSON.stringify(err))
                     deferred.reject(err);

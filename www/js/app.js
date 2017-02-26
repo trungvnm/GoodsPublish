@@ -34,7 +34,8 @@
         }
         //initial db, tables
         $rootScope.db= $dbHelper.openDB();         
-        $dbHelper.initialDB();                
+        $dbHelper.initialDB();
+		//$dbHelper.insert('GoodsPublish', {GoodPublishId: '1', UserId: '1', Title: 'tmTitle', SalePrice: 'tmSaleTitle', Quantity: '12', Description: 'tmDescriptionn'});
       });
     })
 
@@ -107,7 +108,7 @@
               url: '/login',
               templateUrl: 'app/Login/login.html'
           });
-        $urlRouterProvider.otherwise('/app/completes');
+        $urlRouterProvider.otherwise('/login');
     })
 
    
