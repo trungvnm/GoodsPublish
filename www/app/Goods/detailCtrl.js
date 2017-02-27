@@ -1,5 +1,5 @@
-angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper) {
-	
+angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory) {
+	var id = $stateParams.id;
 	$scope.photos = [
 	  {
 		src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
@@ -57,9 +57,22 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 				if (navigator.notification){
 					navigator.notification.confirm('Are you sure to delete this item?', function(result){
 						if (result == 1){
-							$dbHelper.delete('GoodsPublish', '').then(function(result){
-								
-							});
+							var id = $stateParams.id;
+							if (id != undefined){
+								$dbHelper.delete('GoodsPublish', 'GoodPublishId=\''+id+'\'').then(function(res){
+									if (res.result){ //  Delete successful
+										$cordovaToast.showLongTop('Delete successful!').then(function () {
+											$ionicHistory.clearCache().then(function(){ 
+											   $state.go('app.completes'); 
+											});
+										});
+									}
+									else{
+										//  Delete failed
+										$cordovaToast.showLongTop('Save failed!');
+									}
+								});
+							}
 						}
 					});
 				}

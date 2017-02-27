@@ -23,5 +23,17 @@
 		var params = {};
 		params.issearch = false;
 		$rootScope.$broadcast("updateIsSearchFlag", params);
+	};
+	
+	$scope.multiDelete = function(){
+		$rootScope.$broadcast("multiDelete", {});
+	};
+	
+	$scope.searchboxkeyUp = function($event){
+		if ($event.keyCode == 13){ // Enter
+			var params = {};
+			params.searchkey = $scope.searchkey;
+			$rootScope.$broadcast("search", params);
+		}
 	}
 })

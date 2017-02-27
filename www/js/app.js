@@ -16,7 +16,7 @@
         })
         .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle, tokenService) {
             $ionicPlatform.ready(function () {
-                tokenService.checkUserLogin();
+                //tokenService.checkUserLogin();
                 Idle.watch();
                 console.log('start watch app');
                 if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -96,7 +96,7 @@
                     }
                 })
                 .state('navbar.detail', {
-                    url: '/detail',
+                    url: '/detail/{id}',
                     views: {
                         'menuContent': {
                             templateUrl: 'app/Goods/detail.html',

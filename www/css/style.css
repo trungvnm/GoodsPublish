@@ -96,4 +96,7 @@ a[disabled] {
 #gallery{position: fixed; top: 45px}
 .detail-form{top:160px}
 
-
+.filter-caption{background: #f5cdcd;
+    line-height: 26px;
+    display: block;
+    padding-left: 15px;}

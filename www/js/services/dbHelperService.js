@@ -73,9 +73,11 @@ angular.module('LelongApp.services')
 
                 var deferred = $q.defer();
                 var qr = runQuery(command, [], function (res) {
+					res.result = true;
                     console.log("DELETE SUCCESS: " + JSON.stringify(res));
                     deferred.resolve(res);
                 }, function (err) {
+					res.result = false;
                     console.log("DELETE FAILED: " + JSON.stringify(err));
                     deferred.reject(err);
                 });

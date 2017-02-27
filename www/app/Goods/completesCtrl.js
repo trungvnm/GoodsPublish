@@ -1,10 +1,15 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService) {
-	$scope.init = function(){
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, $cordovaToast) {
+	// select many goods by user and extra conditions
+	function selectGoods(whereClause){
 		$scope.goods = [];
 		// load goods data from local database
 		var token = tokenService.getToken();
 		var userId = token.userid;// $window.localStorage.getItem("userid");
-		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'').then(function(result){
+		var fullCondition = 'UserId=\''+userId+'\'';
+		if (whereClause && whereClause != ''){
+			fullCondition += ' AND ' + whereClause;
+		}
+		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', fullCondition).then(function(result){
 			for (var i = 0; i<result.length;i++){
 				var good = result[i];
 				var photoWhere = 'GoodPublishId = \''+result+'\'';
@@ -16,6 +21,10 @@
 				$scope.goods.push(good);
 			}
 		});
+	}
+	
+	$scope.init = function(){
+		selectGoods();
 	};
 	
     $scope.goodOnHold = function(listType){
@@ -43,6 +52,43 @@
 		$scope.quickactions = args.quickactions;
 		if (!$scope.quickactions){
 			$scope.tabclass = '';
+		}
+	});
+	$scope.$on('search', function(event, args){
+		$scope.goods = [];
+		var key = args.searchkey;
+		var whereClause = 'Title LIKE \'%'+key+'%\'';
+		$scope.filterMessage = 'Search for \''+key+'\':';
+		selectGoods(whereClause);
+		
+		var params = {};
+		params.issearch = false;
+        $rootScope.$broadcast('updateIsSearch', params);
+		$rootScope.$broadcast('updateIsSearchFlag', params);
+	});
+	$scope.$on('multiDelete', function(event, args){
+		if (navigator.notification){
+			navigator.notification.confirm('Are you sure to delete selected items?', function(result){
+				if (result == 1){
+					var ids = [];
+					$scope.goods.forEach(function(g){
+						ids.push(g.GoodPublishId);
+					});
+					if (ids.length > 0){
+						var whereClause = 'GoodPublishId IN (' + ids.join(',') + ')';
+						$dbHelper.delete('GoodsPublish', whereClause).then(function(res){
+							if (res.result){
+								$cordovaToast.showLongTop('Delete successful!');
+								$scope.init();
+								$scope.quickactions = false;
+							}
+							else{
+								$cordovaToast.showLongTop('Delete failed!');
+							}
+						});
+					}
+				}
+			})
 		}
 	});
 	

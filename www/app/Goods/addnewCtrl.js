@@ -1,5 +1,5 @@
 angular.module("LelongApp.Goods")
-    .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService) {
+    .controller("addnewCtrl", function ($scope,$window,$dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile,tokenService,$state) {
 
         $scope.tokenServ = tokenService.getToken();
 
@@ -49,7 +49,10 @@ angular.module("LelongApp.Goods")
                 }
                 setTimeout(function () {
                     $cordovaToast.showLongTop('Save successfully!').then(function () {
-                        window.location = '#/app/completes';
+                        //window.location = '#/app/completes';
+						$ionicHistory.clearCache().then(function(){ 
+						   $state.go('app.completes'); 
+						});
                     });
                 }, 3000);
             }, function (err) {

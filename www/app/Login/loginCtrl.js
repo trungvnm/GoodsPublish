@@ -7,9 +7,6 @@
 		$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
 	};
     $scope.login = function () {
-		$scope.goNext();
-		return;
-		
         $scope.errorMessage = "";
         var defer = $q.defer();
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
