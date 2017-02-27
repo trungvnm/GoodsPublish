@@ -15,12 +15,14 @@
             // save user and token to localStogate
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
             var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
-            tokenService.saveToken(token);
+            
 			
 			// get user from User table
 			$dbHelper.select('User', 'UserId', 'UserName==\''+$scope.username+'\'').then(function(result){
 				if (result.length > 0){
-					$window.localStorage.setItem("userid", result[0].UserId);
+					//$window.localStorage.setItem("userid", result[0].UserId);
+					token.userid = result[0].UserId;
+					tokenService.saveToken(token);
 					$scope.goNext();
 				}
 				else{
@@ -29,7 +31,9 @@
 						UserName: $scope.username, 
 						Password: encodeURIComponent($scope.password)
 					}).then(function(result){
-						$window.localStorage.setItem("userid", result.insertId);
+						token.userid = result.insertId;
+						tokenService.saveToken(token);
+						//$window.localStorage.setItem("userid", result.insertId);
 						$scope.goNext();
 					});
 				}

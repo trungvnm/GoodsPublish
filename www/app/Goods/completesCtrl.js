@@ -1,9 +1,9 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService) {
 	$scope.init = function(){
 		$scope.goods = [];
 		// load goods data from local database
-		var userId = $window.localStorage.getItem("userid");
-		//$dbHelper.selectRecords('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'', function(result){
+		var token = tokenService.getToken();
+		var userId = token.userid;// $window.localStorage.getItem("userid");
 		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'').then(function(result){
 			for (var i = 0; i<result.length;i++){
 				var good = result[i];

@@ -1,6 +1,6 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window) {
     $scope.account = {};
-    $scope.account.name = 'NGUYEN TIEN MANH';
+    $scope.account.name = $window.localStorage.getItem("Lelong_UserLogined");
     $scope.toggleLeft = function () {
         $ionicSideMenuDelegate.toggleLeft();
     };
