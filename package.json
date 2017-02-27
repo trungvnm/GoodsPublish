@@ -23,7 +23,8 @@
     "cordova-plugin-splashscreen",
 	 "cordova-sqlite-storage",
     "cordova-plugin-camera",
-    "cordova-plugin-image-picker"
+    "cordova-plugin-image-picker",
+    "cordova-plugin-x-toast"
   ],
   "cordovaPlatforms": [
     "android"
