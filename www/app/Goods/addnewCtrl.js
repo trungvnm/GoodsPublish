@@ -1,14 +1,11 @@
 angular.module("LelongApp.Goods")
-    .controller("addnewCtrl", function ($scope, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast) {
+    .controller("addnewCtrl", function ($scope,$window,$dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast,tokenService) {
 
         $scope.init = function () {
+            $scope.tokenServ=tokenService.getToken();
             $scope.step = 1;
             $scope.imgURI = [];
-            $scope.goodItem = {};
-            $scope.test1 = [];
-            $scope.test2 = [];
-            disableNext();
-            disablePrev();
+            $scope.goodItem = {UserId:$scope.tokenServ.userid};           
         }
 
         $scope.$on("$ionicView.leave", function (event, data) {
@@ -28,39 +25,12 @@ angular.module("LelongApp.Goods")
                 action: function () {
                     $scope.saveClick();
                 }
-            },
-            {
-                name: 'next',
-                action: function () {
-                    $scope.nextClick();
-                }
-            },
-            {
-                name: 'prev',
-                action: function () {
-                    $scope.prevClick();
-                }
             }
         ];
         $rootScope.$broadcast("setMainActions", actions);
 
-        function disableNext() {
-            if ($scope.step >= 3) {
-                $rootScope.$broadcast("disableMainAction", "next");
-            } else {
-                $rootScope.$broadcast("enableMainAction", "next");
-            }
-        }
-        function disablePrev() {
-            if ($scope.step <= 1) {
-                $rootScope.$broadcast("disableMainAction", "prev");
-            } else {
-                $rootScope.$broadcast("enableMainAction", "prev");
-            }
-        }
-
         /**End Top bar actions */
-        $scope.saveClick = function () {
+        $scope.saveClick = function () {            
             //console.log(JSON.stringify($scope.goodItem));
             $dbHelper.insert("GoodsPublish", $scope.goodItem).then(function (res) {
                 console.log("Success: " + JSON.stringify(res))
@@ -75,37 +45,21 @@ angular.module("LelongApp.Goods")
                     };
                 }
                 setTimeout(function () {
-                    $cordovaToast.showLongTop('Save successful!', function (sucess) {
-                        console.log('window.location==completes');
+                    $cordovaToast.showLongTop('Save successfully!').then(function(){
                         window.location = '#/app/completes';
-                    }, function (err) {
-                        console.log('window.location failed');
-                        window.location = '#/app/completes';
-                    });
+                    });                                         
                 }, 3000);
             }, function (err) {
                 console.log("ERROR: " + JSON.stringify(err));
             });
-        }
-
-        $scope.getItem = function () {
-            $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
-                $scope.test1 = JSON.stringify(res);
-                console.log($scope.test1);
-            });
-            $dbHelper.select("GoodsPublishPhoto", "*", "").then(function (res) {
-                $scope.test2 = JSON.stringify(res);
-            });
-        }
+        }       
 
         $scope.nextClick = function () {
             $scope.step += 1;
-            disableNext();
         }
 
         $scope.prevClick = function () {
             $scope.step -= 1;
-            disablePrev();
         }
 
         $scope.cancelClick = function () {
@@ -156,7 +110,7 @@ angular.module("LelongApp.Goods")
                 targetWidth: 300,
                 targetHeight: 300,
                 popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: false
+                saveToPhotoAlbum: true
             };
 
             $cordovaCamera.getPicture(options).then(function (imageData) {
