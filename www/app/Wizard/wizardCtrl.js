@@ -1,6 +1,6 @@
 angular.module("LelongApp.Wizard",[])
 .controller('WizardCtrl', function ($scope, $q, $window, $http,$location,$dbHelper, xhttpService, tokenService)  {
-    $scope.values=  [
+    $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
     {code:3, name:"Fasion" },
@@ -12,92 +12,104 @@ angular.module("LelongApp.Wizard",[])
     {code:9, name:"Sports & Recreation" },
     {code:10, name:"Books & Comics" }
     ];
-    $scope.selectedValues= []; //initial selections
-    $scope.checkItems = { };
+    $scope.checkItems = {};
     $scope.isnew = false;
-    $scope.ischange = false;
     $scope.objWizard = {};
-    $scope.save = function () {
-        
-        debugger;
-        var defer = $q.defer();
-        for(i in $scope.checkItems) {
-            if($scope.checkItems[i] == true) {
-                objWizard.ItemsCategory += i;
+    $scope.errorMessage = "";
+    $scope.peninsular ="";
+    $scope.eastmalaysia="";
+    $scope.save = function () {        
+        if ($scope.IsValid())
+        {
+            var defer = $q.defer();        
+            $scope.objWizard.ItemsCategory= "";
+           for(i in $scope.checkItems) {
+                if($scope.checkItems[i])
+                {
+                    $scope.objWizard.ItemsCategory += i;                
+                }
+                if($scope.checkItems != null)
+                {
+                    $scope.objWizard.ItemsCategory += ",";
+                }    
             }
-            if  ($scope.checkItems > 0)
+
+            $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
+
+            $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
+        
+            if  ($scope.isnew)
             {
-                objWizard.ItemsCategory += ",";
+                $dbHelper.insert('Wizard',$scope.objWizard);
+            }
+            else
+            {
+                $dbHelper.update('Wizard',$scope.objWizard);
             }
         }
 
-        objWizard.ShippingFee = $scope.Pe + "," + $scope.EM;
-       
-        if  ($scope.isnew && $scope.ischange)
+        
+    }
+
+    $scope.IsValid = function()
+    {
+        var count = 0;
+        if ($scope.checkItems != null)
         {
-             $dbHelper.insert('Wizard',objWizard);
+            for (i in $scope.checkItems){
+                if ($scope.checkItems[i])
+                {
+                    count+=1;
+                }
+            }
         }
-        else if  (!$scope.isnew && $scope.ischange)
+        
+        if (count >  0 && count < 3)
         {
-            $dbHelper.update('Wizard',objWizard);
+            $scope.errorMessage = "You select least 3 of your items category";
+            return false;
+        }
+        return true;
+    }
+    
+    $scope.initwizard = function()
+    {         
+        var token = tokenService.getToken();
+        var userId = token.userid;       
+        if (userId != null)
+        {
+            $scope.objWizard.UserId = userId;
+            $scope.initwizardbyuser(userId);
+        }
+        else
+        {
+            $scope.errorMessage = "Can't get User ID from token";
         }
     }
-    $scope.initwizard = function()
+
+    $scope.initwizardbyuser = function(userId)
     {
-        debugger;
-        if ($window.localStorage.getItem("Lelong_UserLogined") != null)
-        {
-            //load by user 
-            var username = $window.localStorage.getItem("Lelong_UserLogined") ;
-            $dbHelper.select("User", "UserName", " UserName = '"+username +"' ").then(function(response){
-                if  (response.length > 0)
-                {
-                    $scope.UserId = response[0].UserId;
-                }
-                else
-                {
-                    console.log("Can't get current user by "+ username);
-                }
-            });
-            $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId = '"+$scope.userid +"' ").then(function(response){
+        $scope.isnew = true; 
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId = '"+ userId +"' ")
+        .then(function(response){
             if  (response.length > 0)
-            {//edit
-                objWizard.WizardId = response[0].WizardId;
-                objWizard.DaysOfShip = response[0].DaysOfShip;
-                objWizard.checkItems = $scope.values;                
+            {
+                $scope.objWizard.WizardId = response[0].WizardId;
+                $scope.objWizard.DaysOfShip = response[0].DaysOfShip;
                 var items = response[0].ItemsCategory.split(",");
                 for (var i = 0;i<= items.length-1;i++)
                 {
-                    element = $scope.checkItems;
-                    array.forEach(function(element) {
-                        if  (this === items[i])
-                        {
-                            this = true;
-                        }
-                    }, this);
+                   $scope.checkItems[items[i]] = true;
                 }
-
-                objWizard.ShippingFee = response[0].ShippingFee;
+                if (response[0].ShippingFee != null && response[0].ShippingFee != "")
+                {
+                    items = response[0].ShippingFee.split(",");
+                    $scope.peninsular =  items[0];
+                    $scope.eastmalaysia =  items[1];
+                }
+                $scope.objWizard.ShippingFee = response[0].ShippingFee;
                 $scope.isnew = false;
-                $scope.ischange = true;
-            }
-            else
-            {//adnew
-                $dbHelper.select("Wizard", "WizardId").then(function(response){
-                    if  (response.length > 0)
-                    {
-                        objWizard.WizardId = response[0].WizardId + 1;                    
-                    }
-                    else
-                    {
-                        objWizard.WizardId = 1;
-                    } 
-                    $scope.isnew = true;   
-                    $scope.ischange = true;                
-                })
-            }
+            }          
         });
-    }
-        
     }
 })

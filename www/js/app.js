@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 (function () {
-    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.Goods', 'LelongApp.Home', 'LelongApp.Login', 'IonicGallery', 'ionic', 'ngCordova', 'ngIdle'])
+    angular.module('LelongApp', ['LelongApp.services', 'LelongApp.Goods', 'LelongApp.Home', 'LelongApp.Login', 'LelongApp.Wizard', 'IonicGallery', 'ionic', 'ngCordova', 'ngIdle'])
         .controller('idleCtrl', function ($scope, Idle, $location, $window) {
             $scope.$on('IdleTimeout', function () {
                 console.log('time out after 30 minutes no action');
@@ -111,7 +111,7 @@
             $urlRouterProvider.otherwise('/login');
         })
 
-
+    angular.module('LelongApp.Wizard', []);    
     angular.module('LelongApp.Goods', []);
     angular.module('LelongApp.Home', []);
     angular.module('LelongApp.Login', []);
