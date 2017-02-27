@@ -24,7 +24,9 @@
 	 "cordova-sqlite-storage",
     "cordova-plugin-camera",
     "cordova-plugin-image-picker",
-    "cordova-plugin-x-toast"
+    "cordova-plugin-x-toast",
+    "cordova-plugin-file",
+    "cordova-plugin-filepath"
   ],
   "cordovaPlatforms": [
     "android"

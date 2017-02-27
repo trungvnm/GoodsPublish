@@ -33,6 +33,12 @@
         },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-filepath": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         }
     },
     "dependent_plugins": {
