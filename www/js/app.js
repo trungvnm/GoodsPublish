@@ -110,6 +110,7 @@
                     controller: 'EditCtrl'
                 })
                 .state('app.wizard', {
+                    cache: false,
                     url: '/wizard',
                     views: {
                         'menuContent': {

@@ -9,7 +9,7 @@
     
         <label class="item item-input item-stacked-label">
             <span class="input-label">Select 3 of your items category</span>
-            <div style=" height: 300px;overflow-y: scroll;overflow-x: hidden">
+            <div style=" height: 200px;overflow-y: scroll;overflow-x: hidden">
                 <ion-checkbox ng-repeat="item in defaultvalue"
                     ng-model="checkItems[item.code]" >            
                         {{ item.name }}
@@ -18,14 +18,10 @@
          </label>
          <label class="item item-input item-stacked-label">
             <span class="input-label">Shipping Fees for</span> 
-            <div><span style="font-weight: 500"> Peninsular <input placeholder="[per Item / KG / FOC]" ng-model="peninsular"/></span></div>
-            <div><span style="font-weight: 500"> East Malaysia <input placeholder="[per Item / KG / FOC]" ng-model="eastmalaysia"/></span></div>
+            <div><span style="font-weight: 500"> Peninsular <input type="number" placeholder="[per Item / KG / FOC]" ng-model="peninsular"/></span></div>
+            <div><span style="font-weight: 500"> East Malaysia <input type="number" placeholder="[per Item / KG / FOC]" ng-model="eastmalaysia"/></span></div>
          </label>
     </div>
-    <div style="position: absolute; bottom: 0px; width: 100%">
-        <div style="text-align: center">
-         <button class="button button-block button-positive" ng-click="save()">Save</button>
-        </div>
-    </div>  
+   <button class="button button-block button-positive" ng-click="save()">Save</button>
 </ion-content>
 </ion-view>

@@ -78,7 +78,7 @@ angular.module("LelongApp.Wizard",[])
     }
     
     $scope.initWizard = function()
-    {                 
+    {     
         var token = tokenService.getToken();
         var userId = token.userid;       
         if (userId != null)
@@ -110,8 +110,8 @@ angular.module("LelongApp.Wizard",[])
                 if (response[0].ShippingFee != null && response[0].ShippingFee != "")
                 {
                     items = response[0].ShippingFee.split(",");
-                    $scope.peninsular =  items[0];
-                    $scope.eastmalaysia =  items[1];
+                    $scope.peninsular =  items[0] != "" ? items[0] : 0;
+                    $scope.eastmalaysia =  items[1] != "" ? items[1] : 0;
                 }
                 $scope.objWizard.ShippingFee = response[0].ShippingFee;
                 $scope.isnew = false;
