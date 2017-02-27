@@ -1,4 +1,4 @@
-angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope) {
+angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper) {
 	
 	$scope.photos = [
 	  {
@@ -54,7 +54,15 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		{
 			name: 'delete',
 			action: function(){
-				alert('delete action');
+				if (navigator.notification){
+					navigator.notification.confirm('Are you sure to delete this item?', function(result){
+						if (result == 1){
+							$dbHelper.delete('GoodsPublish', '').then(function(result){
+								
+							});
+						}
+					});
+				}
 			}
 		}
 	];

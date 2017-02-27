@@ -40,6 +40,7 @@
 
         .config(function ($stateProvider, $ionicConfigProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
             $ionicConfigProvider.tabs.position('bottom');
+			//$ionicConfigProvider.views.maxCache(0);
             IdleProvider.idle(5); // in seconds
             IdleProvider.timeout(18000); // in seconds
             KeepaliveProvider.interval(2); // in seconds
@@ -71,7 +72,21 @@
                             controller: 'QuickActionsCtrl'
                         }
                     }
-                }).state('navbar.addnew', {
+                })
+				.state('app.account', {
+                    url: '/account',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'app/Account/account.html',
+                            controller: 'AccountCtrl'
+                        },
+                        'quickActionsContent': {
+                            templateUrl: 'app/Goods/quickactionsbar.html',
+                            controller: 'QuickActionsCtrl'
+                        }
+                    }
+                })
+				.state('navbar.addnew', {
                     url: '/addnew',
                     views: {
                         'menuContent': {
@@ -116,6 +131,7 @@
     angular.module('LelongApp.Home', []);
     angular.module('LelongApp.Login', []);
     angular.module('LelongApp.Global', []);
+	angular.module('LelongApp.Account', []);
 
     angular.module('LelongApp.services', ['ngResource']);
     angular.module('IonicGallery', ['ionic', 'ion-gallery']);

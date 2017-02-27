@@ -1,12 +1,15 @@
-﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper) {
+﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper, $state, $ionicHistory) {
 	
     $scope.username = "";
     $scope.password = "";
     $scope.errorMessage = "";
 	$scope.goNext = function(){
-		window.location = '#/app/completes';
+		$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
 	};
     $scope.login = function () {
+		$scope.goNext();
+		return;
+		
         $scope.errorMessage = "";
         var defer = $q.defer();
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
