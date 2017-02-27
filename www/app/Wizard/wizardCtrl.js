@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $q, $window, $http,$location,$dbHelper, xhttpService, tokenService)  {
+.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService, $cordovaToast)  {
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
@@ -14,16 +14,17 @@ angular.module("LelongApp.Wizard",[])
     ];
     $scope.checkItems = {};
     $scope.isnew = false;
+    $scope.isload = false;
     $scope.objWizard = {};
     $scope.errorMessage = "";
     $scope.peninsular ="";
     $scope.eastmalaysia="";
+
     $scope.save = function () {        
-        if ($scope.IsValid())
+        if ($scope.isValid())
         {
-            var defer = $q.defer();        
             $scope.objWizard.ItemsCategory= "";
-           for(i in $scope.checkItems) {
+            for(i in $scope.checkItems) {
                 if($scope.checkItems[i])
                 {
                     $scope.objWizard.ItemsCategory += i;                
@@ -33,25 +34,30 @@ angular.module("LelongApp.Wizard",[])
                     $scope.objWizard.ItemsCategory += ",";
                 }    
             }
-
             $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
 
             $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
-        
+
             if  ($scope.isnew)
             {
-                $dbHelper.insert('Wizard',$scope.objWizard);
+                $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {
+                    setTimeout(function () {                        
+                        $cordovaToast.showLongTop('Save successful!', function (sucess) {});
+                    }, 3000);
+                });
             }
             else
             {
-                $dbHelper.update('Wizard',$scope.objWizard);
-            }
-        }
-
-        
+                $dbHelper.update('Wizard',$scope.objWizard).then(function (res) {
+                    setTimeout(function () {                        
+                        $cordovaToast.showLongTop('Save successful!', function (sucess) {});
+                    }, 3000);
+                });
+            }            
+        }        
     }
 
-    $scope.IsValid = function()
+    $scope.isValid = function()
     {
         var count = 0;
         if ($scope.checkItems != null)
@@ -62,8 +68,7 @@ angular.module("LelongApp.Wizard",[])
                     count+=1;
                 }
             }
-        }
-        
+        }        
         if (count >  0 && count < 3)
         {
             $scope.errorMessage = "You select least 3 of your items category";
@@ -72,22 +77,23 @@ angular.module("LelongApp.Wizard",[])
         return true;
     }
     
-    $scope.initwizard = function()
-    {         
+    $scope.initWizard = function()
+    {                 
         var token = tokenService.getToken();
         var userId = token.userid;       
         if (userId != null)
         {
             $scope.objWizard.UserId = userId;
-            $scope.initwizardbyuser(userId);
+            $scope.initWizardByUser(userId);
         }
         else
         {
             $scope.errorMessage = "Can't get User ID from token";
         }
+        $scope.isload = true;
     }
 
-    $scope.initwizardbyuser = function(userId)
+    $scope.initWizardByUser = function(userId)
     {
         $scope.isnew = true; 
         $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId = '"+ userId +"' ")
