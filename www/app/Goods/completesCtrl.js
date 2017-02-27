@@ -4,11 +4,11 @@
 		// load goods data from local database
 		var userId = $window.localStorage.getItem("userid");
 		//$dbHelper.selectRecords('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'', function(result){
-		$dbHelper.selectRecords('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', '', function(result){
+		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', 'UserId=\''+userId+'\'').then(function(result){
 			for (var i = 0; i<result.length;i++){
 				var good = result[i];
 				var photoWhere = 'GoodPublishId = \''+result+'\'';
-				$dbHelper.selectRecords('GoodsPublishPhoto', 'PhotoUrl', photoWhere, function(photoResult){
+				$dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoWhere).then(function(photoResult){
 					if (photoResult.length > 0){
 						good.photoUrl = photoResult[0].PhotoUrl;
 					}

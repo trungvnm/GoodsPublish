@@ -53,7 +53,7 @@ angular.module('LelongApp.services')
                 //console.log("Table value: " + JSON.stringify(tbl));
 
                 var deferred = $q.defer();
-                var qr = runQuery(command, tbl.values, function (res) {
+                var qr = runQuery(command, tbl.values.split(','), function (res) {
                     console.log("INSERT SUCCESS: " + res.insertId);
                     deferred.resolve(res);
                 }, function (err) {

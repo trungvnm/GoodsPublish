@@ -18,7 +18,7 @@
             tokenService.saveToken(token);
 			
 			// get user from User table
-			$dbHelper.selectRecords('User', 'UserId', 'UserName==\''+$scope.username+'\'', function(result){
+			$dbHelper.select('User', 'UserId', 'UserName==\''+$scope.username+'\'').then(function(result){
 				if (result.length > 0){
 					$window.localStorage.setItem("userid", result[0].UserId);
 					$scope.goNext();
@@ -28,7 +28,7 @@
 					$dbHelper.insert('User', {
 						UserName: $scope.username, 
 						Password: encodeURIComponent($scope.password)
-					}, function(result){
+					}).then(function(result){
 						$window.localStorage.setItem("userid", result.insertId);
 						$scope.goNext();
 					});
