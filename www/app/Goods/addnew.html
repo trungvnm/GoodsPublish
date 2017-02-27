@@ -42,25 +42,32 @@
             <div id="addnew-step3" ng-show="step==3">
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Quantity</span>
-                <input type="number" placeholder="Quantity">
+                <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Weight</span>
-                <input type="number" placeholder="weight">
+                <input type="number" placeholder="Weight" ng-model="goodItem.Weight">
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Whopay</span>
-                <input type="text" placeholder="whopay">
+                <input type="text" placeholder="Whopay" ng-model="goodItem.Whopay">
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">shiptolocation</span>
-                <input type="text" placeholder="Shiptolocation">
+                <input type="text" placeholder="Shiptolocation" ng-model="goodItem.Shiptolocation">
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Shippingmethod</span>
-                <input type="text" placeholder="Shippingmethod">
+                <input type="text" placeholder="Shippingmethod" ng-model="goodItem.Shippingmethod">
             </label>
             </div>
+        </div>
+        <div>
+            <button class="button button-block button-positive"  ng-click="getItem()">
+                GET
+            </button>        
+        <div>GoodPublish:{{test1}}</div>
+        <div>GoodPublishPhoto:{{test2}}</div>
         </div>
     </ion-content>
 </ion-view>

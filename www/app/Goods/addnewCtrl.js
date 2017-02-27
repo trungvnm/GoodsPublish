@@ -1,15 +1,19 @@
 angular.module("LelongApp.Goods")
-    .controller("addnewCtrl", function ($scope, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker) {
+    .controller("addnewCtrl", function ($scope, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast) {
 
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
             $scope.goodItem = {};
+            $scope.test1 = [];
+            $scope.test2 = [];
+            disableNext();
+            disablePrev();
         }
 
         $scope.$on("$ionicView.leave", function (event, data) {
             // handle event
-             $scope.init();
+            $scope.init();
         });
         /**Top bar actions */
         var actions = [
@@ -39,17 +43,69 @@ angular.module("LelongApp.Goods")
             }
         ];
         $rootScope.$broadcast("setMainActions", actions);
+
+        function disableNext() {
+            if ($scope.step >= 3) {
+                $rootScope.$broadcast("disableMainAction", "next");
+            } else {
+                $rootScope.$broadcast("enableMainAction", "next");
+            }
+        }
+        function disablePrev() {
+            if ($scope.step <= 1) {
+                $rootScope.$broadcast("disableMainAction", "prev");
+            } else {
+                $rootScope.$broadcast("enableMainAction", "prev");
+            }
+        }
+
         /**End Top bar actions */
         $scope.saveClick = function () {
-            console.log(JSON.stringify($scope.goodItem));
+            //console.log(JSON.stringify($scope.goodItem));
+            $dbHelper.insert("GoodsPublish", $scope.goodItem).then(function (res) {
+                console.log("Success: " + JSON.stringify(res))
+                if (res.insertId > 0 && $scope.imgURI.length > 0) {
+                    //insert photo for GoodsPublishPhoto
+                    for (var i = 0; i < $scope.imgURI.length; i++) {
+                        $dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: $scope.imgURI[i].src }).then(function (response) {
+                            console.log("INSERT IMG DONE:");
+                        }, function (error) {
+                            console.log("INSERT IMG FAILED: " + JSON.stringify(err));
+                        });
+                    };
+                }
+                setTimeout(function () {
+                    $cordovaToast.showLongTop('Save successful!', function (sucess) {
+                        console.log('window.location==completes');
+                        window.location = '#/app/completes';
+                    }, function (err) {
+                        console.log('window.location failed');
+                        window.location = '#/app/completes';
+                    });
+                }, 3000);
+            }, function (err) {
+                console.log("ERROR: " + JSON.stringify(err));
+            });
+        }
+
+        $scope.getItem = function () {
+            $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
+                $scope.test1 = JSON.stringify(res);
+                console.log($scope.test1);
+            });
+            $dbHelper.select("GoodsPublishPhoto", "*", "").then(function (res) {
+                $scope.test2 = JSON.stringify(res);
+            });
         }
 
         $scope.nextClick = function () {
             $scope.step += 1;
+            disableNext();
         }
 
         $scope.prevClick = function () {
             $scope.step -= 1;
+            disablePrev();
         }
 
         $scope.cancelClick = function () {
