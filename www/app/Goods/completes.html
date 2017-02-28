@@ -13,7 +13,7 @@
 				<p class="item" ng-show="goods.length == 0">No items</p>
 				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions">
 				  <div class="main_photo">
-						<img src="{{g.photoUrl}}"/>
+						<img src="{{g.PhotoUrl}}"/>
 						<img class="inlay" src="./img/Check-icon.png" />
 					</div>				
 				  <h2>{{g.Title}}</h2>
@@ -24,10 +24,10 @@
 				</a>
 			</div>
 			
-			<div ng-repeat="g in goods" class="list" id="list-editmode" ng-show="quickactions">
-				<ion-checkbox ng-model="g.Checked">
+			<div class="list" id="list-editmode" ng-show="quickactions">
+				<ion-checkbox ng-repeat="g in goods" ng-model="g.Checked">
 					<a class="item item-thumbnail-left">
-					  <img src="{{g.photoUrl}}">
+					  <img src="{{g.PhotoUrl}}">
 					  <h2>{{g.Title}}</h2>
 					  <p>{{g.Description}}</p>
 					  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
@@ -43,11 +43,10 @@
 		<!-- Tab 2 content -->
 		<ion-content class="has-header tab-content">
 			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}</span>
-			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
 				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions">
-				  <img src="{{g.photoUrl}}">
+				  <img src="{{g.PhotoUrl}}">
 				  <h2>{{g.Title}}</h2>
 				  <p>{{g.Description}}</p>
 				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
@@ -59,7 +58,7 @@
 			<div ng-repeat="g in goods" class="list" id="list-editmode" ng-show="quickactions">
 				<ion-checkbox ng-model="filter.red">
 					<a class="item item-thumbnail-left">
-					  <img src="{{g.photoUrl}}">
+					  <img src="{{g.PhotoUrl}}">
 					  <h2>{{g.Title}}</h2>
 					  <p>{{g.Description}}</p>
 					  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
@@ -73,7 +72,7 @@
 	  <ion-tab title="Synced" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline">
 		<!-- Tab 3 content -->
 		<ion-content class="has-header tab-content">
-			
+			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}</span>
 		</ion-content>
 	  </ion-tab>
 

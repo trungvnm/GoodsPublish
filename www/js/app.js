@@ -40,7 +40,6 @@
 
         .config(function ($stateProvider, $ionicConfigProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
             $ionicConfigProvider.tabs.position('bottom');
-			//$ionicConfigProvider.views.maxCache(0);
             IdleProvider.idle(5); // in seconds
             IdleProvider.timeout(18000); // in seconds
             KeepaliveProvider.interval(2); // in seconds

@@ -19,6 +19,10 @@
 		var params = {};
 		params.issearch = args.issearch;
 		$rootScope.$broadcast('updateIsSearchFlag', params);
+		
+		if (args.issearch){
+			setTimeout(function(){jQuery("#searchbox").focus();}, 100);
+		}
 	});
 	
 	$scope.cancelSearchingg = function(){
@@ -26,6 +30,9 @@
 		var params = {};
 		params.issearch = false;
 		$rootScope.$broadcast("updateIsSearchFlag", params);
+	};
+	$scope.clearSearchBox = function(){
+		$scope.searchkey = '';
 	};
 	
 	$scope.multiDelete = function(){
@@ -38,5 +45,7 @@
 			params.searchkey = $scope.searchkey;
 			$rootScope.$broadcast("search", params);
 		}
-	}
+	};
+	
+	
 })

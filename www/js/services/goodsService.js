@@ -1,45 +1,43 @@
 angular.module('LelongApp.services')
     .factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService) {
         var goodService = {
-            search: function (searchKey) {
+            getAll: function (searchKey) {
                 var token = tokenService.getToken();
                 var userId = token.userid;
-                var whereClause = 'UserId=\''+userId+'\'';
-                if (searchKey && searchKey != '' && searchKey.length > 0){
+				
+				// Condition for filter
+				var whereClause = ' WHERE UserId=\''+userId+'\'';
+                if (searchKey && searchKey.trim() != ''){
                     whereClause += ' AND Title LIKE \'%'+searchKey+'%\'';
                 }
-
-                return $dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', whereClause).then(function(result){
-                    var goods = [];
-                    for (var i = 0; i<result.length;i++){
-                        var good = result[i];
-                        var photoFilter = 'GoodPublishId = \''+result[i].GoodPublishId+'\'';
-                        $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoFilter).then(function(photoResult){
-                            if (photoResult.length > 0){
-                                good.photoUrl = photoResult[0].PhotoUrl;
-                            }
-                            return good;
-                        });
-                        goods.push(good);
-                    }
-                    return goods;
-                });
+				
+				// Query to extract data
+				var query = 'SELECT	GoodPublishId, Title, SalePrice, Description, Quantity, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
+				query += 'FROM	GoodsPublish';
+				query += whereClause;
+				
+				return $dbHelper.selectCustom(query).then(function(result){
+					return result;
+				});
             },
             getGoodsById: function (goodId) {
-                var whereClause = 'GoodPublishId=\''+goodId+'\'';
-                
-                return $dbHelper.select('GoodsPublish', 'GoodPublishId, UserId, Title, Subtitle, Condition, Guid, Price, SalePrice,' + 
-                'msrp, costprice, SaleType, Category, StoreCategory, Brand, ShipWithin, ModelSkuCode, State,' +
-                'Link, Description, Video, VideoAlign, Active, Weight, Quantity, ShippingPrice, WhoPay, ShippingMethod, ShipToLocation,' + 
-                'PaymentMethod, GstType, OptionsStatus', whereClause).then(function(result){
-                    var good = result;
-                    var photoFilter = 'GoodPublishId = \''+result.GoodPublishId+'\'';
-                    $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoFilter).then(function(photoResult){
-                        good.photos = photoResult;
-                        return good;
-                    });
-                    return good;
-                });
+				var token = tokenService.getToken();
+                var userId = token.userid;
+				
+				// Condition for filter
+				var whereClause = 'GoodPublishId=\''+goodId+'\'';
+				
+				// Query to extract data
+				var query = 'SELECT	*, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
+				query += 'FROM	GoodsPublish';
+				query += whereClause;
+				
+				return $dbHelper.selectCustom(query).then(function(result){
+					if (result && result.length > 0){
+						return result[0];
+					}
+					return null;
+				});
             },
         };
 

@@ -7,8 +7,9 @@
 		<button class="button button-icon button-clear ion-android-arrow-back" ng-click="cancelSearchingg()">
 			</button>
 	  <label class="item-input-wrapper" style="background: none;">
-		<input type="search" placeholder="Search" ng-keyup="searchboxkeyUp($event)" ng-model="searchkey">
+		<input id="searchbox" type="search" placeholder="Search" ng-keyup="searchboxkeyUp($event)" ng-model="searchkey" ng-focus="searchaction"/>
 	  </label>
+	  <button class="button button-small button-icon icon ion-close-round tiny-icon" ng-click="clearSearchBox()" ng-show="searchkey && searchkey.trim() != ''"></button>
 	</div>
 </div>
 

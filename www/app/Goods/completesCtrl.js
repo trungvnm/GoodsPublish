@@ -1,35 +1,16 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast) {
-	// select many goods by user and extra conditions
-	function selectGoods(whereClause){
-		$scope.goods = [];
-		// load goods data from local database
-		var token = tokenService.getToken();
-		var userId = token.userid;// $window.localStorage.getItem("userid");
-		var fullCondition = 'UserId=\''+userId+'\'';
-		if (whereClause && whereClause != ''){
-			fullCondition += ' AND ' + whereClause;
-		}
-		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', fullCondition).then(function(result){
-			for (var i = 0; i<result.length;i++){
-				var good = result[i];
-				var photoWhere = 'GoodPublishId = \''+good.GoodPublishId+'\'';
-				$dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoWhere).then(function(photoResult){
-					if (photoResult.length > 0){
-						good.photoUrl = photoResult[0].PhotoUrl;
-					}
-					else {
-						good.photoUrl = 'img/nophoto.jpg';
-					}
-				});
-				$scope.goods.push(good);
-			}
-		});
-	}
-	
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast) {	
 	$scope.init = function(){
 		$scope.goods = [];
-		goodsService.search().then(function(result) {
+		goodsService.getAll().then(function(result) {
+			if (result){
+				result.forEach(function(g){
+					if (!g.PhotoUrl || g.PhotoUrl.trim() == ''){
+						g.PhotoUrl = 'img/nophoto.jpg';
+					}
+				});
+			}
 			$scope.goods = result;
+			
 		});
 
 		//selectGoods();
