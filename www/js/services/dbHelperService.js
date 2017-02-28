@@ -43,6 +43,22 @@ angular.module('LelongApp.services')
                 });
                 return deferred.promise;
             },
+            selectCustom: function (query) {
+                var deferred = $q.defer();
+                var qr = runQuery(query, [], function (res) {
+                    var result = [];
+                    if (res.rows.length > 0) {
+                        for (var i = 0; i < res.rows.length; i++) {
+                            result.push(res.rows.item(i));
+                        }
+                    }
+                    deferred.resolve(result);
+                }, function (err) {
+                    console.log("ERROR: " + JSON.stringify(err));
+                    deferred.reject(err);
+                });
+                return deferred.promise;
+            },
             insert: function (table, obj) {
                 var tbl = extractTableFieldsAndValues(table, obj, false);
                 var esValue = EscapeValues(tbl.fields);
