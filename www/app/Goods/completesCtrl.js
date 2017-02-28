@@ -17,6 +17,9 @@
 					if (photoResult.length > 0){
 						good.photoUrl = photoResult[0].PhotoUrl;
 					}
+					else {
+						good.photoUrl = 'img/nophoto.jpg';
+					}
 				});
 				$scope.goods.push(good);
 			}
