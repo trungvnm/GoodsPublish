@@ -11,6 +11,17 @@
                 <span class="input-label">Category</span>
                 <input type="number" placeholder="Category" ng-model="goodItem.Category">
             </label>
+                <!--<label class="item item-input item-select">
+                    <div class="input-label">
+                    Category
+                    </div>
+                    <select>
+                    <option value="1">Phone</option>
+                    <option selected value="2">Fashion</option>
+                    <option value="3">Stuff</option>
+                    </select>
+                </label>-->
+
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Condition</span>
                 <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
@@ -27,10 +38,17 @@
             <!--Step 2 photo upload-->
             <div id="addnew-step2" ng-show="step==2">
                 <div id="addnew-photo-preview">
-                    <ion-scroll direction="x" class="available-scroller" ng-show="imgURI.length>0">
-                        <ion-gallery ion-gallery-items="imgURI"  ion-gallery-row="20" ion-gallery-toggle="true"></ion-gallery>
-                    </ion-scroll>
-                    <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">                    
+                    <ion-slide-box does-continue="true">
+                        <ion-slide ng-repeat="image in imgURI">
+                            <div>
+                                <img ng-src="{{image.src}}" alt="">
+                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(image.src)"></a>
+                            </div>
+                        </ion-slide>
+                        </ion-slide>                        
+                    </ion-slide-box>
+
+                    <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">
                 </div>
                 <div style="display: flex;padding-top: 20px;">
                     <button class="button icon ion-ios-camera" ng-click="choosePhotoAction()"> 
@@ -70,6 +88,6 @@
             <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-disabled="step==3">
                 Next
             </button>
-        </div>       
+        </div>
     </ion-content>
 </ion-view>
