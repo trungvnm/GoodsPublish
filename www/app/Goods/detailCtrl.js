@@ -1,46 +1,30 @@
 angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory) {
 	var id = $stateParams.id;
-	$scope.photos = [
-	  {
-		src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
-		sub: 'This is a <b>subtitle</b>'
-	  },
-	  {
-		src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-		sub: '' /* Not showed */
-	  },
-	  {
-		src:'http://www.hdwallpapersimages.com/wp-content/uploads/2014/01/Winter-Tiger-Wild-Cat-Images.jpg',
-		thumb:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg'
-	  },
-	  {
-		src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
-		sub: 'This is a <b>subtitle</b>'
-	  },
-	  {
-		src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-		sub: '' /* Not showed */
-	  },
-	  {
-		src:'http://www.hdwallpapersimages.com/wp-content/uploads/2014/01/Winter-Tiger-Wild-Cat-Images.jpg',
-		thumb:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg'
-	  },
-	  {
-		src:'http://www.wired.com/images_blogs/rawfile/2013/11/offset_WaterHouseMarineImages_62652-2-660x440.jpg',
-		sub: 'This is a <b>subtitle</b>'
-	  },
-	  {
-		src:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg',
-		sub: '' /* Not showed */
-	  },
-	  {
-		src:'http://www.hdwallpapersimages.com/wp-content/uploads/2014/01/Winter-Tiger-Wild-Cat-Images.jpg',
-		thumb:'http://www.gettyimages.co.uk/CMS/StaticContent/1391099215267_hero2.jpg'
-	  }
-	];
+	$scope.photos = [];
 	
 	$scope.goBack = function(){
 		$rootScope.$ionicGoBack();
+	};
+	
+	$scope.getDetail = function(){
+		// load all metadata of current good
+		$dbHelper.select('GoodsPublish', '*', 'GoodPublishId = \''+id+'\'').then(function(result){
+			if (result && result.length > 0){
+				$scope.good = result[0];
+			}
+		});
+		
+		// load all photos of current good
+		$dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', 'GoodPublishId = \''+id+'\'').then(function(result){
+			if (result && result.length > 0){
+				result.forEach(function(photo){
+					$scope.photos.push({
+						src: photo.PhotoUrl,
+						sub: photo.PhotoDescription
+					});
+				});
+			}
+		});
 	};
 	
 	//-- setup action buttons

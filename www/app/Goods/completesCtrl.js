@@ -12,10 +12,13 @@
 		$dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', fullCondition).then(function(result){
 			for (var i = 0; i<result.length;i++){
 				var good = result[i];
-				var photoWhere = 'GoodPublishId = \''+result+'\'';
+				var photoWhere = 'GoodPublishId = \''+good.GoodPublishId+'\'';
 				$dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoWhere).then(function(photoResult){
 					if (photoResult.length > 0){
 						good.photoUrl = photoResult[0].PhotoUrl;
+					}
+					else {
+						good.photoUrl = 'img/nophoto.jpg';
 					}
 				});
 				$scope.goods.push(good);
@@ -71,7 +74,7 @@
 		var params = {};
 		params.issearch = false;
         $rootScope.$broadcast('updateIsSearch', params);
-		$rootScope.$broadcast('updateIsSearchFlag', params);
+		//$rootScope.$broadcast('updateIsSearchFlag', params);
 	});
 	$scope.$on('multiDelete', function(event, args){
 		if (navigator.notification){

@@ -1,8 +1,7 @@
 angular.module("LelongApp.Goods")
-    .controller("addnewCtrl", function ($scope,$window,$dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile,tokenService,$state) {
-
+    .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q) {
+        
         $scope.tokenServ = tokenService.getToken();
-
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
@@ -49,10 +48,9 @@ angular.module("LelongApp.Goods")
                 }
                 setTimeout(function () {
                     $cordovaToast.showLongTop('Save successfully!').then(function () {
-                        //window.location = '#/app/completes';
-						$ionicHistory.clearCache().then(function(){ 
-						   $state.go('app.completes'); 
-						});
+                        $ionicHistory.clearCache().then(function () {
+                            $state.go('app.completes');
+                        });
                     });
                 }, 3000);
             }, function (err) {
@@ -118,29 +116,7 @@ angular.module("LelongApp.Goods")
             };
 
             $cordovaCamera.getPicture(options).then(function (imagePath) {
-                var currentName = imagePath.replace(/^.*[\\\/]/, '');
-                // var newFileName = generateUUID() + ".jpg";
-                var d = new Date(),
-                    n = d.getTime(),
-                    newFileName = n + ".jpg";
-                window.FilePath.resolveNativePath(imagePath, function (entry) {
-                    window.resolveLocalFileSystemURL(entry, function (fileEntry) {
-                        var namePath = fileEntry.nativeURL.substr(0, fileEntry.nativeURL.lastIndexOf('/') + 1);
-                        $cordovaFile.copyFile(namePath, fileEntry.name, cordova.file.dataDirectory + $scope.uploadDir, newFileName).then(function (success) {
-                            console.log("COPY FILE SUCCESS:" + JsonParse(success));
-                            $scope.imgURI.push({ src: success.nativeURL });
-                        }, function (error) {
-                            console.log("COPY FILE FAILED:" + JsonParse(error));
-                        });
-                    }, function (failed) {
-                        console.log("resolveLocalFileSystemURL FAILED: " + JsonParse(failed));
-                    })
-                });
-
-                // $cordovaFile.moveFile(cordova.file.tempDirectory, currentName, cordova.file.dataDirectory + $scope.uploadDir, newFileName).then(function (success) {                    
-                //     console.log("MOVE FILE SUCCESS:" + JsonParse(success));
-                //      $scope.imgURI.push({ src: success.nativeURL });
-                // });   
+                copyImgToPerFolder(imagePath);
             }, function (err) {
                 // An error occured. Show a message to the user
                 console.log('From Camera: ' + JsonParse(error));
@@ -157,7 +133,7 @@ angular.module("LelongApp.Goods")
 
             $cordovaImagePicker.getPictures(options).then(function (results) {
                 for (var i = 0; i < results.length; i++) {
-                    $scope.imgURI.push({ src: results[i] });
+                    copyImgToPerFolder(results[i]);
                 }
             }, function (error) {
                 console.log('From Library Photo: ' + JsonParse(error));
@@ -165,19 +141,19 @@ angular.module("LelongApp.Goods")
         };
         /**End camera */
         /**Cordova file */
-        var dirName = "ImagesUpload";
+        /** create folder with name 'ImagesUpload + userid' */
+        $scope.dirName = "ImagesUpload";
         var subDir = "" + $scope.tokenServ.userid + ""
         function requestAccessFs() {
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
-                dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+                dirEntry.root.getDirectory($scope.dirName, { create: true }, function (subDirEntry) {
                     subDirEntry.getDirectory(subDir, { create: true }, function (success) {
                         console.log("CREATE SUBDIR SUCCESS!!!");
-                        $scope.uploadDir = dirName + "/" + subDir + "/";
+                        $scope.uploadDir = $scope.dirName + "/" + subDir + "/";
                     }, fnFailed)
                 }, fnFailed);
             }, failAccessFS);
         }
-
 
         function failAccessFS(err) {
             console.log("ACCESS FILE SYSTEM FAILED: " + JsonParse(err));
@@ -186,9 +162,38 @@ angular.module("LelongApp.Goods")
             console.log("CREATE DIRECTORY FAILED: " + JsonParse(err));
         }
 
+        /** copy img from temp folder to PERSISTENT folder */
+        function copyImgToPerFolder(originPath) {
+            var newFileName = generateUUID() + ".jpg";
+            if ($scope.uploadDir.length <= 0) {
+                $scope.uploadDir = $scope.dirName;
+            }
+            var deffered = $q.defer();
+            window.resolveLocalFileSystemURL(originPath, function (fileEntry) {
+                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
+                    fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
+                        fileEntry.copyTo(desFolder, newFileName, function (success) {
+                            console.log("COPY FILE SUCCESS:" + JsonParse(success));
+                            $scope.imgURI.push({ src: success.nativeURL });
+                            $scope.$apply();
+                            deffered.resolve();
+                        }, function (error) {
+                            console.log("COPY FILE FAILED:" + JsonParse(error));
+                        });
+                    }, errorHandler);
+                });
+            }, function (failed) {
+                console.log("resolveLocalFileSystemURL FAILED: " + JsonParse(failed));
+            })
+            return deffered.promise;
+        };
         /**End Cordova file */
         function JsonParse(obj) {
             return JSON.stringify(obj);
+        }
+
+        function errorHandler(err) {
+            console.log("ERROR: " + JsonParse(err));
         }
 
         function generateUUID() {
@@ -200,4 +205,13 @@ angular.module("LelongApp.Goods")
             });
             return uuid;
         };
+
+        $(document).ready(function () {
+            //Here your view content is fully loaded !!
+            var imagesInScreen = 3;
+            var imgWidth = $(window).width() / imagesInScreen;
+            var imgQuantity = $(".gallery-view .row .image-container img").length;
+            $(".gallery-view .row").width(imgWidth * imgQuantity);
+            $(".gallery-view .row .image-container img").width(imgWidth - 2);
+        });
     });

@@ -9,7 +9,7 @@
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Category</span>
-                <input type="text" placeholder="Category" ng-model="goodItem.Category">
+                <input type="number" placeholder="Category" ng-model="goodItem.Category">
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Condition</span>
@@ -21,14 +21,14 @@
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Price</span>
-                <input type="text" placeholder="Price" ng-model="goodItem.Price">
+                <input type="number" placeholder="Price" ng-model="goodItem.Price">
             </label>
             </div>
             <!--Step 2 photo upload-->
             <div id="addnew-step2" ng-show="step==2">
                 <div id="addnew-photo-preview">
                     <ion-scroll direction="x" class="available-scroller" ng-show="imgURI.length>0">
-                        <ion-gallery ion-gallery-items="imgURI"  ion-gallery-row="10" ion-gallery-toggle="true"></ion-gallery>
+                        <ion-gallery ion-gallery-items="imgURI"  ion-gallery-row="20" ion-gallery-toggle="true"></ion-gallery>
                     </ion-scroll>
                     <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">                    
                 </div>
