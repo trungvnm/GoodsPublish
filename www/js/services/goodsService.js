@@ -19,11 +19,11 @@ angular.module('LelongApp.services')
             },
             getGoodsById: function (goodId) {
 				// Condition for filter
-				var whereClause = 'GoodPublishId=\''+goodId+'\'';
+				var whereClause = ' WHERE GoodPublishId=\''+goodId+'\'';
 				
 				// Query to extract data
-				var query = 'SELECT	*, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
-				query += 'FROM	GoodsPublish';
+				var query = 'SELECT	* ';
+				query += 'FROM	GoodsPublish ';
 				query += whereClause;
 				
 				return $dbHelper.selectCustom(query).then(function(result){

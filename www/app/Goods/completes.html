@@ -22,6 +22,17 @@
 				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
 				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick($event)"></button>
 				</a>
+				<a class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				  <div class="main_photo">
+						<img src="{{g.PhotoUrl}}"/>
+						<img class="inlay" src="./img/Check-icon.png" />
+					</div>				
+				  <h2>{{g.Title}}</h2>
+				  <p>{{g.Description}}</p>
+				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
+				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
+				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick($event)"></button>
+				</a>
 			</div>
 			
 			<div class="list" id="list-editmode" ng-show="quickactions">

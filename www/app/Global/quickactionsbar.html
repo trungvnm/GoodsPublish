@@ -1,8 +1,9 @@
-
 <div class="button-bar" id="quick-actions-bar" ng-show="quickactions || searchaction"  ng-init="init()">
   <a class="button-icon icon ion-android-arrow-back back" ng-click="updateQuickActions(false, '')" ng-show='quickactions'></a>
-  <button class="button icon ion-upload" title="Upload" ng-show="quickactions && (list == 'all' || list == 'unsynced')"></button>
-  <button class="button icon ion-trash-b" ng-show="quickactions" ng-click="multiDelete()"></button>
+  <div class="right-panel">
+	  <button class="button icon ion-upload" title="Upload" ng-show="quickactions && (list == 'all' || list == 'unsynced')"></button>
+	  <button class="button icon ion-trash-b" ng-show="quickactions" ng-click="multiDelete()"></button>
+  </div>
   <div class="bar bar-header item-input-inset" ng-show="searchaction">
 		<button class="button button-icon button-clear ion-android-arrow-back" ng-click="cancelSearchingg()">
 			</button>

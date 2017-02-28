@@ -1,4 +1,4 @@
-angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory) {
+angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory, goodsService) {
 	var id = $stateParams.id;
 	$scope.photos = [];
 	
@@ -8,9 +8,9 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 	
 	$scope.getDetail = function(){
 		// load all metadata of current good
-		$dbHelper.select('GoodsPublish', '*', 'GoodPublishId = \''+id+'\'').then(function(result){
-			if (result && result.length > 0){
-				$scope.good = result[0];
+		goodsService.getGoodsById(id).then(function(result){
+			if (result != null){
+				$scope.good = result;
 			}
 		});
 		
