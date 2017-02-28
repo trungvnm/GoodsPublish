@@ -95,7 +95,7 @@
 	});
 	
 	$(document).ready(function(){
-		$("#list-readmode > a.item").click(function(e){
+		$("#list-readmode > a.item").on("click", function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
 				return false;
 		});
