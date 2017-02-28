@@ -9,44 +9,38 @@ angular.module('LelongApp.services')
                     whereClause += ' AND Title LIKE \'%'+searchKey+'%\'';
                 }
 
-                var promises = [];
-                
                 return $dbHelper.select('GoodsPublish', 'GoodPublishId, Title, SalePrice, Description, Quantity', whereClause).then(function(result){
+                    var goods = [];
                     for (var i = 0; i<result.length;i++){
                         var good = result[i];
                         var photoFilter = 'GoodPublishId = \''+result[i].GoodPublishId+'\'';
-                        var promise = $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoFilter).then(function(photoResult){
+                        $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoFilter).then(function(photoResult){
                             if (photoResult.length > 0){
                                 good.photoUrl = photoResult[0].PhotoUrl;
                             }
                             return good;
                         });
-                        promises.push(promise);
-
-                        return promises;
+                        goods.push(good);
                     }
+                    return goods;
                 });
-
-                //return $q.when.apply(undefined, promises).promise();
             },
             getGoodsById: function (goodId) {
+                var whereClause = 'GoodPublishId=\''+goodId+'\'';
                 
+                return $dbHelper.select('GoodsPublish', 'GoodPublishId, UserId, Title, Subtitle, Condition, Guid, Price, SalePrice,' + 
+                'msrp, costprice, SaleType, Category, StoreCategory, Brand, ShipWithin, ModelSkuCode, State,' +
+                'Link, Description, Video, VideoAlign, Active, Weight, Quantity, ShippingPrice, WhoPay, ShippingMethod, ShipToLocation,' + 
+                'PaymentMethod, GstType, OptionsStatus', whereClause).then(function(result){
+                    var good = result;
+                    var photoFilter = 'GoodPublishId = \''+result.GoodPublishId+'\'';
+                    $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl', photoFilter).then(function(photoResult){
+                        good.photos = photoResult;
+                        return good;
+                    });
+                    return good;
+                });
             },
-        };
-
-        function extractTableFieldsAndValues(tableName, objwithFieldsAndValues, isUpdate) {
-            
-        }
-
-        function runQuery(query, params, fnSuccess, fnError) {
-            
-        }
-        function createTable(tableName, fields) {
-            
-        };
-
-        function EscapeValues(fields) {
-            
         };
 
         return goodService;
