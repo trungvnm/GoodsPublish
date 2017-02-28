@@ -12,7 +12,11 @@
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
 				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions">
-				  <img src="{{g.photoUrl}}">
+				  <div class="main_photo">
+						<img src="{{g.photoUrl}}"/>
+						<img class="inlay noborder"/>
+					</div>
+					a
 				  <h2>{{g.Title}}</h2>
 				  <p>{{g.Description}}</p>
 				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>

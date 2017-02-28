@@ -99,3 +99,40 @@ a[disabled] {
     line-height: 26px;
     display: block;
     padding-left: 15px;}
+
+.item-thumbnail-left>.main_photo>img:first-child{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: 100%;
+}
+.item-thumbnail-left>.main_photo>img:first-child{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    font: inherit;
+    font-size: 100%;
+}
+.item-thumbnail-left>.main_photo>.inlay-hidden{
+    visibility: hidden;
+}
+.item-thumbnail-left>.main_photo>.inlay{
+    position:absolute;
+    top:10px;
+    left:10px;   
+    background-image: url('../img/Check-icon.png');
+    background-size: cover;
+    max-width: 16px;
+    max-height: 16px;
+    width: 100%;
+    height: 100%;
+}
+
+.item-thumbnail-left>.main_photo>.noborder{
+    border: none !important;
+    background: transparent !important
+}

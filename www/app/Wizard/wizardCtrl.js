@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService, $cordovaToast)  {
+.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate, $cordovaToast)  {
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
@@ -14,7 +14,6 @@ angular.module("LelongApp.Wizard",[])
     ];
     $scope.checkItems = {};
     $scope.isnew = false;
-    $scope.isload = false;
     $scope.objWizard = {};
     $scope.errorMessage = "";
     $scope.peninsular ="";
@@ -83,6 +82,7 @@ angular.module("LelongApp.Wizard",[])
         var userId = token.userid;       
         if (userId != null)
         {
+            $ionicSideMenuDelegate.toggleLeft();
             $scope.objWizard.UserId = userId;
             $scope.initWizardByUser(userId);
         }
@@ -90,7 +90,6 @@ angular.module("LelongApp.Wizard",[])
         {
             $scope.errorMessage = "Can't get User ID from token";
         }
-        $scope.isload = true;
     }
 
     $scope.initWizardByUser = function(userId)
