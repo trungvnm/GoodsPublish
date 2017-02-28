@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, $cordovaToast) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast) {
 	// select many goods by user and extra conditions
 	function selectGoods(whereClause){
 		$scope.goods = [];
@@ -24,7 +24,12 @@
 	}
 	
 	$scope.init = function(){
-		selectGoods();
+		$scope.goods = [];
+		goodsService.search().then(function(result) {
+			$scope.goods = result;
+		});
+
+		//selectGoods();
 	};
 	
     $scope.goodOnHold = function(listType){
@@ -59,7 +64,9 @@
 		var key = args.searchkey;
 		var whereClause = 'Title LIKE \'%'+key+'%\'';
 		$scope.filterMessage = 'Search for \''+key+'\':';
-		selectGoods(whereClause);
+		goodsService.search(key).then(function(result) {
+			$scope.goods = result;
+		});
 		
 		var params = {};
 		params.issearch = false;
