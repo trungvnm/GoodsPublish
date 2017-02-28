@@ -78,11 +78,11 @@ angular.module("LelongApp.Wizard",[])
     
     $scope.initWizard = function()
     {     
+        $ionicSideMenuDelegate.toggleLeft();
         var token = tokenService.getToken();
         var userId = token.userid;       
         if (userId != null)
-        {
-            $ionicSideMenuDelegate.toggleLeft();
+        {           
             $scope.objWizard.UserId = userId;
             $scope.initWizardByUser(userId);
         }
