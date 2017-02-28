@@ -44,7 +44,19 @@
 		}
 	});
 	$scope.$on('search', function(event, args){
-		$scope.goods = [];
+		if ($scope.goods){
+			var key = args.searchkey;
+			$scope.filterMessage = 'Search for \''+key+'\':';
+			$scope.goods.forEach(function(g){
+				if (g.Title.toLowerCase().indexOf(key.toLowerCase()) == -1){
+					g.hidden = true;
+				}
+			})
+		}
+		var params = {};
+		params.issearch = false;
+        $rootScope.$broadcast('updateIsSearch', params);
+		/*$scope.goods = [];
 		var key = args.searchkey;
 		var whereClause = 'Title LIKE \'%'+key+'%\'';
 		$scope.filterMessage = 'Search for \''+key+'\':';
@@ -54,8 +66,7 @@
 		
 		var params = {};
 		params.issearch = false;
-        $rootScope.$broadcast('updateIsSearch', params);
-		//$rootScope.$broadcast('updateIsSearchFlag', params);
+        $rootScope.$broadcast('updateIsSearch', params);*/
 	});
 	$scope.$on('multiDelete', function(event, args){
 		if (navigator.notification){

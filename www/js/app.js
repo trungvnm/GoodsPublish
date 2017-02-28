@@ -48,7 +48,7 @@
                 .state('app', {
                     url: '/app',
                     abstract: true,
-                    templateUrl: 'app/Goods/menu.html',
+                    templateUrl: 'app/Global/menu.html',
                     controller: 'MenuCtrl'
 
                 })
@@ -67,7 +67,7 @@
                             controller: 'GoodsCtrl'
                         },
                         'quickActionsContent': {
-                            templateUrl: 'app/Goods/quickactionsbar.html',
+                            templateUrl: 'app/Global/quickactionsbar.html',
                             controller: 'QuickActionsCtrl'
                         }
                     }
