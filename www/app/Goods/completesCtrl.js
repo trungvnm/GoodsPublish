@@ -74,7 +74,9 @@
 				if (result == 1){
 					var ids = [];
 					$scope.goods.forEach(function(g){
-						ids.push(g.GoodPublishId);
+						if (g.Checked){
+							ids.push(g.GoodPublishId);
+						}
 					});
 					if (ids.length > 0){
 						var whereClause = 'GoodPublishId IN (' + ids.join(',') + ')';
