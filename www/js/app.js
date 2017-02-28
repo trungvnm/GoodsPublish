@@ -16,7 +16,7 @@
         })
         .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle, tokenService) {
             $ionicPlatform.ready(function () {
-                //tokenService.checkUserLogin();
+                tokenService.checkUserLogin();
                 Idle.watch();
                 console.log('start watch app');
                 if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -125,7 +125,7 @@
                 });
 
             $urlRouterProvider.otherwise('/login');
-        })
+        });
 
     angular.module('LelongApp.Wizard', []);    
     angular.module('LelongApp.Goods', []);

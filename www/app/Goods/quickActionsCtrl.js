@@ -16,6 +16,9 @@
 	
 	$scope.$on('updateIsSearch', function(event, args){
 		$scope.searchaction = args.issearch;
+		var params = {};
+		params.issearch = args.issearch;
+		$rootScope.$broadcast('updateIsSearchFlag', params);
 	});
 	
 	$scope.cancelSearchingg = function(){
@@ -30,7 +33,7 @@
 	};
 	
 	$scope.searchboxkeyUp = function($event){
-		if ($event.keyCode == 13){ // Enter
+		if ($event.keyCode == 13 && $scope.searchkey && $scope.searchkey.trim() != ''){ // Enter
 			var params = {};
 			params.searchkey = $scope.searchkey;
 			$rootScope.$broadcast("search", params);
