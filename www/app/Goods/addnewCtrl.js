@@ -24,7 +24,7 @@ angular.module("LelongApp.Goods")
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
-            $scope.goodItem = {Category:'',UserId: $scope.tokenServ.userid };
+            $scope.goodItem = {Category:'',UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
             $scope.defaultCategory = [
             { value: 1, name: "Phone & Tablet",isChecked:false },
