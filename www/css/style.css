@@ -140,6 +140,11 @@ ion-header-bar *{color: white !important;} */
 	height: 100%;
 	text-align: center;
 }
+.spinner.show{
+	z-index: 10;
+	background: white;
+    opacity: 0.95;
+}
 .spinner svg{
 	top: 50%;
 	position: absolute

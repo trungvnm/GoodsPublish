@@ -1,4 +1,8 @@
 angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory, goodsService) {
+	$scope.showSpinner = function(){
+		$rootScope.$broadcast('showSpinner');
+	}
+	
 	var id = $stateParams.id;
 	$scope.photos = [];
 	

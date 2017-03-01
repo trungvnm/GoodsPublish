@@ -46,6 +46,14 @@
 		}
 	});
 	
+	//======= snippet control =====
+	$scope.$on("showSpinner", function(event){
+		$("ion-spinner").addClass("show");
+	});
+	$scope.$on("hideSpinner", function(event){
+		$("ion-spinner").removeClass("show");
+	});
+	
 	$scope.isHasAction = function(name){
 		for (var i = 0; i < $scope.mainActions.length; i++){
 			var action = $scope.mainActions[i];

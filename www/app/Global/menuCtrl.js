@@ -18,6 +18,15 @@
         // do what you want to do
 		$scope.issearch = args.issearch;
 	});
+	
+	//======= snippet control =====
+	$scope.$on("showSpinner", function(event){
+		$("ion-spinner").addClass("show");
+	});
+	$scope.$on("hideSpinner", function(event){
+		$("ion-spinner").removeClass("show");
+	});
+	
 	$scope.logout = function () {
 	    tokenService.removeToken();
 	    $location.url('/login');
