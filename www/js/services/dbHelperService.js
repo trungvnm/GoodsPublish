@@ -59,6 +59,16 @@ angular.module('LelongApp.services')
                 });
                 return deferred.promise;
             },
+			query: function(query){
+				var deferred = $q.defer();
+                var qr = runQuery(query, [], function (res) {
+                    deferred.resolve(res);
+                }, function (err) {
+                    console.log("ERROR: " + JSON.stringify(err));
+                    deferred.reject(err);
+                });
+                return deferred.promise;
+			},
             insert: function (table, obj) {
                 var tbl = extractTableFieldsAndValues(table, obj, false);
                 var esValue = EscapeValues(tbl.fields);

@@ -43,7 +43,20 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 						if (result == 1){
 							var id = $stateParams.id;
 							if (id != undefined){
-								$dbHelper.delete('GoodsPublish', 'GoodPublishId=\''+id+'\'').then(function(res){
+								goodsService.deleteGoods([id]).then(function(result){
+									//if (result){
+										$cordovaToast.showLongTop('Delete successful!').then(function () {
+											$ionicHistory.clearCache().then(function(){ 
+											   $state.go('app.completes'); 
+											});
+										});
+									/*}
+									else{
+										//  Delete failed
+										$cordovaToast.showLongTop('Save failed!');
+									}*/
+								});
+								/*$dbHelper.delete('GoodsPublish', 'GoodPublishId=\''+id+'\'').then(function(res){
 									if (res.result){ //  Delete successful
 										$cordovaToast.showLongTop('Delete successful!').then(function () {
 											$ionicHistory.clearCache().then(function(){ 
@@ -55,7 +68,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 										//  Delete failed
 										$cordovaToast.showLongTop('Save failed!');
 									}
-								});
+								});*/
 							}
 						}
 					});

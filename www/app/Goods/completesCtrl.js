@@ -80,8 +80,8 @@
 					});
 					if (ids.length > 0){
 						var whereClause = 'GoodPublishId IN (' + ids.join(',') + ')';
-						$dbHelper.delete('GoodsPublish', whereClause).then(function(res){
-							if (res.result){
+						goodsService.deleteGoods([id]).then(function(result){
+							if (result){
 								$cordovaToast.showLongTop('Delete successful!');
 								$scope.init();
 								$scope.quickactions = false;
