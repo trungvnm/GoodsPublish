@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate, $cordovaToast)  {
+.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate, $cordovaToast, $state, $ionicHistory)  {
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
@@ -16,9 +16,7 @@ angular.module("LelongApp.Wizard",[])
     $scope.isnew = false;
     $scope.objWizard = {};
     $scope.errorMessage = "";
-    $scope.peninsular ="";
-    $scope.eastmalaysia="";
-
+   
     $scope.save = function () {        
         if ($scope.isValid())
         {
@@ -41,16 +39,28 @@ angular.module("LelongApp.Wizard",[])
             {
                 $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {
                     setTimeout(function () {                        
-                        $cordovaToast.showLongTop('Save successful!', function (sucess) {});
-                    }, 3000);
+                        $cordovaToast.showLongTop('Save successful!', function (sucess) {
+                            $ionicHistory.clearCache().then(function () {
+                                $state.go('app.completes');
+                            });
+                        });
+                    }, 3000);            
+                }, function (err) {
+                            $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
                 });
             }
             else
             {
                 $dbHelper.update('Wizard',$scope.objWizard).then(function (res) {
                     setTimeout(function () {                        
-                        $cordovaToast.showLongTop('Save successful!', function (sucess) {});
+                        $cordovaToast.showLongTop('Save successful!', function (sucess) {
+                            $ionicHistory.clearCache().then(function () {
+                                $state.go('app.completes');
+                            });
+                        });
                     }, 3000);
+                }, function (err) {
+                            $scope.errorMessage = "ERROR Update Wizard Table: " + err;
                 });
             }            
         }        
@@ -80,22 +90,20 @@ angular.module("LelongApp.Wizard",[])
     {     
         $ionicSideMenuDelegate.toggleLeft();
         var token = tokenService.getToken();
-        var userId = token.userid;       
-        if (userId != null)
-        {           
+        var userId = token.userid;     
+         if (userId != null) {           
             $scope.objWizard.UserId = userId;
             $scope.initWizardByUser(userId);
         }
-        else
-        {
+        else {
             $scope.errorMessage = "Can't get User ID from token";
         }
     }
-
+                   
     $scope.initWizardByUser = function(userId)
     {
         $scope.isnew = true; 
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId = '"+ userId +"' ")
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId == '"+ userId +"' ")
         .then(function(response){
             if  (response.length > 0)
             {
@@ -109,8 +117,8 @@ angular.module("LelongApp.Wizard",[])
                 if (response[0].ShippingFee != null && response[0].ShippingFee != "")
                 {
                     items = response[0].ShippingFee.split(",");
-                    $scope.peninsular =  items[0] != "" ? items[0] : 0;
-                    $scope.eastmalaysia =  items[1] != "" ? items[1] : 0;
+                    $scope.peninsular =  items[0] != "" ? items[0] * 1 : 0 * 1;
+                    $scope.eastmalaysia =  items[1] != "" ? items[1] * 1 : 0 * 1;
                 }
                 $scope.objWizard.ShippingFee = response[0].ShippingFee;
                 $scope.isnew = false;
