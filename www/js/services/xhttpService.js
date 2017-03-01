@@ -38,6 +38,7 @@
             if (token) {
                 var header = {
                     "Authorization": "Bearer " + token.access_token,
+                    "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
                 this.$http.get(url, header).then(function (response) {
@@ -57,6 +58,7 @@
                 var header = {
                     'Content-type': 'application/x-www-form-urlencoded',
                     "Authorization": "Bearer " + token.access_token,
+                    "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
                 this.$http.post(url, data, header).then(function (response) {
@@ -77,6 +79,7 @@
                 var header = {
                     'Content-type': 'application/x-www-form-urlencoded',
                     "Authorization": "Bearer " + token.access_token,
+                    "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
                 this.$http.put(url, data, header).then(function (response) {
@@ -96,6 +99,7 @@
             if (token) {
                 var header = {
                     "Authorization": "Bearer " + token.access_token,
+                    "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
                 this.$http.delete(url, header).then(function (response) {
