@@ -16,7 +16,7 @@
         })
         .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle, tokenService) {
             $ionicPlatform.ready(function () {
-                tokenService.checkUserLogin();
+                //tokenService.checkUserLogin();
                 Idle.watch();
                 console.log('start watch app');
                 if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -40,7 +40,6 @@
 
         .config(function ($stateProvider, $ionicConfigProvider, $urlRouterProvider, IdleProvider, KeepaliveProvider) {
             $ionicConfigProvider.tabs.position('bottom');
-			//$ionicConfigProvider.views.maxCache(0);
             IdleProvider.idle(5); // in seconds
             IdleProvider.timeout(18000); // in seconds
             KeepaliveProvider.interval(2); // in seconds
@@ -49,7 +48,7 @@
                 .state('app', {
                     url: '/app',
                     abstract: true,
-                    templateUrl: 'app/Goods/menu.html',
+                    templateUrl: 'app/Global/menu.html',
                     controller: 'MenuCtrl'
 
                 })
@@ -68,7 +67,7 @@
                             controller: 'GoodsCtrl'
                         },
                         'quickActionsContent': {
-                            templateUrl: 'app/Goods/quickactionsbar.html',
+                            templateUrl: 'app/Global/quickactionsbar.html',
                             controller: 'QuickActionsCtrl'
                         }
                     }

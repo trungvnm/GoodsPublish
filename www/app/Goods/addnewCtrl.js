@@ -1,6 +1,6 @@
 angular.module("LelongApp.Goods")
-    .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q) {
-        
+    .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout, $ionicSlideBoxDelegate) {
+
         $scope.tokenServ = tokenService.getToken();
         $scope.init = function () {
             $scope.step = 1;
@@ -65,11 +65,6 @@ angular.module("LelongApp.Goods")
         $scope.prevClick = function () {
             $scope.step -= 1;
         }
-
-        $scope.cancelClick = function () {
-            $ionicHistory.goBack();
-        }
-
         /* ActionSheet */
         $scope.choosePhotoAction = function () {
 
@@ -143,13 +138,13 @@ angular.module("LelongApp.Goods")
         /**Cordova file */
         /** create folder with name 'ImagesUpload + userid' */
         $scope.dirName = "ImagesUpload";
-        var subDir = "" + $scope.tokenServ.userid + ""
+        $scope.subDir = "" + $scope.tokenServ.userid + ""
         function requestAccessFs() {
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
                 dirEntry.root.getDirectory($scope.dirName, { create: true }, function (subDirEntry) {
-                    subDirEntry.getDirectory(subDir, { create: true }, function (success) {
+                    subDirEntry.getDirectory($scope.subDir, { create: true }, function (success) {
                         console.log("CREATE SUBDIR SUCCESS!!!");
-                        $scope.uploadDir = $scope.dirName + "/" + subDir + "/";
+                        $scope.uploadDir = $scope.dirName + "/" + $scope.subDir + "/";
                     }, fnFailed)
                 }, fnFailed);
             }, failAccessFS);
@@ -175,7 +170,10 @@ angular.module("LelongApp.Goods")
                         fileEntry.copyTo(desFolder, newFileName, function (success) {
                             console.log("COPY FILE SUCCESS:" + JsonParse(success));
                             $scope.imgURI.push({ src: success.nativeURL });
-                            $scope.$apply();
+                            $timeout(function () {
+                                $ionicSlideBoxDelegate.slide(0);
+                                $ionicSlideBoxDelegate.update();
+                            });
                             deffered.resolve();
                         }, function (error) {
                             console.log("COPY FILE FAILED:" + JsonParse(error));
@@ -187,9 +185,48 @@ angular.module("LelongApp.Goods")
             })
             return deffered.promise;
         };
-        /**End Cordova file */
+
+        $scope.deleteImg = function (fullNamePath) {
+            removeFileFromPersitentFolder(fullNamePath);
+        }
+
+        function removeFileFromPersitentFolder(fullFileName) {
+            var fileName = fullFileName.replace(/^.*[\\\/]/, '');
+             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileEntry) {
+                fileEntry.root.getDirectory($scope.dirName, { create: true }, function (dir) {
+                    dir.getDirectory($scope.subDir, { create: true }, function (subdir) {
+                        subdir.getFile(fileName, { create: false }, function (files) {
+                            files.remove(function () {
+                                console.log("REMOVE FILE " + fileName + " SUCCESS");
+
+                                for(var i=0;i< $scope.imgURI.length;i++){
+                                    var file= $scope.imgURI[i].src.replace(/^.*[\\\/]/, '');
+                                    if(file === fileName){
+                                        $scope.imgURI.splice(i,1);
+                                        break;
+                                    }
+                                }
+                                $timeout(function () {
+                                    $ionicSlideBoxDelegate.slide(0);
+                                    $ionicSlideBoxDelegate.update();
+                                    $cordovaToast.showLongTop('Delete successfully!')
+                                });
+                            }, errorHandler, function () {
+                                console.log("FILE " + fileName + " DOES NOT EXISTS.");
+                            })
+                        }, errorHandler)
+                    }, errorHandler);
+                }, errorHandler);
+            }, errorHandler);
+        }
+
+        /**End Cordova file */       
         function JsonParse(obj) {
-            return JSON.stringify(obj);
+            var jsonObj;
+            if (obj !== undefined) {
+                jsonObj = JSON.stringify(obj)
+            }
+            return jsonObj;
         }
 
         function errorHandler(err) {
@@ -204,14 +241,5 @@ angular.module("LelongApp.Goods")
                 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
             return uuid;
-        };
-
-        $(document).ready(function () {
-            //Here your view content is fully loaded !!
-            var imagesInScreen = 3;
-            var imgWidth = $(window).width() / imagesInScreen;
-            var imgQuantity = $(".gallery-view .row .image-container img").length;
-            $(".gallery-view .row").width(imgWidth * imgQuantity);
-            $(".gallery-view .row .image-container img").width(imgWidth - 2);
-        });
+        };      
     });

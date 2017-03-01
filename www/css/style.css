@@ -5,11 +5,13 @@
 #menulist a.item:hover{background: #d6d6d6}
 
 #quick-actions-bar{position: fixed; top:0;left: 0; z-index: 20;height: 47px; background: #f8f8f8;}
+#quick-actions-bar .right-panel{position: absolute; right: 0}
+#quick-actions-bar *{color: #676767  !important}
 #quick-actions-bar .back{display: block;
     padding: 7px 10px;
     color: #444;}
 
-.button-clear.button-clear{    color: #b2b2b2;}
+/*.button-clear.button-clear{    color: #b2b2b2;}*/
 .ionic .item-input-wrapper{    background: #eee}
 
 .list .detail-value{    color: #707070;
@@ -99,6 +101,9 @@ a[disabled] {
     line-height: 26px;
     display: block;
     padding-left: 15px;}
+.button.tiny-icon:before{font-size: 14px !important}
+/*ion-header-bar{background: #387ef5;}
+ion-header-bar *{color: white !important;} */
 
 .item-thumbnail-left>.main_photo>img:first-child{
     position: absolute;
