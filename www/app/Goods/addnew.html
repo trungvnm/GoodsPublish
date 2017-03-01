@@ -9,31 +9,35 @@
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Category</span>
-                <input type="number" placeholder="Category" ng-model="goodItem.Category">
-            </label>
-                <!--<label class="item item-input item-select">
-                    <div class="input-label">
-                    Category
-                    </div>
-                    <select>
-                    <option value="1">Phone</option>
-                    <option selected value="2">Fashion</option>
-                    <option value="3">Stuff</option>
-                    </select>
-                </label>-->
-
-                <label class="item item-input item-stacked-label">
-                <span class="input-label">Condition</span>
-                <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
+                <button ng-show="goodItem.Category.length<=0" ng-disabled="goodItem.Category.length>0"  style="float: right" class="button button-clear button-positive" ng-click="showPopup()">
+                    Choose category
+                </button>
+                 <input type="text" ng-show="goodItem.Category.length>0" ng-disabled="true" placeholder="Category" ng-model="goodItem.Category">            
             </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Brand</span>
-                <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
-            </label>
+                    <span class="input-label">Condition</span>
+                    <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
+                </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Price</span>
-                <input type="number" placeholder="Price" ng-model="goodItem.Price">
-            </label>
+                    <span class="input-label">Brand</span>
+                    <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Quantity</span>
+                    <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Weight</span>
+                    <input type="number" placeholder="Weight" ng-model="goodItem.Weight">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Price</span>
+                    <input type="number" placeholder="Price" ng-model="goodItem.Price">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">SalePrice</span>
+                    <input type="number" placeholder="Price" ng-model="goodItem.SalePrice">
+                </label>
             </div>
             <!--Step 2 photo upload-->
             <div id="addnew-step2" ng-show="step==2">
@@ -41,11 +45,11 @@
                     <ion-slide-box does-continue="true">
                         <ion-slide ng-repeat="image in imgURI">
                             <div>
-                                <img ng-src="{{image.src}}" alt="">
+                                <img style="width: 200px;height: 200px" ng-src="{{image.src}}" alt="">
                                 <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(image.src)"></a>
                             </div>
                         </ion-slide>
-                        </ion-slide>                        
+                        </ion-slide>
                     </ion-slide-box>
 
                     <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">
@@ -59,25 +63,42 @@
             <!--Step 3 optional field-->
             <div id="addnew-step3" ng-show="step==3">
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Quantity</span>
-                <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
-            </label>
+                    <span class="input-label">GSTType</span>
+                    <input type="number" placeholder="GSTType" ng-model="goodItem.GstType">
+                </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Weight</span>
-                <input type="number" placeholder="Weight" ng-model="goodItem.Weight">
-            </label>
+                    <span class="input-label">SaleType</span>
+                    <input type="text" placeholder="SaleType" ng-model="goodItem.SaleType">
+                </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Whopay</span>
-                <input type="text" placeholder="Whopay" ng-model="goodItem.Whopay">
-            </label>
+                    <span class="input-label">ModelSKUCode</span>
+                    <input type="text" placeholder="ModelSkuCode" ng-model="goodItem.ModelSkuCode">
+                </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">shiptolocation</span>
-                <input type="text" placeholder="Shiptolocation" ng-model="goodItem.Shiptolocation">
-            </label>
+                    <span class="input-label">State</span>
+                    <input type="text" placeholder="State" ng-model="goodItem.State">
+                </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Shippingmethod</span>
-                <input type="text" placeholder="Shippingmethod" ng-model="goodItem.Shippingmethod">
-            </label>
+                    <span class="input-label">Whopay</span>
+                    <input type="text" placeholder="Whopay" ng-model="goodItem.Whopay">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Shiptolocation</span>
+                    <input type="text" placeholder="Shiptolocation" ng-model="goodItem.Shiptolocation">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Shippingmethod</span>
+                    <input type="text" placeholder="Shippingmethod" ng-model="goodItem.Shippingmethod">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">PaymentMethod</span>
+                    <input type="text" placeholder="PaymentMethod" ng-model="goodItem.PaymentMethod">
+                </label>
+                <label class="item item-input item-stacked-label">
+                     <span class="input-label">Description</span>
+                    <textarea placeholder="Description" ng-model="goodItem.Description"></textarea>
+                </label>
+                <ion-toggle ng-model="goodItem.Active" toggle-class="toggle-calm">Active</ion-toggle>
             </div>
         </div>
         <!--Next, Previous button-->
