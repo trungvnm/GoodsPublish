@@ -11,7 +11,7 @@
 			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
-				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-click="goodClick(g.GoodPublishId)" ng-class="goodSlided" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img src="{{g.PhotoUrl}}"/>
 						<img class="inlay" src="./img/Check-icon.png" />
@@ -45,7 +45,7 @@
 			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
-				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-class="goodSlided" href="#/navbar/detail/{{g.GoodPublishId}}" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-click="goodClick(g.GoodPublishId)" ng-class="goodSlided" on-swipe-left="goodSwipeLeft()" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <img src="{{g.PhotoUrl}}">
 				  <h2>{{g.Title}}</h2>
 				  <p>{{g.Description}}</p>
@@ -78,7 +78,7 @@
 
 	</ion-tabs>
 	<span id="addnew-button">
-		<a class="button button-icon icon ion-android-add" href="#/navbar/addnew" ng-click="addnewButtonClick()"></a>
+		<a class="button button-icon icon ion-android-add" ng-click="addnewButtonClick()"></a>
 	</span>
 	
 </ion-view>

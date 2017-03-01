@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast) {	
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state) {	
 	$scope.init = function(){
 		$scope.goods = [];
 		goodsService.getAll().then(function(result) {
@@ -34,9 +34,11 @@
 	$scope.editButtonClick = function($event){
 		window.location = '#/edit';
 	};
+	$scope.goodClick = function(goodId){
+		$ionicHistory.clearCache().then(function(){ $state.go('navbar.detail', {id: goodId, context: 'navbar.detail'}); });
+	};
 	$scope.addnewButtonClick = function(){
-		//$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew'); });
-		window.location = '#/navbar/addnew';
+		$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew'); });
 	};
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
 		$scope.quickactions = args.quickactions;

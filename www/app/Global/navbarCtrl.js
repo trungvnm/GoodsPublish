@@ -1,7 +1,7 @@
 ﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService){
 	$scope.disabled = {};
-	$scope.mainActions = {};
-	$scope.subActions = {};
+	$scope.mainActions = [];
+	$scope.subActions = [];
 	$scope.$on("setMainActions", function(event, actionsList){
 		$scope.mainActions = actionsList;
 	});
@@ -89,5 +89,5 @@
 	// action for cancel searching button
 	$scope.cancelSearchingg = function(){
 		$scope.isSearchEnabled = false;
-	}
+	};
 })

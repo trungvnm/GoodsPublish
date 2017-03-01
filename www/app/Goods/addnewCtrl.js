@@ -3,6 +3,23 @@ angular.module("LelongApp.Goods")
         $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
         $ionicSlideBoxDelegate, $ionicPopup) {
 
+		/**Top bar actions */
+        var actions = [
+            {
+                name: 'upload',
+                action: function () {
+
+                }
+            },
+            {
+                name: 'save',
+                action: function () {
+                    $scope.saveClick();
+                }
+            }
+        ];
+        $rootScope.$broadcast("setMainActions", actions);
+		
         $scope.tokenServ = tokenService.getToken();
         $scope.init = function () {
             $scope.step = 1;
@@ -28,22 +45,7 @@ angular.module("LelongApp.Goods")
             // handle event
             $scope.init();
         });
-        /**Top bar actions */
-        var actions = [
-            {
-                name: 'upload',
-                action: function () {
-
-                }
-            },
-            {
-                name: 'save',
-                action: function () {
-                    $scope.saveClick();
-                }
-            }
-        ];
-        $rootScope.$broadcast("setMainActions", actions);
+        
 
         /** Choose Category */
         $scope.showPopup = function () {
