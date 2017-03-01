@@ -101,6 +101,8 @@ a[disabled] {
     line-height: 26px;
     display: block;
     padding-left: 15px;}
+.filter-caption .button{position: absolute; right: 0px}
+.filter-caption .button:before{font-size: 20px}
 .button.tiny-icon:before{font-size: 14px !important}
 /*ion-header-bar{background: #387ef5;}
 ion-header-bar *{color: white !important;} */

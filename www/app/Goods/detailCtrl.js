@@ -1,8 +1,4 @@
 angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory, goodsService) {
-	$scope.showSpinner = function(){
-		$rootScope.$broadcast('showSpinner');
-	}
-	
 	var id = $stateParams.id;
 	$scope.photos = [];
 	
@@ -26,6 +22,12 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 						src: photo.PhotoUrl,
 						sub: photo.PhotoDescription
 					});
+				});
+			}
+			else{
+				$scope.photos.push({
+					src: 'img/nophoto.jpg',
+					sub: ''
 				});
 			}
 		});

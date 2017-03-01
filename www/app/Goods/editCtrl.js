@@ -1,4 +1,4 @@
-angular.module("LelongApp.Goods").controller("EditCtrl", function ($scope, $rootScope) {
+angular.module("LelongApp.Goods").controller("EditCtrl", function ($scope, $rootScope,$ionicHistory, $state) {
 	
 	$scope.photos = [
 	  {
@@ -40,7 +40,10 @@ angular.module("LelongApp.Goods").controller("EditCtrl", function ($scope, $root
 	];
 	
 	$scope.goBack = function(){
-		$rootScope.$ionicGoBack();
+		$ionicHistory.clearCache().then(function(){
+			$rootScope.$ionicGoBack();
+		});
+		
 	};
 	
 	$(document).ready(function(){

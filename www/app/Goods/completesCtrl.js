@@ -1,5 +1,6 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state) {	
 	$scope.init = function(){
+		$scope.filterMessage = '';
 		$scope.goods = [];
 		goodsService.getAll().then(function(result) {
 			if (result){
@@ -16,6 +17,13 @@
 		//selectGoods();
 	};
 	
+	$scope.exitSearching = function(){
+		$scope.filterMessage = '';
+		$scope.goods.forEach(function(g){
+			g.hidden = false;
+		});
+	};
+	
     $scope.goodOnHold = function(listType){
         var params = {};
         params.isQuickActions = true;
@@ -24,17 +32,19 @@
 		$scope.tabclass = 'tabhide';
         $rootScope.$broadcast('updateIsQuickActions', params);
     };
-	$scope.goodSwipeLeft = function(){
-		$scope.goodSlided = 'slided';
+	$scope.goodSwipeLeft = function(good){
+		good.goodSlided = 'slided';
 		setTimeout(function(){
-			window.location = '#/edit';
+			$ionicHistory.clearCache().then(function(){ $state.go('edit'); });
 		}, 250);
 		
 	};
 	$scope.editButtonClick = function($event){
-		window.location = '#/edit';
+		$ionicHistory.clearCache().then(function(){ $state.go('edit'); });
 	};
-	$scope.goodClick = function(goodId){
+	$scope.goodClick = function($event,goodId){
+		if ($event.target.className.indexOf("edit-button") != -1)
+			return false;
 		$ionicHistory.clearCache().then(function(){ $state.go('navbar.detail', {id: goodId, context: 'navbar.detail'}); });
 	};
 	$scope.addnewButtonClick = function(){
