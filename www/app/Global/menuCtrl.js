@@ -1,4 +1,5 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService) {
+	$scope.goodCounter = 0;
     $scope.account = {};
     $scope.account.name = $window.localStorage.getItem("Lelong_UserLogined");
     $scope.toggleLeft = function () {
@@ -20,5 +21,12 @@
 	$scope.logout = function () {
 	    tokenService.removeToken();
 	    $location.url('/login');
+	};
+	
+	$scope.init = function(){
+		// count quantity of goods 
+		goodsService.countAll().then(function(quantity){
+			$scope.goodCounter = quantity;
+		});
 	}
 })

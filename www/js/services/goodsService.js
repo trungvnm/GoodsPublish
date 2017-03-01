@@ -6,7 +6,7 @@ angular.module('LelongApp.services')
                 var userId = token.userid;
 				
 				// Condition for filter
-				var whereClause = ' WHERE UserId=\''+userId+'\'';
+				var whereClause = ' WHERE UserId=\''+userId+'\' AND Active = 1 ';
 				
 				// Query to extract data
 				var query = 'SELECT	GoodPublishId, Title, SalePrice, Description, Quantity, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
@@ -17,6 +17,23 @@ angular.module('LelongApp.services')
 					return result;
 				});
             },
+			countAll: function(){
+				var token = tokenService.getToken();
+                var userId = token.userid;
+				
+				// Condition for filter
+				var whereClause = ' WHERE UserId=\''+userId+'\' AND Active = 1 ';
+				
+				// Query to extract data
+				var query = 'SELECT	COUNT(GoodPublishId) AS Counter FROM	GoodsPublish ' + whereClause;
+				
+				return $dbHelper.selectCustom(query).then(function(result){
+					if (result && result.length > 0){
+						return result[0].Counter;
+					}
+					return 0;
+				});
+			},
             getGoodsById: function (goodId) {
 				// Condition for filter
 				var whereClause = ' WHERE GoodPublishId=\''+goodId+'\'';
@@ -47,15 +64,14 @@ angular.module('LelongApp.services')
 							});
 							
 							// delete records from GoodsPublish table before
-							var query = 'DELETE FROM GoodsPublish WHERE ' + whereClause;
-							//query += 'DELETE FROM GoodsPublishPhoto WHERE ' + whereClause;
+							var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
 							return $dbHelper.query(query).then(function(result){
 								if (result.rowsAffected && result.rowsAffected > 0){
 									
 									// delete records from GoodsPublishPhoto table
-									query = 'DELETE FROM GoodsPublishPhoto WHERE ' + whereClause;
-									return $dbHelper.query(query).then(function(res){
-										if (res.rowsAffected && res.rowsAffected > 0){
+									//query = 'DELETE FROM GoodsPublishPhoto WHERE ' + whereClause;
+									//return $dbHelper.query(query).then(function(res){
+										//if (res.rowsAffected && res.rowsAffected > 0){
 											// for each photo file on disk 
 											photoPaths.forEach(function(p){
 												var nameSegments = p.split('/');
@@ -78,10 +94,10 @@ angular.module('LelongApp.services')
 													});
 												});
 											});
-										}
-									});
+										//}
+									//});
 								}
-								return result.result;
+								return (result.rowsAffected && result.rowsAffected > 0);
 							});
 						}
 					});

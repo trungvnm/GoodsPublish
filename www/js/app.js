@@ -80,7 +80,7 @@
                             controller: 'AccountCtrl'
                         },
                         'quickActionsContent': {
-                            templateUrl: 'app/Goods/quickactionsbar.html',
+                            templateUrl: 'app/Global/quickactionsbar.html',
                             controller: 'QuickActionsCtrl'
                         }
                     }

@@ -35,6 +35,7 @@
 		window.location = '#/edit';
 	};
 	$scope.addnewButtonClick = function(){
+		//$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew'); });
 		window.location = '#/navbar/addnew';
 	};
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
@@ -79,8 +80,7 @@
 						}
 					});
 					if (ids.length > 0){
-						var whereClause = 'GoodPublishId IN (' + ids.join(',') + ')';
-						goodsService.deleteGoods([id]).then(function(result){
+						goodsService.deleteGoods(ids).then(function(result){
 							if (result){
 								$cordovaToast.showLongTop('Delete successful!');
 								$scope.init();
