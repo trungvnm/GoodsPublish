@@ -39,16 +39,6 @@
 				}
 			});
 
-            //--key{wizardSetting: true}
-            // var wizardVal = $dbHelper.select("Setting", "SettingFieldId", " SettingFieldId = 'wizardSetting' ");
-            // if(wizardVal){
-            //     window.location = '#/app/completes';
-            //     defer.resolve("success");
-            // }
-            // $location.path('/wizard');
-            // defer.resolve("success");
-
-			//window.location = '#/app/completes';
             defer.resolve("success");
         }, function (err) {
             $scope.errorMessage ="invalid username or password. Please try again!"
