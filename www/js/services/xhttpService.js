@@ -15,6 +15,7 @@
 
     XhttpService.prototype.login = function (loginUrl, data) {
         var defer = this.$q.defer();
+        var self = this;
         var header = {
             'Access-Control-Allow-Origin': 'www.lelong.com.my',
             'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
@@ -22,7 +23,7 @@
             'Content-type': 'application/x-www-form-urlencoded',
             "Accept": "application/json"
         }
-        this.$http.post(loginUrl, data, header).then(function (response) {
+        self.$http.post(loginUrl, data, header).then(function (response) {
             console.log('logined');
             defer.resolve(response);
         }, function (err) {
@@ -37,6 +38,7 @@
 			$("ion-spinner").addClass("show");
 		}
         var defer = this.$q.defer();
+        var self = this;
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
@@ -44,7 +46,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                this.$http.get(url, header).then(function (response) {
+                self.$http.get(url, header).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -65,6 +67,7 @@
 			$("ion-spinner").addClass("show");
 		}
         var defer = this.$q.defer();
+        var self = this;
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
@@ -73,7 +76,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                this.$http.post(url, data, header).then(function (response) {
+                self.$http.post(url, data, header).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -94,6 +97,7 @@
 			$("ion-spinner").addClass("show");
 		}
         var defer = this.$q.defer();
+        var self = this;
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
@@ -102,7 +106,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                this.$http.put(url, data, header).then(function (response) {
+                self.$http.put(url, data, header).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -122,7 +126,8 @@
 		if (showSpinner){
 			$("ion-spinner").addClass("show");
 		}
-        var defer = this.$q.defer()
+        var defer = this.$q.defer();
+        var self = this;
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
@@ -130,7 +135,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                this.$http.delete(url, header).then(function (response) {
+                self.$http.delete(url, header).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");

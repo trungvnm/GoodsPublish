@@ -61,23 +61,17 @@
 						UserName: $scope.username, 
 						Password: encodeURIComponent($scope.password)
 					}).then(function(result){
-
 						token.userid = result.insertId;
 						tokenService.saveToken(token);
-						$scope.updateLoginAttempt(token.userid,0);                          
-					});
-                    // xhttpService.post("/app/User/Add",{
-                    //     UserName: $scope.username, 
-                    //     Password: encodeURIComponent($scope.password)
-                    // }).then(function(res){
-                    //     debugger;
-                    //     token.userid = result.insertId;
-                    //     tokenService.saveToken(token);
-                    //     $scope.updateLoginAttempt(token.userid,0);
-                    // })
+                        xhttpService.post("https://1f71ef25.ngrok.io/api/user/add",{
+                            UserName: $scope.username, 
+                            Password: encodeURIComponent($scope.password)
+                            }).then(function(res){                                                               
+                                $scope.updateLoginAttempt(token.userid,0);
+                            })                     
+					});                   
 				}                
 			});
-
             defer.resolve("success");
         }, function (err) {
             var loginAttempt = 0;

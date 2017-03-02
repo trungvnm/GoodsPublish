@@ -94,7 +94,9 @@
                 this.refresh().then(function (token) {
                     defer.resolve(token);
                 })
-            } else defer.reject(err);
+            } else 
+                defer.resolve(token);
+                //defer.reject(err);
         });
         return defer.promise;
     };

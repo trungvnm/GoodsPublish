@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate, $cordovaToast, $state, $ionicHistory)  {
+.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
@@ -16,54 +16,64 @@ angular.module("LelongApp.Wizard",[])
     $scope.isnew = false;
     $scope.objWizard = {};
     $scope.errorMessage = "";
-   
-    $scope.save = function () {        
+    $scope.bRead = false;
+    $scope.save = function()
+    {
         if ($scope.isValid())
         {
-            $scope.objWizard.ItemsCategory= "";
-            for(i in $scope.checkItems) {
-                if($scope.checkItems[i])
-                {
-                    $scope.objWizard.ItemsCategory += i;                
-                }
-                if($scope.checkItems != null)
-                {
-                    $scope.objWizard.ItemsCategory += ",";
-                }    
-            }
-            $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
-
-            $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
-
-            if  ($scope.isnew)
+            $scope.readObject();
+            $scope.saveObject();
+        }
+    }
+    $scope.readObject = function(){
+        $scope.objWizard.ItemsCategory= "";
+        for(i in $scope.checkItems) {
+            if($scope.checkItems[i])
             {
-                $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {
-                    setTimeout(function () {                        
-                        $cordovaToast.showLongTop('Save successful!', function (sucess) {
-                            $ionicHistory.clearCache().then(function () {
-                                $state.go('app.completes');
-                            });
-                        });
-                    }, 3000);            
-                }, function (err) {
-                            $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
-                });
+                $scope.objWizard.ItemsCategory += i;  
+                $scope.objWizard.ItemsCategory += ",";              
             }
-            else
-            {
-                $dbHelper.update('Wizard',$scope.objWizard).then(function (res) {
-                    setTimeout(function () {                        
-                        $cordovaToast.showLongTop('Save successful!', function (sucess) {
-                            $ionicHistory.clearCache().then(function () {
-                                $state.go('app.completes');
-                            });
-                        });
-                    }, 3000);
-                }, function (err) {
-                            $scope.errorMessage = "ERROR Update Wizard Table: " + err;
-                });
-            }            
-        }        
+        }
+        $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
+
+        $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
+    }
+    $scope.saveObject = function () {  
+        var defer = $q.defer();
+        if  ($scope.isnew)
+        {
+            $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {       
+                    $ionicHistory.clearCache().then(function () {                   
+                        $cordovaToast.showLongTop('Save successful!').then( function (success) {
+                            $scope.isnew = false;
+                            $state.go('app.completes');    
+                        },function(error){
+                            $scope.errorMessage = "Can't navigate Goods Page!";           
+                        })               
+                    });
+                 defer.resolve("insert wizard success");    
+            }, function (err) {
+                    $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
+                    defer.reject("insert wizard unsuccess");  
+            });
+        }
+        else
+        {
+             $dbHelper.update('Wizard',$scope.objWizard).then(function (res) {       
+                    $ionicHistory.clearCache().then(function () {                   
+                        $cordovaToast.showLongTop('Save successful!').then( function (success) {
+                            $scope.isnew = false;
+                            $state.go('app.completes');    
+                        },function(error){
+                            $scope.errorMessage = "Can't navigate Goods Page!";           
+                        })               
+                    });
+                defer.resolve("update wizard success");      
+            }, function (err) {
+                    $scope.errorMessage = "ERROR Update Wizard Table: " + err;
+                    defer.reject("update wizard unsuccess");  
+            });
+        } 
     }
 
     $scope.isValid = function()
@@ -93,7 +103,7 @@ angular.module("LelongApp.Wizard",[])
         var userId = token.userid;     
          if (userId != null) {           
             $scope.objWizard.UserId = userId;
-            $scope.initWizardByUser(userId);
+            $scope.initWizardByUser(userId);            
         }
         else {
             $scope.errorMessage = "Can't get User ID from token";
@@ -102,8 +112,8 @@ angular.module("LelongApp.Wizard",[])
                    
     $scope.initWizardByUser = function(userId)
     {
-        $scope.isnew = true; 
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId == '"+ userId +"' ")
+        $scope.isnew = true;     
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId=='"+ userId +"'")
         .then(function(response){
             if  (response.length > 0)
             {
