@@ -73,7 +73,7 @@
 		</ion-content>
 	  </ion-tab>
 
-	  <ion-tab title="Synced" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline">
+	  <ion-tab title="Synced" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline" on-select="onTabSelected()" on-deselect="onTabSelected()">
 		<!-- Tab 3 content -->
 		<ion-content class="has-header tab-content">
 			<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">{{filterMessage}}
@@ -83,8 +83,10 @@
 	  </ion-tab>
 
 	</ion-tabs>
-	<span id="addnew-button">
+	<span class="popup-button" ng-show="popButton == 'addnew'">
 		<a class="button button-icon icon ion-android-add" ng-click="addnewButtonClick()"></a>
 	</span>
-	
+	<span class="popup-button" ng-show="popButton == 'syncall'">
+		<a class="button button-icon icon ion-android-sync"></a>
+	</span>
 </ion-view>

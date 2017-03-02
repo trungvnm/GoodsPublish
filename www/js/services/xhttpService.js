@@ -32,7 +32,10 @@
         return defer.promise;
     }
 
-    XhttpService.prototype.get = function (url) {
+    XhttpService.prototype.get = function (url, showSpinner) {
+		if (showSpinner){
+			$("ion-spinner").addClass("show");
+		}
         var defer = this.$q.defer();
         this.tokenService.verify().then(function (token) {
             if (token) {
@@ -43,15 +46,24 @@
                 }
                 this.$http.get(url, header).then(function (response) {
                     defer.resolve(response);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 }, function (err) {
                     defer.reject(err);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
         return defer.promise;
     }
 
-    XhttpService.prototype.post = function (url, data) {
+    XhttpService.prototype.post = function (url, data, showSpinner) {
+		if (showSpinner){
+			$("ion-spinner").addClass("show");
+		}
         var defer = this.$q.defer();
         this.tokenService.verify().then(function (token) {
             if (token) {
@@ -63,16 +75,24 @@
                 }
                 this.$http.post(url, data, header).then(function (response) {
                     defer.resolve(response);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 }, function (err) {
-
                     defer.reject(err);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
         return defer.promise;
     }
 
-    XhttpService.prototype.put = function (url, data) {
+    XhttpService.prototype.put = function (url, data, showSpinner) {
+		if (showSpinner){
+			$("ion-spinner").addClass("show");
+		}
         var defer = this.$q.defer();
         this.tokenService.verify().then(function (token) {
             if (token) {
@@ -84,16 +104,24 @@
                 }
                 this.$http.put(url, data, header).then(function (response) {
                     defer.resolve(response);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 }, function (err) {
-
                     defer.reject(err);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
         return defer.promise;
     }
 
-    XhttpService.prototype.delete = function (url) {
+    XhttpService.prototype.delete = function (url, showSpinner) {
+		if (showSpinner){
+			$("ion-spinner").addClass("show");
+		}
         var defer = this.$q.defer()
         this.tokenService.verify().then(function (token) {
             if (token) {
@@ -104,9 +132,15 @@
                 }
                 this.$http.delete(url, header).then(function (response) {
                     defer.resolve(response);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 }, function (err) {
 
                     defer.reject(err);
+					if (showSpinner){
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })

@@ -1,4 +1,5 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state) {	
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {	
+	$scope.popButton = 'addnew';
 	$scope.init = function(){
 		$scope.filterMessage = '';
 		$scope.goods = [];
@@ -15,6 +16,17 @@
 		});
 
 		//selectGoods();
+	};
+	
+	// when a tab has been selected
+	$scope.onTabSelected = function(){
+		var tabIndex = $ionicTabsDelegate.selectedIndex();
+		if (tabIndex == 2){
+			$scope.popButton = 'syncall';
+		}
+		else{
+			$scope.popButton = 'addnew';
+		}
 	};
 	
 	$scope.exitSearching = function(){
@@ -113,6 +125,7 @@
 			if (e.target.className.indexOf("edit-button") != -1)
 				return false;
 		});
-
 	});
+	
+	
 });

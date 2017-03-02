@@ -9,6 +9,7 @@ angular.module("LelongApp.Goods")
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
+            $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
 
             if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
