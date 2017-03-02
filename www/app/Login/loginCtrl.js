@@ -63,12 +63,19 @@
 					}).then(function(result){
 						token.userid = result.insertId;
 						tokenService.saveToken(token);
+                        $scope.updateLoginAttempt(token.userid,0);
                         xhttpService.post("https://1f71ef25.ngrok.io/api/user/add",{
                             UserName: $scope.username, 
-                            Password: encodeURIComponent($scope.password)
-                            }).then(function(res){                                                               
-                                $scope.updateLoginAttempt(token.userid,0);
-                            })                     
+                            Password: encodeURIComponent($scope.password),
+                            AccessToken: token.access_token,
+                            RefreshToken: token.refresh_token,
+                            LoginAttempt: 0,
+                            MaxPostingAllow: 1000,
+                            PostingAlready: true,
+                            NumberOfPhotosAllow: 10
+                        }).then(function(res){                                                               
+                            $scope.updateLoginAttempt(token.userid,0);
+                        })                     
 					});                   
 				}                
 			});
