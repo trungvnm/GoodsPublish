@@ -26,7 +26,8 @@
     "cordova-plugin-image-picker",
     "cordova-plugin-x-toast",
     "cordova-plugin-file",
-    "cordova-plugin-filepath"
+    "cordova-plugin-filepath",
+	"cordova-plugin-dialogs"
   ],
   "cordovaPlatforms": [
     "android"
