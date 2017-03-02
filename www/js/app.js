@@ -34,7 +34,7 @@
                 }
                 //initial db, tables
                 $rootScope.db = $dbHelper.openDB();
-                $dbHelper.initialDB();
+                $dbHelper.initialDB();               
             });
         })
 
@@ -86,7 +86,7 @@
                     }
                 })
 				.state('navbar.addnew', {
-                    url: '/addnew',
+                    url: '/addnew/{goodsId}',
                     views: {
                         'menuContent': {
                             templateUrl: 'app/Goods/addnew.html',

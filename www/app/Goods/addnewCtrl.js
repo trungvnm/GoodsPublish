@@ -1,26 +1,37 @@
 angular.module("LelongApp.Goods")
     .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory,
         $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
-        $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService) {
+        $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams) {
 
+        $scope.goodsId = $stateParams.goodsId;
+        $scope.viewTitle="Add new";
         $scope.tokenServ = tokenService.getToken();
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
-            $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
-            $scope.defaultCategory = [
-                { value: 1, name: "Phone & Tablet", isChecked: false },
-                { value: 2, name: "Electronics & Appliances", isChecked: false },
-                { value: 3, name: "Fasion", isChecked: false },
-                { value: 4, name: "Beauty & Personal Care", isChecked: false },
-                { value: 5, name: "Toys & Games", isChecked: false },
-                { value: 6, name: "Watches, Pens & Clocks", isChecked: false },
-                { value: 7, name: "Gifts & Premiums", isChecked: false },
-                { value: 8, name: "Home & Gardening", isChecked: false },
-                { value: 9, name: "Sports & Recreation", isChecked: false },
-                { value: 10, name: "Books & Comics", isChecked: false }
-            ];
+
+            if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+                /** get publishGood by id */
+                $scope.viewTitle="Edit"
+                goodsService.getGoodsById($scope.goodsId).then(function(res){
+                    $scope.goodItem=res;
+                });
+            } else {
+                $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') };
+                $scope.defaultCategory = [
+                    { value: 1, name: "Phone & Tablet", isChecked: false },
+                    { value: 2, name: "Electronics & Appliances", isChecked: false },
+                    { value: 3, name: "Fasion", isChecked: false },
+                    { value: 4, name: "Beauty & Personal Care", isChecked: false },
+                    { value: 5, name: "Toys & Games", isChecked: false },
+                    { value: 6, name: "Watches, Pens & Clocks", isChecked: false },
+                    { value: 7, name: "Gifts & Premiums", isChecked: false },
+                    { value: 8, name: "Home & Gardening", isChecked: false },
+                    { value: 9, name: "Sports & Recreation", isChecked: false },
+                    { value: 10, name: "Books & Comics", isChecked: false }
+                ];
+            }
             requestAccessFs();
         }
 
@@ -44,7 +55,7 @@ angular.module("LelongApp.Goods")
             }
         ];
         $rootScope.$broadcast("setMainActions", actions);
-
+        /**End Top bar actions */
         /** Choose Category */
         $scope.showPopup = function () {
             var listTemplate = '<ion-list> <ion-checkbox  ng-repeat="cate in defaultCategory" title="{{cate.name}}" ng-model="cate.isChecked">{{cate.name}}</ion-checkbox> </ion-list>';
@@ -71,18 +82,8 @@ angular.module("LelongApp.Goods")
             });
         }
         /** End Choose Category */
-        /**End Top bar actions */
-        $scope.saveClick = function () {
-            goodsService.saveGoods($scope.goodItem, $scope.imgURI);
-        }
 
-        $scope.nextClick = function () {
-            $scope.step += 1;
-        }
 
-        $scope.prevClick = function () {
-            $scope.step -= 1;
-        }
         /* ActionSheet */
         $scope.choosePhotoAction = function () {
 
@@ -125,7 +126,8 @@ angular.module("LelongApp.Goods")
                 targetWidth: 300,
                 targetHeight: 300,
                 popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: false
+                saveToPhotoAlbum: false,
+                correctOrientation:true
             };
 
             $cordovaCamera.getPicture(options).then(function (imagePath) {
@@ -152,9 +154,26 @@ angular.module("LelongApp.Goods")
                 console.log('From Library Photo: ' + JsonParse(error));
             });
         };
+
+        $scope.deleteImg = function (fullNamePath) {
+            imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
+                for (var i = 0; i < $scope.imgURI.length; i++) {
+                    var file = $scope.imgURI[i].replace(/^.*[\\\/]/, '');
+                    if (file === res) {
+                        $scope.imgURI.splice(i, 1);
+                        break;
+                    }
+                }
+                $timeout(function () {
+                    $ionicSlideBoxDelegate.slide(0);
+                    $ionicSlideBoxDelegate.update();
+                    $cordovaToast.showLongTop('Delete successfully!')
+                });
+            });
+        }
         /**End camera */
         /**Cordova file */
-        /** create folder with name 'ImagesUpload + userid' */
+        /** create folder with name 'ImagesUpload / userid */
         $scope.dirName = "ImagesUpload";
         $scope.subDir = "" + $scope.tokenServ.userid + ""
         function requestAccessFs() {
@@ -204,24 +223,26 @@ angular.module("LelongApp.Goods")
             return deffered.promise;
         };
 
-        $scope.deleteImg = function (fullNamePath) {
-            imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
-                for (var i = 0; i < $scope.imgURI.length; i++) {
-                    var file = $scope.imgURI[i].replace(/^.*[\\\/]/, '');
-                    if (file === res) {
-                        $scope.imgURI.splice(i, 1);
-                        break;
-                    }
-                }
-                $timeout(function () {
-                    $ionicSlideBoxDelegate.slide(0);
-                    $ionicSlideBoxDelegate.update();
-                    $cordovaToast.showLongTop('Delete successfully!')
-                });
+        /**End Cordova file */
+        $scope.saveClick = function () {
+            goodsService.saveGoods($scope.goodItem, $scope.imgURI);
+        }
+
+        $scope.nextClick = function () {
+            $scope.step += 1;
+        }
+
+        $scope.prevClick = function () {
+            $scope.step -= 1;
+        }
+
+        $scope.getData = function () {
+            $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
+                console.log("INNER JOIN: " + JsonParse(res));
             });
         }
 
-        /**End Cordova file */
+        /**helper method */
         function JsonParse(obj) {
             var jsonObj;
             if (obj !== undefined) {
@@ -243,4 +264,5 @@ angular.module("LelongApp.Goods")
             });
             return uuid;
         };
+        /**end helper method */
     });

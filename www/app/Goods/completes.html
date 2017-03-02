@@ -22,7 +22,7 @@
 				  <p>{{g.Description}}</p>
 				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
 				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
-				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick($event)"></button>
+				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)"></button>
 				</a>
 			</div>
 			
@@ -55,7 +55,7 @@
 				  <p>{{g.Description}}</p>
 				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
 				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
-				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick($event)"></button>
+				  <a class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)" ></a>
 				</a>
 			</div>
 			

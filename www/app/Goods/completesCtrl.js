@@ -39,8 +39,8 @@
 		}, 250);
 		
 	};
-	$scope.editButtonClick = function($event){
-		$ionicHistory.clearCache().then(function(){ $state.go('edit'); });
+	$scope.editButtonClick = function(gId){
+		$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew',{goodsId:gId}); });
 	};
 	$scope.goodClick = function($event,goodId){
 		if ($event.target.className.indexOf("edit-button") != -1)

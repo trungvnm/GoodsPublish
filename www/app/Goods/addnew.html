@@ -1,5 +1,5 @@
-<ion-view view-title="Add new">
-    <ion-content ng-init="init()">
+<ion-view ng-init="init()" view-title="{{viewTitle}}">
+    <ion-content >
         <div class="list">
             <!--Step 1-->
             <div id="addnew-step1" ng-show="step==1">
@@ -64,7 +64,7 @@
             <div id="addnew-step3" ng-show="step==3">
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">GSTType</span>
-                    <input type="number" placeholder="GSTType" ng-model="goodItem.GstType">
+                    <input type="number" placeholder="GSTType" ng-model="goodItem.GstType" autofocus>
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">SaleType</span>
@@ -108,6 +108,10 @@
             <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-disabled="step==3">
                 Next
             </button>
+
+            <!--<button class="button button-positive" style="float: right" ng-click="getData()">
+                GET
+            </button>-->
         </div>
     </ion-content>
 </ion-view>
