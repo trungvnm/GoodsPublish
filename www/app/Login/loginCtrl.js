@@ -5,15 +5,19 @@
     $scope.errorMessage = "";
 
     $scope.goNext = function(){
-        $dbHelper.select('Setting', 'SettingFieldId, IsInstalled', " SettingFieldId=='Wizard'").then(function(result){
+        var userID = tokenService.getToken().userid;
+        $dbHelper.select('Setting', 'SettingFieldId, IsInstalled', " SettingFieldId=='Wizard" + userID + "'").then(function(result){
             if  (result.length > 0)
-            {
+            {                
                 $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
             }
             else{
-                $dbHelper.insert("Setting",{SettingFieldId: 'Wizard', IsInstalled: 'true'}).then(function(res){
+                var defer = $q.defer();
+                $dbHelper.insert("Setting",{SettingFieldId: 'Wizard' + userID, IsInstalled: 'true'}).then(function(res){
+                    defer.resolve("insert Setting success");
                     $ionicHistory.clearCache().then(function(){ $state.go('app.wizard'); });
                 }, function (err) {
+                    defer.resolve("insert Setting unsuccess");
                     $scope.errorMessage = "ERROR Insert Setting Table: " + err;
                 });
             }

@@ -42,36 +42,42 @@ angular.module("LelongApp.Wizard",[])
         var defer = $q.defer();
         if  ($scope.isnew)
         {
-            $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {       
-                    $ionicHistory.clearCache().then(function () {                   
-                        $cordovaToast.showLongTop('Save successful!').then( function (success) {
+            $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
+                $cordovaToast.showLongTop('Save successful!').then( function (success) {   
+                    $ionicHistory.clearCache().then(function () {  
+                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, IsInstalled: 'false'}).then(function(res){
                             $scope.isnew = false;
-                            $state.go('app.completes');    
-                        },function(error){
-                            $scope.errorMessage = "Can't navigate Goods Page!";           
-                        })               
-                    });
-                 defer.resolve("insert wizard success");    
+                            $state.go('app.completes');
+                            defer.resolve("update Setting success");
+                        }, function (err) {
+                            defer.resolve("update Setting unsuccess");
+                            $scope.errorMessage = "ERROR Update Setting Table: " + err;
+                        }); 
+                    },function(error){
+                        $scope.errorMessage = "Can't navigate Goods Page!";           
+                    })               
+                });
+                defer.resolve("insert Wizard success");    
             }, function (err) {
                     $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
-                    defer.reject("insert wizard unsuccess");  
+                    defer.reject("insert Wizard unsuccess");  
             });
         }
         else
         {
-             $dbHelper.update('Wizard',$scope.objWizard).then(function (res) {       
-                    $ionicHistory.clearCache().then(function () {                   
-                        $cordovaToast.showLongTop('Save successful!').then( function (success) {
-                            $scope.isnew = false;
-                            $state.go('app.completes');    
-                        },function(error){
-                            $scope.errorMessage = "Can't navigate Goods Page!";           
-                        })               
-                    });
-                defer.resolve("update wizard success");      
+             $dbHelper.update('Wizard',$scope.objWizard, "WizardId=='"+ $scope.objWizard.WizardId + "'").then(function (res) {       
+                $cordovaToast.showLongTop('Save successful!').then( function (success) {   
+                    $ionicHistory.clearCache().then(function () {  
+                        $scope.isnew = false;
+                        $state.go('app.completes');                            
+                    },function(error){
+                        $scope.errorMessage = "Can't navigate Goods Page!";           
+                    })               
+                });
+                defer.resolve("update Wizard success");      
             }, function (err) {
                     $scope.errorMessage = "ERROR Update Wizard Table: " + err;
-                    defer.reject("update wizard unsuccess");  
+                    defer.reject("update Wizard unsuccess");  
             });
         } 
     }
@@ -112,8 +118,12 @@ angular.module("LelongApp.Wizard",[])
                    
     $scope.initWizardByUser = function(userId)
     {
-        $scope.isnew = true;     
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", " UserId=='"+ userId +"'")
+        $scope.isnew = true; 
+        $dbHelper.select("Wizard").then(function(es){
+            debugger;
+        })
+
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId="+ userId)
         .then(function(response){
             if  (response.length > 0)
             {
