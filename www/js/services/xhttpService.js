@@ -46,7 +46,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.get(url, header).then(function (response) {
+                self.$http.get(url, {headers: header}).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -71,12 +71,12 @@
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
-                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Content-type': 'application/json',
                     "Authorization": "Bearer " + token.access_token,
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.post(url, data, header).then(function (response) {
+                self.$http.post(url, data, {headers: header}).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -101,12 +101,12 @@
         this.tokenService.verify().then(function (token) {
             if (token) {
                 var header = {
-                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Content-type': 'application/json',
                     "Authorization": "Bearer " + token.access_token,
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.put(url, data, header).then(function (response) {
+                self.$http.put(url, data, {headers: header}).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
@@ -135,7 +135,7 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.delete(url, header).then(function (response) {
+                self.$http.delete(url, {headers: header}).then(function (response) {
                     defer.resolve(response);
 					if (showSpinner){
 						$("ion-spinner").removeClass("show");
