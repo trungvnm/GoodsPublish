@@ -65,8 +65,8 @@ angular.module('LelongApp.services')
 
 						// get path of all photo files
 						return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
+							var photoPaths = [];
 							if (result && result.length > 0) {
-								var photoPaths = [];
 								result.forEach(function (photo) {
 									photoPaths.push(photo.PhotoUrl);
 								});
@@ -106,7 +106,7 @@ angular.module('LelongApp.services')
 							});
 						});
 					}
-				}
+				})
 			},
 			saveGoods: function (goodItemObj, arrFullPathImgs) {
 				$dbHelper.insert("GoodsPublish", goodItemObj).then(function (res) {
