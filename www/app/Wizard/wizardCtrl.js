@@ -45,7 +45,7 @@ angular.module("LelongApp.Wizard",[])
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
                 $cordovaToast.showLongTop('Save successful!').then( function (success) {   
                     $ionicHistory.clearCache().then(function () {  
-                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, IsInstalled: 'false'}).then(function(res){
+                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, IsInstalled: 'false'}, "SettingFieldId = 'Wizard" + $scope.objWizard.UserId + "'").then(function(res){
                             $scope.isnew = false;
                             $state.go('app.completes');
                             defer.resolve("update Setting success");
@@ -65,7 +65,7 @@ angular.module("LelongApp.Wizard",[])
         }
         else
         {
-             $dbHelper.update('Wizard',$scope.objWizard, "WizardId=='"+ $scope.objWizard.WizardId + "'").then(function (res) {       
+             $dbHelper.update('Wizard',$scope.objWizard, "WizardId = "+ $scope.objWizard.WizardId).then(function (res) {       
                 $cordovaToast.showLongTop('Save successful!').then( function (success) {   
                     $ionicHistory.clearCache().then(function () {  
                         $scope.isnew = false;
@@ -123,7 +123,7 @@ angular.module("LelongApp.Wizard",[])
             debugger;
         })
 
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId="+ userId)
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId = "+ userId)
         .then(function(response){
             if  (response.length > 0)
             {
