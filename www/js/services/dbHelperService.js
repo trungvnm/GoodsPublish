@@ -120,7 +120,7 @@ angular.module('LelongApp.services')
                 console.log("UPDATE COMMAND: " + command);
 
                 var deferred = $q.defer();
-                var qr = runQuery(command, [tbl.values], function (res) {
+                var qr = runQuery(command, tbl.values, function (res) {
                     console.log("UPDATE SUCCESS: " + res.insertId)
                     deferred.resolve(res);
                 }, function (err) {
@@ -139,6 +139,9 @@ angular.module('LelongApp.services')
             var fIndex = -1;
             if (tableName.toLowerCase() === 'wizard' || tableName.toLowerCase() === 'goodspublish') {
                 fIndex = arrKeys.indexOf('UserId');
+                if(isUpdate && tableName.toLowerCase() === 'goodspublish'){
+                    arrKeys.push("CreatedDate");
+                }
             } else if (tableName.toLowerCase() === 'goodspublishphoto') {
                 fIndex = arrKeys.indexOf('GoodPublishId');
             }

@@ -4,21 +4,32 @@ angular.module("LelongApp.Goods")
         $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams) {
 
         $scope.goodsId = $stateParams.goodsId;
-        $scope.viewTitle="Add new";
+        $scope.viewTitle = "Add new";
         $scope.tokenServ = tokenService.getToken();
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];
+            $scope.imageDeleted = [];
             $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
 
             if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
-                /** get publishGood by id */
-                $scope.viewTitle="Edit"
-                goodsService.getGoodsById($scope.goodsId).then(function(res){
-                    $scope.goodItem=res;
+                /** UPDATE GoodsPublish: get publishGood by id */
+                $scope.viewTitle = "Edit"
+                goodsService.getGoodsById($scope.goodsId).then(function (res) {
+                    $scope.goodItem = res;
+                    /** get photos by goodsId */
+                    var where = "GoodPublishId=" + $scope.goodsId;
+                    $dbHelper.select("GoodsPublishPhoto", "*", where).then(function (result) {
+                        if (result.length > 0) {
+                            for (var i = 0; i < result.length; i++) {
+                                $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
+                            }
+                        }
+                    });
                 });
             } else {
+                /**ADD NEW GoodsPublish */
                 $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') };
                 $scope.defaultCategory = [
                     { value: 1, name: "Phone & Tablet", isChecked: false },
@@ -128,7 +139,7 @@ angular.module("LelongApp.Goods")
                 targetHeight: 300,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: false,
-                correctOrientation:true
+                correctOrientation: true
             };
 
             $cordovaCamera.getPicture(options).then(function (imagePath) {
@@ -156,12 +167,15 @@ angular.module("LelongApp.Goods")
             });
         };
 
-        $scope.deleteImg = function (fullNamePath) {
+        $scope.deleteImg = function (fullNamePath, photoId) {
             imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
                 for (var i = 0; i < $scope.imgURI.length; i++) {
-                    var file = $scope.imgURI[i].replace(/^.*[\\\/]/, '');
+                    var file = $scope.imgURI[i].photoUrl.replace(/^.*[\\\/]/, '');
                     if (file === res) {
                         $scope.imgURI.splice(i, 1);
+                        if(photoId>0){
+                            $scope.imageDeleted.push({ photoId: photoId, photoUrl: '' });
+                        }
                         break;
                     }
                 }
@@ -207,11 +221,8 @@ angular.module("LelongApp.Goods")
                     fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
                         fileEntry.copyTo(desFolder, newFileName, function (success) {
                             console.log("COPY FILE SUCCESS:" + JsonParse(success));
-                            $scope.imgURI.push(success.nativeURL);
-                            $timeout(function () {
-                                $ionicSlideBoxDelegate.slide(0);
-                                $ionicSlideBoxDelegate.update();
-                            });
+                            $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });
+                            updateSlide();
                             deffered.resolve();
                         }, function (error) {
                             console.log("COPY FILE FAILED:" + JsonParse(error));
@@ -225,24 +236,54 @@ angular.module("LelongApp.Goods")
         };
 
         /**End Cordova file */
+        /** Actions */
         $scope.saveClick = function () {
-            goodsService.saveGoods($scope.goodItem, $scope.imgURI);
+            var arrImage = [];
+            if ($scope.imgURI.length > 0) {
+                for (var i = 0; i < $scope.imgURI.length; i++) {
+                    arrImage.push($scope.imgURI[i].photoUrl);
+                }
+            }
+            if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+                /**update */
+                var imgSave = [];
+                if ($scope.imgURI.length > 0) {
+                    for (var i = 0; i < $scope.imgURI.length; i++) {
+                        if ($scope.imgURI[i].photoId == 0) {
+                            imgSave.push($scope.imgURI[i]);
+                        }
+                    }
+                }
+                if ($scope.imageDeleted.length > 0) {
+                    for (var i = 0; i < $scope.imageDeleted.length; i++) {
+                        imgSave.push($scope.imageDeleted[i]);
+                    }
+                }
+                goodsService.updateGoods($scope.goodItem, imgSave);
+            } else {
+                /**insert */
+                goodsService.saveGoods($scope.goodItem, arrImage);
+            }
         }
 
         $scope.nextClick = function () {
             $scope.step += 1;
+            if ($scope.step == 2) {
+                updateSlide();
+            }
         }
 
         $scope.prevClick = function () {
             $scope.step -= 1;
         }
 
-        $scope.getData = function () {
-            $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
-                console.log("INNER JOIN: " + JsonParse(res));
-            });
-        }
+        // $scope.getData = function () {
+        //     $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
+        //         console.log("INNER JOIN: " + JsonParse(res));
+        //     });
+        // }
 
+        /** End Actions */
         /**helper method */
         function JsonParse(obj) {
             var jsonObj;
@@ -265,5 +306,11 @@ angular.module("LelongApp.Goods")
             });
             return uuid;
         };
+        function updateSlide() {
+            $timeout(function () {
+                $ionicSlideBoxDelegate.slide(0);
+                $ionicSlideBoxDelegate.update();
+            });
+        }
         /**end helper method */
     });

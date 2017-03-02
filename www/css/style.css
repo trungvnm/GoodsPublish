@@ -79,6 +79,9 @@ a[disabled] {
     padding: 0px;
     padding-top: 15px;
 }
+.slider-pager{
+    bottom: 0px !important;
+}
 /*End Addnew page*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;

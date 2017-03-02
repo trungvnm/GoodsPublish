@@ -132,6 +132,36 @@ angular.module('LelongApp.services')
 					console.log("ERROR: " + JSON.stringify(err));
 				});
 			},
+			/** goodsPhotoObj: object GoodsPublishPhoto	with {photoId,PhotoUrl} */
+			updateGoods: function (goodsItemObj, goodsPhotoObj, goodItemWhereClause) {
+				var where = " GoodPublishId = " + goodsItemObj.GoodPublishId;
+				if (goodItemWhereClause !== undefined && goodItemWhereClause.trim().length > 0) {
+					where += " " + goodItemWhereClause;
+				}
+				$dbHelper.update("GoodsPublish", goodsItemObj, where).then(function (res) {
+					console.log("GoodsPublish UPDATED: " + JSON.stringify(res));
+					$cordovaToast.showLongTop('Update successfully!').then(function () {
+						$ionicHistory.clearCache().then(function () {
+							$state.go('app.completes');
+						});
+					});
+				});
+				/** update GoodsPublishPhoto: if photoId>0: delete?insert */
+				if (goodsPhotoObj.length > 0) {
+					for (var i = 0; i < goodsPhotoObj.length; i++) {
+						if (goodsPhotoObj[i].photoId > 0) {
+							var wherePhoto = " Photoid=" + goodsPhotoObj[i].photoId;
+							$dbHelper.delete("GoodsPublishPhoto", wherePhoto).then(function (res) {
+								console.log("GoodsPublishPhoto DELETED:" + JSON.stringify(res));
+							});
+						} else {
+							$dbHelper.insert("GoodsPublishPhoto", { PhotoUrl: goodsPhotoObj[i].photoUrl, GoodPublishId: goodsPhotoObj[i].GoodPublishId }).then(function (res) {
+								console.log("GoodsPublishPhoto INSERTED:" + JSON.stringify(res));
+							});
+						}
+					}
+				}
+			},
 			publish: function(good){
 				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish',good, true).then(function(response){
 					console.dir(response);
