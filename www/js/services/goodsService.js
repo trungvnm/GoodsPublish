@@ -1,5 +1,5 @@
 angular.module('LelongApp.services')
-	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService,$cordovaToast,$ionicHistory,$state) {
+	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService,$cordovaToast,$ionicHistory,$state, xhttpService) {
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -39,9 +39,7 @@ angular.module('LelongApp.services')
 				var whereClause = ' WHERE GoodPublishId=\'' + goodId + '\'';
 
 				// Query to extract data
-				var query = 'SELECT	* ';
-				query += 'FROM	GoodsPublish ';
-				query += whereClause;
+				var query = 'SELECT	* FROM	GoodsPublish ' + whereClause;
 
 				return $dbHelper.selectCustom(query).then(function (result) {
 					if (result && result.length > 0) {
@@ -50,28 +48,34 @@ angular.module('LelongApp.services')
 					return null;
 				});
 			},
-			deleteGoods: function (goodIds) {
-				var whereClause = '';
-				if (goodIds && goodIds.length > 0) {
-					whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
+			deleteGoods: function (goods){
+				$rootScope.$broadcast('showSpinner');
+				var goodIds = [];
+				var guids = [];
+				goods.forEach(function(g){
+					goodIds.push(g.GoodPublishId);
+					guids.push(g.Guid);
+				});
+				
+				// call API to delete from server 
+				return xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function(apiResponse){
+					var whereClause = '';
+					if (goodIds && goodIds.length > 0) {
+						whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
 
-					// get path of all photo files
-					return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
-						if (result && result.length > 0) {
-							var photoPaths = [];
-							result.forEach(function (photo) {
-								photoPaths.push(photo.PhotoUrl);
-							});
-
-							// delete records from GoodsPublish table before
+						// get path of all photo files
+						return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
+							if (result && result.length > 0) {
+								var photoPaths = [];
+								result.forEach(function (photo) {
+									photoPaths.push(photo.PhotoUrl);
+								});
+							}
+							
+							// CLient SQLite Db: delete records from GoodsPublish table before
 							var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
 							return $dbHelper.query(query).then(function (result) {
 								if (result.rowsAffected && result.rowsAffected > 0) {
-
-									// delete records from GoodsPublishPhoto table
-									//query = 'DELETE FROM GoodsPublishPhoto WHERE ' + whereClause;
-									//return $dbHelper.query(query).then(function(res){
-									//if (res.rowsAffected && res.rowsAffected > 0){
 									// for each photo file on disk 
 									photoPaths.forEach(function (p) {
 										var nameSegments = p.split('/');
@@ -97,12 +101,11 @@ angular.module('LelongApp.services')
 									//}
 									//});
 								}
+								$rootScope.$broadcast('hideSpinner');
 								return (result.rowsAffected && result.rowsAffected > 0);
 							});
-						}
-					});
-
-
+						});
+					}
 				}
 			},
 			saveGoods: function (goodItemObj, arrFullPathImgs) {
@@ -127,6 +130,11 @@ angular.module('LelongApp.services')
 					}, 3000);
 				}, function (err) {
 					console.log("ERROR: " + JSON.stringify(err));
+				});
+			},
+			publish: function(good){
+				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish',good, true).then(function(response){
+					console.dir(response);
 				});
 			}
 		};

@@ -3,11 +3,19 @@
 	$scope.init = function(){
 		$scope.filterMessage = '';
 		$scope.goods = [];
+		$scope.unSyncedGoods = [];
+		$scope.syncedGoods = [];
 		goodsService.getAll().then(function(result) {
 			if (result){
 				result.forEach(function(g){
 					if (!g.PhotoUrl || g.PhotoUrl.trim() == ''){
 						g.PhotoUrl = 'img/nophoto.jpg';
+					}
+					if (g.LastSync && g.LastSync.trim() != ''){
+						$scope.syncedGoods.push(g);
+					}
+					else{
+						$scope.unSyncedGoods.push(g);
 					}
 				});
 			}
@@ -81,30 +89,20 @@
 		var params = {};
 		params.issearch = false;
         $rootScope.$broadcast('updateIsSearch', params);
-		/*$scope.goods = [];
-		var key = args.searchkey;
-		var whereClause = 'Title LIKE \'%'+key+'%\'';
-		$scope.filterMessage = 'Search for \''+key+'\':';
-		goodsService.search(key).then(function(result) {
-			$scope.goods = result;
-		});
-		
-		var params = {};
-		params.issearch = false;
-        $rootScope.$broadcast('updateIsSearch', params);*/
 	});
+	
 	$scope.$on('multiDelete', function(event, args){
 		if (navigator.notification){
 			navigator.notification.confirm('Are you sure to delete selected items?', function(result){
 				if (result == 1){
-					var ids = [];
+					var selecteds = [];
 					$scope.goods.forEach(function(g){
 						if (g.Checked){
-							ids.push(g.GoodPublishId);
+							selecteds.push(g);
 						}
 					});
-					if (ids.length > 0){
-						goodsService.deleteGoods(ids).then(function(result){
+					if (selecteds.length > 0){
+						goodsService.deleteGoods(selecteds).then(function(result){
 							if (result){
 								$cordovaToast.showLongTop('Delete successful!');
 								$scope.init();
