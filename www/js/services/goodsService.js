@@ -58,55 +58,56 @@ angular.module('LelongApp.services')
 				});
 				
 				// call API to delete from server 
-				return xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function(apiResponse){
-					var whereClause = '';
-					if (goodIds && goodIds.length > 0) {
-						whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
+				xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function(apiResponse){});
+				
+				var whereClause = '';
+				if (goodIds && goodIds.length > 0) {
+					whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
 
-						// get path of all photo files
-						return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
-							var photoPaths = [];
-							if (result && result.length > 0) {
-								result.forEach(function (photo) {
-									photoPaths.push(photo.PhotoUrl);
-								});
-							}
-							
-							// CLient SQLite Db: delete records from GoodsPublish table before
-							var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
-							return $dbHelper.query(query).then(function (result) {
-								if (result.rowsAffected && result.rowsAffected > 0) {
-									// for each photo file on disk 
-									photoPaths.forEach(function (p) {
-										var nameSegments = p.split('/');
-										var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
-										var filename = nameSegments[nameSegments.length - 1];
+					// get path of all photo files
+					return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
+						var photoPaths = [];
+						if (result && result.length > 0) {
+							result.forEach(function (photo) {
+								photoPaths.push(photo.PhotoUrl);
+							});
+						}
+						
+						// CLient SQLite Db: delete records from GoodsPublish table before
+						var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
+						return $dbHelper.query(query).then(function (result) {
+							if (result.rowsAffected && result.rowsAffected > 0) {
+								// for each photo file on disk 
+								photoPaths.forEach(function (p) {
+									var nameSegments = p.split('/');
+									var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
+									var filename = nameSegments[nameSegments.length - 1];
 
-										// delete file
-										window.resolveLocalFileSystemURL(path, function (dir) {
-											dir.getFile(filename, { create: false }, function (fileEntry) {
-												fileEntry.remove(function () {
-													console.log("The file has been removed succesfully");
-													// The file has been removed succesfully
-												}, function (error) {
-													// Error deleting the file
-													console.dir(error);
-												}, function () {
-													// The file doesn't exist
-													console.console("The file doesn't exist");
-												});
+									// delete file
+									window.resolveLocalFileSystemURL(path, function (dir) {
+										dir.getFile(filename, { create: false }, function (fileEntry) {
+											fileEntry.remove(function () {
+												console.log("The file has been removed succesfully");
+												// The file has been removed succesfully
+											}, function (error) {
+												// Error deleting the file
+												console.dir(error);
+											}, function () {
+												// The file doesn't exist
+												console.console("The file doesn't exist");
 											});
 										});
 									});
-									//}
-									//});
-								}
-								$rootScope.$broadcast('hideSpinner');
-								return (result.rowsAffected && result.rowsAffected > 0);
-							});
+								});
+								//}
+								//});
+							}
+							$rootScope.$broadcast('hideSpinner');
+							return (result.rowsAffected && result.rowsAffected > 0);
 						});
-					}
-				})
+					});
+				}
+				return false;
 			},
 			saveGoods: function (goodItemObj, arrFullPathImgs) {
 				$dbHelper.insert("GoodsPublish", goodItemObj).then(function (res) {
