@@ -14,7 +14,6 @@ angular.module("LelongApp.Goods")
             $scope.step = 1;
             $scope.imgURI = [];
             $scope.imageDeleted = [];
-            $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
             $scope.defaultCategory = [
                 { value: 1, name: "Phone & Tablet", isChecked: false },
@@ -46,7 +45,7 @@ angular.module("LelongApp.Goods")
                 });
             } else {
                 /**ADD NEW GoodsPublish */
-                $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') };
+                $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: generateUUID() };
             }
             requestAccessFs();
         }
@@ -60,7 +59,7 @@ angular.module("LelongApp.Goods")
             {
                 name: 'upload',
                 action: function () {
-
+                    postToServer();
                 }
             },
             {
@@ -188,7 +187,7 @@ angular.module("LelongApp.Goods")
         $scope.deleteImg = function (fullNamePath, photoId) {
             imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
                 for (var i = 0; i < $scope.imgURI.length; i++) {
-                    var file = $scope.imgURI[i].photoUrl.replace(/^.*[\\\/]/, '');
+                    var file = getImageFileName($scope.imgURI[i].photoUrl);
                     if (file === res) {
                         $scope.imgURI.splice(i, 1);
                         if (photoId > 0) {
@@ -294,13 +293,35 @@ angular.module("LelongApp.Goods")
         $scope.prevClick = function () {
             $scope.step -= 1;
         }
-        // $scope.getData = function () {
-        //     $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
-        //         console.log("INNER JOIN: " + JsonParse(res));
-        //     });
-        // }
-
         /** End Actions */
+
+        /** Post to server */
+        function postToServer() {
+            var listPhoto = [];
+            var newSource;
+            /** Save goods to local device */
+           // $scope.saveClick();
+            /** post goods to server */
+            if ($scope.imgURI.length > 0) {
+                for (var i = 0; i < $scope.imgURI.length; i++) {
+                    var pName = getImageFileName($scope.imgURI[i].photoUrl);
+                    listPhoto.push({
+                        PhotoName: pName,
+                        PhotoUrl: pName,
+                        PhotoDescription: $scope.imgURI[i].photoDescription
+                    })
+                }
+            };
+            angular.extend(newSource,$scope.goodItem,{listPhoto:listPhoto});
+            console.log("EXTEND: " + JsonParse(newSource));
+            // goodsService.publish($scope.good).then(function (result) {
+            //     $ionicHistory.clearCache().then(function () {
+            //         $state.go('app.completes');
+            //     });
+            // });
+        }
+
+        /** end Post to server */
         /**helper method */
         function JsonParse(obj) {
             var jsonObj;
@@ -328,6 +349,9 @@ angular.module("LelongApp.Goods")
                 $ionicSlideBoxDelegate.slide(0);
                 $ionicSlideBoxDelegate.update();
             });
+        }
+        function getImageFileName(fullNamePath) {
+            return fullNamePath.replace(/^.*[\\\/]/, '');
         }
         /**end helper method */
     });

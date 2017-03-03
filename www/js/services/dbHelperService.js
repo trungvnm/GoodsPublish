@@ -141,6 +141,7 @@ angular.module('LelongApp.services')
                 fIndex = arrKeys.indexOf('UserId');
                 if(isUpdate && tableName.toLowerCase() === 'goodspublish'){
                     arrKeys.push("CreatedDate");
+                    arrKeys.push("Guid");
                 }
             } else if (tableName.toLowerCase() === 'goodspublishphoto') {
                 fIndex = arrKeys.indexOf('GoodPublishId');
