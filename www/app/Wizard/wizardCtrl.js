@@ -45,7 +45,7 @@ angular.module("LelongApp.Wizard",[])
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
                 $cordovaToast.showLongTop('Save successful!').then( function (success) {   
                     $ionicHistory.clearCache().then(function () {  
-                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, IsInstalled: 'false'}, "SettingFieldId = 'Wizard" + $scope.objWizard.UserId + "'").then(function(res){
+                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, Value: 'false'}, "SettingFieldId = 'Wizard" + $scope.objWizard.UserId + "'").then(function(res){
                             $scope.isnew = false;
                             $state.go('app.completes');
                             defer.resolve("update Setting success");

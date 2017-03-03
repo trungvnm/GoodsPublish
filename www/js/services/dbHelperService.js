@@ -6,7 +6,7 @@ angular.module('LelongApp.services')
                 return dbConnect;
             },
             initialDB: function () {
-                var settingFields = "SettingFieldId text,IsInstalled text";
+                var settingFields = "SettingFieldId text,Value text";
                 var userFields = "UserId integer primary key,UserName text,Password text,access_token text,refresh_token text,LoginAttempt integer,MaxPostingAllow integer,PostingAlready integer,NumberOfPhotosAllow integer";
                 var wizardFields = "WizardId  integer primary key,UserId integer, DaysOfShip integer,ItemsCategory text,ShippingFee text";
                 var goodsPublishPhoto = "Photoid integer primary key,GoodPublishId integer,PhotoName text,PhotoUrl text,PhotoDescription text";
