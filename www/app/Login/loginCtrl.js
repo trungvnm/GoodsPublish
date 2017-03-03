@@ -11,6 +11,7 @@
             && result[0].Value.toLowerCase() == 'true') {   
                 $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
             } else {
+                $scope.updateSetting(userID);
                 if (navigator.notification) {
 					navigator.notification.confirm('This is the first time you login. Do you want to setup wizard?', function (result) {
                         if (result == 1) {
@@ -22,7 +23,6 @@
                 } else {
                     $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
                 }
-                $scope.updateSetting(userID);
             }
         });
 	};
