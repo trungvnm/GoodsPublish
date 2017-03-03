@@ -194,9 +194,14 @@ angular.module('LelongApp.services')
 							params += ",";
 						params += g.Guid;
 					});
+					
+					// request to API
 					return xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
-						if (response){
-							response.forEach(function(newGood){
+						if (response.data){
+							response.data.forEach(function(newGood){
+								// update new goods to app database
+								var listPhoto = newGood.listPhoto;
+								delete newGood.listPhoto;
 								$dbHelper.update("GoodsPublish", newGood, "Guid = '"+newGood.Guid+"'").then(function(result){
 									if (result.rowsAffected > 0){
 										for (var i=0; i<goods.length; i++){

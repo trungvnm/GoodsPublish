@@ -82,7 +82,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 					actions.push({
 						name: 'sync',
 						action: function () {
-							alert('sync action');
+							goodsService.sync([$scope.good]);
 						}
 					});
 				}
@@ -91,7 +91,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		});
 
 		// load all photos of current good
-		$dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + id + '\'').then(function (result) {
+		$dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + id + '\'').then(function (result) {
 			if (result && result.length > 0) {
 				result.forEach(function (photo) {
 					$scope.photos.push({
