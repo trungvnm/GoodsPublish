@@ -102,7 +102,7 @@
     {
         xhttpService.post("https://1f71ef25.ngrok.io/api/user/add",{
             UserName: $scope.username, 
-            Password: encodeURIComponent($scope.password),
+            Password: window.btoa($scope.password),
             AccessToken: token.access_token,
             RefreshToken: token.refresh_token,
             LoginAttempt: 0,
