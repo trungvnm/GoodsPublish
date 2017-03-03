@@ -1,5 +1,5 @@
 angular.module('LelongApp.services')
-	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService,$cordovaToast,$ionicHistory,$state, xhttpService) {
+	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService) {
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -48,18 +48,18 @@ angular.module('LelongApp.services')
 					return null;
 				});
 			},
-			deleteGoods: function (goods){
+			deleteGoods: function (goods) {
 				$rootScope.$broadcast('showSpinner');
 				var goodIds = [];
 				var guids = [];
-				goods.forEach(function(g){
+				goods.forEach(function (g) {
 					goodIds.push(g.GoodPublishId);
 					guids.push(g.Guid);
 				});
-				
+
 				// call API to delete from server 
-				xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function(apiResponse){});
-				
+				xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) { });
+
 				var whereClause = '';
 				if (goodIds && goodIds.length > 0) {
 					whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
@@ -72,7 +72,7 @@ angular.module('LelongApp.services')
 								photoPaths.push(photo.PhotoUrl);
 							});
 						}
-						
+
 						// CLient SQLite Db: delete records from GoodsPublish table before
 						var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
 						return $dbHelper.query(query).then(function (result) {
@@ -110,6 +110,7 @@ angular.module('LelongApp.services')
 				return false;
 			},
 			saveGoods: function (goodItemObj, arrFullPathImgs) {
+				$rootScope.$broadcast('showSpinner');
 				$dbHelper.insert("GoodsPublish", goodItemObj).then(function (res) {
 					console.log("SUCCESS: " + JSON.stringify(res))
 					if (res.insertId > 0 && arrFullPathImgs.length > 0) {
@@ -122,15 +123,15 @@ angular.module('LelongApp.services')
 							});
 						};
 					}
-					setTimeout(function () {
-						$cordovaToast.showLongTop('Save successfully!').then(function () {
-							$ionicHistory.clearCache().then(function () {
-								$state.go('app.completes');
-							});
+					$cordovaToast.showLongTop('Save successfully!').then(function () {
+						$ionicHistory.clearCache().then(function () {
+							$state.go('app.completes');
 						});
-					}, 3000);
+					});
+					$rootScope.$broadcast('hideSpinner');
 				}, function (err) {
 					console.log("ERROR: " + JSON.stringify(err));
+					$rootScope.$broadcast('hideSpinner');
 				});
 			},
 			/** goodsPhotoObj: object GoodsPublishPhoto	with {photoId,PhotoUrl} */
@@ -163,8 +164,8 @@ angular.module('LelongApp.services')
 					}
 				}
 			},
-			publish: function(good){
-				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish',good, true).then(function(response){
+			publish: function (good) {
+				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', good, true).then(function (response) {
 					console.dir(response);
 				});
 			}

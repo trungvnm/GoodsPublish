@@ -9,12 +9,12 @@
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Category</span>
-                <div ng-show="editMode==false" ng-click="showPopup()">
+                <div ng-show="editMode==false" ng-hide="goodItem.Category.length>0" ng-click="showPopup()">
                 <button  style="float: right" class="button button-clear button-positive" >
                     Choose category
                 </button>
                 </div>
-                <div style="height: 34px;line-height: 16px;padding-top: 8px;" ng-show="editMode==true" ng-model="goodItem.Category">
+                <div style="height: 34px;line-height: 16px;padding-top: 8px;" ng-show="editMode==true || goodItem.Category.length" ng-model="goodItem.Category">
                   {{goodItem.Category}}                 
                 </div>
             </label>
