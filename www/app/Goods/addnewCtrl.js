@@ -311,7 +311,7 @@ angular.module("LelongApp.Goods")
                             var pName = getImageFileName($scope.imgURI[i].photoUrl);
                             listPhoto.push({
                                 PhotoName: pName,
-                                PhotoUrl: pName,
+                                PhotoUrl: $scope.imgURI[i].photoUrl,
                                 PhotoDescription: ""
                             })
                         }
