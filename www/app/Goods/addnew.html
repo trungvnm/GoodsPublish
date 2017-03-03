@@ -4,11 +4,11 @@
             <!--Step 1-->
             <div id="addnew-step1" ng-show="step==1">
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Title<span class="input-required">(*)</span></span>
+                <span class="input-label">Title<span class="input-required"> *</span></span>
                 <input type="text" placeholder="Title" autofocus  ng-model="goodItem.Title">
             </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Category<span class="input-required">(*)</span></span>
+                <span class="input-label">Category</span>
                 <div ng-show="editMode==false" ng-hide="goodItem.Category.length>0" ng-click="showPopup()">
                 <button  style="float: right" class="button button-clear button-positive" >
                     Choose category
@@ -19,19 +19,19 @@
                 </div>
             </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Condition<span class="input-required">(*)</span></span>
+                    <span class="input-label">Condition<span class="input-required"> *</span></span>
                     <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Brand<span class="input-required">(*)</span></span>
+                    <span class="input-label">Brand</span>
                     <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Quantity<span class="input-required">(*)</span></span>
+                    <span class="input-label">Quantity<span class="input-required"> *</span></span>
                     <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">SalePrice<span class="input-required">(*)</span></span>
+                    <span class="input-label">SalePrice<span class="input-required"> *</span></span>
                     <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice">
                 </label>
             </div>
