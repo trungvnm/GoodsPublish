@@ -1,5 +1,5 @@
 angular.module('LelongApp.services')
-	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService) {
+	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -166,8 +166,51 @@ angular.module('LelongApp.services')
 			},
 			publish: function (good) {
 				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', good, true).then(function (response) {
-					console.dir(response);
+					// upload images
+					if (good.listPhoto){
+						var imageAPI = "https://1f71ef25.ngrok.io/api/image/upload?guiIdGoods=" + good.Guid;
+						good.listPhoto.forEach(function(p){
+							imageService.uploadImage(imageAPI, p.PhotoUrl);
+						});
+						
+					}
+					
+					if (response.status == 200 && response.data){
+						// update lastsync value to current good
+						var params = {
+							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+						};
+						return $dbHelper.update("GoodsPublish", params, "GoodPublishId = '"+good.GoodPublishId+"'").then(function(result){
+							return result.rowsAffected > 0;
+						});
+					}
 				});
+			},
+			sync: function(goods){
+				var params = "";//guidsArray.join(',');
+				if (goods){
+					goods.forEach(function(g){
+						if (params != "")
+							params += ",";
+						params += g.Guid;
+					});
+					return xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
+						if (response){
+							response.forEach(function(newGood){
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '"+newGood.Guid+"'").then(function(result){
+									if (result.rowsAffected > 0){
+										for (var i=0; i<goods.length; i++){
+											if (goods[i].Guid == newGood.Guid){
+												goods[i] = newGood;
+												break;
+											}
+										}
+									}
+								});
+							});
+						}
+					});
+				}
 			}
 		};
 

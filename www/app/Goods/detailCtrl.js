@@ -19,15 +19,24 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		{
 			name: 'upload',
 			action: function () {
-				if ($scope.good) {
-					goodsService.publish($scope.good).then(function (result) {
-						$ionicHistory.clearCache().then(function () {
-							$state.go('app.completes');
-						});
+				if (navigator.notification) {
+					navigator.notification.confirm('Are you sure to upload this item?', function (result) {
+						if (result == 1) {
+							if ($scope.good) {
+								goodsService.publish($scope.good).then(function (result) {
+									if (result){
+										$cordovaToast.showLongTop('Publish successful!');
+									}
+									else{
+										$cordovaToast.showLongTop('Error: Publish failed!');
+									}
+								});
+							}
+							else {
+								alert("Item not found");
+							}
+						}
 					});
-				}
-				else {
-					alert("Item not found");
 				}
 			}
 		},

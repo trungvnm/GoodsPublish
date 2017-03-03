@@ -28,7 +28,61 @@ angular.module('LelongApp.services')
             }, errorHandler);
 
             return deffered.promise;
-        }
+        };
+		
+		// upload image to an server by its path
+		self.uploadImage = function(serverUrl, filePath){
+			/*this.tokenService.verify().then(function (token) {
+            if (token) {*/
+			var win = function (r) {
+				console.log("UPLOAD image success ");
+				return r.response.indexOf("Success") > -1;
+			}
+
+			var fail = function (error) {
+				console.log("error on upload image ");
+				console.dir(error);
+			}
+			var options = new FileUploadOptions();
+			options.fileKey = "file";
+			options.fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+			options.mimeType = "text/plain";
+
+			var headers = {
+                    "Authorization": "Bearer " + token.access_token,
+                    "X-User-Context" : token.username,
+                };
+			options.headers = headers;
+
+			var ft = new FileTransfer();
+			return ft.upload(filePath, encodeURI(serverUrl), win, fail, options);
+		};
+		
+		// Download image from an server by its url
+		self.downloadImage = function(serverUrl, saveUrl){
+			var fileTransfer = new FileTransfer();
+			var uri = encodeURI(serverUrl);
+
+			return fileTransfer.download(
+				uri,
+				saveUrl,
+				function(entry) {
+					return entry;
+				},
+				function(error) {
+					console.log("download error source " + error.source);
+					console.log("download error target " + error.target);
+					console.log("download error code" + error.code);
+				},
+				false,
+				{
+					headers: {
+						"Authorization": "Bearer " + token.access_token,
+						"X-User-Context" : token.username,
+					}
+				}
+			);
+		}
 
         function errorHandler(error) {
             var err = "ERROR: ";
