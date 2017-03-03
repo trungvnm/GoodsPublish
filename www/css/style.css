@@ -104,6 +104,8 @@ a[disabled] {
     line-height: 26px;
     display: block;
     padding-left: 15px;}
+.filter-caption .button{position: absolute; right: 0px}
+.filter-caption .button:before{font-size: 20px}
 .button.tiny-icon:before{font-size: 14px !important}
 /*ion-header-bar{background: #387ef5;}
 ion-header-bar *{color: white !important;} */
@@ -140,4 +142,19 @@ ion-header-bar *{color: white !important;} */
 .button-style{
     width: 95% !important;
     margin: 0 auto !important;
+}
+.spinner{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+.spinner.show{
+	z-index: 10;
+	background: white;
+    opacity: 0.95;
+}
+.spinner svg{
+	top: 50%;
+	position: absolute
 }
