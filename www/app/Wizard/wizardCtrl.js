@@ -1,5 +1,6 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
+.controller('WizardCtrl', function ($scope, $rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
+    $rootScope.$broadcast('hideSearch');
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 

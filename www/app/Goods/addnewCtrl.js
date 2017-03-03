@@ -10,6 +10,8 @@ angular.module("LelongApp.Goods")
         }
         $scope.viewTitle = "Add new";
         $scope.tokenServ = tokenService.getToken();
+        $rootScope.$broadcast('hideSearch');
+
         $scope.init = function () {
             $scope.step = 1;
             $scope.imgURI = [];

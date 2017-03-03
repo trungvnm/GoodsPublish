@@ -1,7 +1,8 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService, $state) {
 	$scope.goodCounter = 0;
     $scope.account = {};
     $scope.account.name = $window.localStorage.getItem("Lelong_UserLogined");
+	$scope.showSearch = false;
     $scope.toggleLeft = function () {
         $ionicSideMenuDelegate.toggleLeft();
     };
@@ -25,6 +26,14 @@
 	});
 	$scope.$on("hideSpinner", function(event){
 		$("ion-spinner").removeClass("show");
+	});
+
+	//show search icon on each page
+	$scope.$on("showSearch", function(event){
+		$scope.showSearch = true;
+	});
+	$scope.$on("hideSearch", function(event){
+		$scope.showSearch = false;
 	});
 	
 	$scope.logout = function () {

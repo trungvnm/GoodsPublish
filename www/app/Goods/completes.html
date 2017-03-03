@@ -14,7 +14,7 @@
 			</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
-				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="goodSwipeLeft(g)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img src="{{g.PhotoUrl}}"/>
 						<img class="inlay" src="./img/Check-icon.png" />
@@ -51,7 +51,7 @@
 			</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
-				<a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="goodSwipeLeft(g)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				<a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img src="{{g.PhotoUrl}}"/>
 						<img class="inlay" src="./img/Check-icon.png" />
@@ -87,7 +87,7 @@
 			</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
 				<p class="item" ng-show="goods.length == 0">No items</p>
-				<a ng-repeat="g in syncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="goodSwipeLeft(g)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
+				<a ng-repeat="g in syncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img src="{{g.PhotoUrl}}"/>
 						<img class="inlay" src="./img/Check-icon.png" />

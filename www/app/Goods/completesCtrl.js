@@ -1,5 +1,6 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {	
 	$scope.popButton = 'addnew';
+	$rootScope.$broadcast('showSearch');
 	$scope.init = function(){
 		$scope.filterMessage = '';
 		$scope.goods = [];
