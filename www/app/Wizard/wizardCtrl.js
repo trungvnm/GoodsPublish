@@ -38,7 +38,6 @@ angular.module("LelongApp.Wizard",[])
         $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
     }
     $scope.saveObject = function () {  
-        var defer = $q.defer();
         if  ($scope.isnew)
         {
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
@@ -47,19 +46,15 @@ angular.module("LelongApp.Wizard",[])
                         $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, Value: false}, "SettingFieldId='Wizard" + $scope.objWizard.UserId + "'").then(function(res){
                             $scope.isnew = false;
                             $state.go('app.completes');
-                            defer.resolve("update Setting success");
                         }, function (err) {
-                            defer.resolve("update Setting unsuccess");
                             $scope.errorMessage = "ERROR Update Setting Table: " + err;
                         }); 
                     },function(error){
                         $scope.errorMessage = "Can't navigate Goods Page!";           
                     })               
                 });
-                defer.resolve("insert Wizard success");    
             }, function (err) {
-                    $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
-                    defer.reject("insert Wizard unsuccess");  
+                $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
             });
         }
         else
@@ -73,10 +68,8 @@ angular.module("LelongApp.Wizard",[])
                         $scope.errorMessage = "Can't navigate Goods Page!";           
                     })               
                 });
-                defer.resolve("update Wizard success");      
             }, function (err) {
                     $scope.errorMessage = "ERROR Update Wizard Table: " + err;
-                    defer.reject("update Wizard unsuccess");  
             });
         } 
     }
@@ -108,7 +101,7 @@ angular.module("LelongApp.Wizard",[])
         var userId = token.userid;     
          if (userId != null) {           
             $scope.objWizard.UserId = userId;
-            $scope.initWizardByUser(userId);            
+            $scope.initWizardByUser(userId);
         }
         else {
             $scope.errorMessage = "Can't get User ID from token";
@@ -139,5 +132,5 @@ angular.module("LelongApp.Wizard",[])
                 $scope.isnew = false;
             }          
         });
-    }
+    };
 })

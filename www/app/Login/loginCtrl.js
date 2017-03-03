@@ -7,22 +7,22 @@
     $scope.goNext = function(){
         var userID = tokenService.getToken().userid;
         $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userID + "'").then(function(result){
-            if  (result.length > 0) {   
-                if (result.Value == "false")
-                {
-                    $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
-                }        
-                
+            if  (result.length > 0
+            && result[0].Value.toLowerCase() == 'true') {   
+                $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
             } else {
-                var setting = {
-                    SettingFieldId: "Wizard" + userID,
-                    Value: true
-                };
-                $dbHelper.insert("Setting",setting).then(function(res){
-                    $ionicHistory.clearCache().then(function(){ 
-                        $state.go('app.wizard'); 
+                if (navigator.notification) {
+					navigator.notification.confirm('This is the first time you login. Do you want to setup wizard?', function (result) {
+                        if (result == 1) {
+                            $state.go('app.wizard');
+                        } else {
+                            $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+                        }
                     });
-                });
+                } else {
+                    $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+                }
+                $scope.updateSetting(userID);
             }
         });
 	};
@@ -115,6 +115,21 @@
             NumberOfPhotosAllow: 10
         });          
     }
+
+    $scope.updateSetting = function(userId) {
+        $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userId + "'").then(function(result){
+            var setting = {
+                SettingFieldId: "Wizard" + userId,
+                Value: true
+            };
+            if  (result.length > 0) {   
+                $dbHelper.update("Setting",setting, "SettingFieldId='Wizard" + userId + "'");
+            } else {
+                $dbHelper.insert("Setting",setting);
+            }
+        });
+        
+    };
 
     $scope.logout = function () {
         this.$window.localStorage.clear();
