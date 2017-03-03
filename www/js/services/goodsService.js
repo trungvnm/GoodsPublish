@@ -1,5 +1,8 @@
 angular.module('LelongApp.services')
 	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
+		function getPhotoApiUrl(guid){
+			return "https://1f71ef25.ngrok.io/api/image/download?photoName=" + guid;
+		}
 		
 		// Delete all photos of a good
 		function deletePhotosByGood(goodId, callBack){
@@ -226,6 +229,8 @@ angular.module('LelongApp.services')
 				});
 			},
 			sync: function (goods) {
+				var token = tokenService.getToken();
+				var userId = token.userid;
 				var params = "";//guidsArray.join(',');
 				if (goods) {
 					goods.forEach(function (g) {
@@ -240,6 +245,7 @@ angular.module('LelongApp.services')
 							response.data.forEach(function (newGood) {
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
+								newGood.Active = 1;
 								delete newGood.listPhoto;
 								delete newGood.GoodPublishId;
 								
@@ -253,10 +259,28 @@ angular.module('LelongApp.services')
 												
 												// clear old photos
 												deletePhotosByGood(cId, function(){
-													// save new photos
+													
+													var uploadDir = "";
 													listPhoto.forEach(function(p){
+														// download photo from server
+														if (uploadDir == ""){
+															var dirName = "ImagesUpload";
+															var subDir = userId;
+															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+																dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+																	subDirEntry.getDirectory(subDir, { create: true }, function (success) {
+																		var uploadDir = LocalFileSystem.PERSISTENT + "/" + dirName + "/" + subDir + "/" + p.PhotoName;
+																		var remoteImgUrl = getPhotoApiUrl(p.PhotoName);
+																		imageService.downloadImage(remoteImgUrl, uploadDir);
+																	})
+																});
+															});
+														}
+														// save to database
 														p.GoodPublishId = cId;
+														p.PhotoUrl = uploadDir;
 														$dbHelper.insert("GoodsPublishPhoto", p);
+														/*var saveLocal = "file:///data/user/0/com.ionicframework.goodspublish443924/files/files/ImagesUpload/1/396d77d2-7471-4800-a816-9861929deb26.jpg";*/
 													});
 												});
 												
