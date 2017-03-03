@@ -40,18 +40,10 @@ angular.module("LelongApp.Wizard",[])
     $scope.saveObject = function () {  
         if  ($scope.isnew)
         {
-            $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
-                $cordovaToast.showLongTop('Save successful!').then( function (success) {   
-                    $ionicHistory.clearCache().then(function () {  
-                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, Value: false}, "SettingFieldId='Wizard" + $scope.objWizard.UserId + "'").then(function(res){
-                            $scope.isnew = false;
-                            $state.go('app.completes');
-                        }, function (err) {
-                            $scope.errorMessage = "ERROR Update Setting Table: " + err;
-                        }); 
-                    },function(error){
-                        $scope.errorMessage = "Can't navigate Goods Page!";           
-                    })               
+            $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {
+                $ionicHistory.clearCache().then(function () {  
+                    $state.go('app.completes');
+                    $cordovaToast.showLongTop('Save successful!');
                 });
             }, function (err) {
                 $scope.errorMessage = "ERROR Insert Wizard Table: " + err;
@@ -60,13 +52,9 @@ angular.module("LelongApp.Wizard",[])
         else
         {
              $dbHelper.update('Wizard',$scope.objWizard, "WizardId="+ $scope.objWizard.WizardId).then(function (res) {       
-                $cordovaToast.showLongTop('Save successful!').then( function (success) {   
-                    $ionicHistory.clearCache().then(function () {  
-                        $scope.isnew = false;
-                        $state.go('app.completes');                            
-                    },function(error){
-                        $scope.errorMessage = "Can't navigate Goods Page!";           
-                    })               
+                $ionicHistory.clearCache().then(function () {  
+                    $state.go('app.completes');
+                    $cordovaToast.showLongTop('Save successful!');
                 });
             }, function (err) {
                     $scope.errorMessage = "ERROR Update Wizard Table: " + err;
