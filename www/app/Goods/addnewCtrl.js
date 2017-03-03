@@ -4,6 +4,10 @@ angular.module("LelongApp.Goods")
         $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams) {
 
         $scope.goodsId = $stateParams.goodsId;
+        $scope.editMode = false
+        if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+            $scope.editMode = true;
+        }
         $scope.viewTitle = "Add new";
         $scope.tokenServ = tokenService.getToken();
         $scope.init = function () {
@@ -12,8 +16,20 @@ angular.module("LelongApp.Goods")
             $scope.imageDeleted = [];
             $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1 };
             $scope.uploadDir = "";
+            $scope.defaultCategory = [
+                { value: 1, name: "Phone & Tablet", isChecked: false },
+                { value: 2, name: "Electronics & Appliances", isChecked: false },
+                { value: 3, name: "Fasion", isChecked: false },
+                { value: 4, name: "Beauty & Personal Care", isChecked: false },
+                { value: 5, name: "Toys & Games", isChecked: false },
+                { value: 6, name: "Watches, Pens & Clocks", isChecked: false },
+                { value: 7, name: "Gifts & Premiums", isChecked: false },
+                { value: 8, name: "Home & Gardening", isChecked: false },
+                { value: 9, name: "Sports & Recreation", isChecked: false },
+                { value: 10, name: "Books & Comics", isChecked: false }
+            ];
 
-            if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+            if ($scope.editMode) {
                 /** UPDATE GoodsPublish: get publishGood by id */
                 $scope.viewTitle = "Edit"
                 goodsService.getGoodsById($scope.goodsId).then(function (res) {
@@ -31,18 +47,6 @@ angular.module("LelongApp.Goods")
             } else {
                 /**ADD NEW GoodsPublish */
                 $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') };
-                $scope.defaultCategory = [
-                    { value: 1, name: "Phone & Tablet", isChecked: false },
-                    { value: 2, name: "Electronics & Appliances", isChecked: false },
-                    { value: 3, name: "Fasion", isChecked: false },
-                    { value: 4, name: "Beauty & Personal Care", isChecked: false },
-                    { value: 5, name: "Toys & Games", isChecked: false },
-                    { value: 6, name: "Watches, Pens & Clocks", isChecked: false },
-                    { value: 7, name: "Gifts & Premiums", isChecked: false },
-                    { value: 8, name: "Home & Gardening", isChecked: false },
-                    { value: 9, name: "Sports & Recreation", isChecked: false },
-                    { value: 10, name: "Books & Comics", isChecked: false }
-                ];
             }
             requestAccessFs();
         }
@@ -70,6 +74,20 @@ angular.module("LelongApp.Goods")
         /**End Top bar actions */
         /** Choose Category */
         $scope.showPopup = function () {
+            if ($scope.editMode) {
+                if ($scope.goodItem.Category.length > 0) {
+                    var arrOldCate = $scope.goodItem.Category.split(';');
+                    for (var i = 0; i < arrOldCate.length; i++) {
+                        for (var j = 0; j < $scope.defaultCategory.length; j++) {
+                            if (arrOldCate[i] == $scope.defaultCategory[j].name) {
+                                $scope.defaultCategory[j].isChecked = true;
+                                break;
+                            }
+                        }
+                    }
+
+                }
+            }
             var listTemplate = '<ion-list> <ion-checkbox  ng-repeat="cate in defaultCategory" title="{{cate.name}}" ng-model="cate.isChecked">{{cate.name}}</ion-checkbox> </ion-list>';
             var myPopup = $ionicPopup.show({
                 template: listTemplate,
@@ -173,7 +191,7 @@ angular.module("LelongApp.Goods")
                     var file = $scope.imgURI[i].photoUrl.replace(/^.*[\\\/]/, '');
                     if (file === res) {
                         $scope.imgURI.splice(i, 1);
-                        if(photoId>0){
+                        if (photoId > 0) {
                             $scope.imageDeleted.push({ photoId: photoId, photoUrl: '' });
                         }
                         break;
@@ -244,7 +262,7 @@ angular.module("LelongApp.Goods")
                     arrImage.push($scope.imgURI[i].photoUrl);
                 }
             }
-            if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+            if ($scope.editMode) {
                 /**update */
                 var imgSave = [];
                 if ($scope.imgURI.length > 0) {
@@ -276,7 +294,6 @@ angular.module("LelongApp.Goods")
         $scope.prevClick = function () {
             $scope.step -= 1;
         }
-
         // $scope.getData = function () {
         //     $dbHelper.select("GoodsPublish", "*", "").then(function (res) {
         //         console.log("INNER JOIN: " + JsonParse(res));
