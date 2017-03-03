@@ -1,5 +1,44 @@
 angular.module('LelongApp.services')
 	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
+		
+		// Delete all photos of a good
+		function deletePhotosByGood(goodId, callBack){
+			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='"+goodId+"'").then(function (result) {
+				var photoPaths = [];
+				if (result && result.length > 0) {
+					result.forEach(function (photo) {
+						photoPaths.push(photo.PhotoUrl);
+					});
+				}
+				photoPaths.forEach(function (p) {
+					var nameSegments = p.split('/');
+					var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
+					var filename = nameSegments[nameSegments.length - 1];
+
+					// delete file
+					window.resolveLocalFileSystemURL(path, function (dir) {
+						dir.getFile(filename, { create: false }, function (fileEntry) {
+							fileEntry.remove(function () {
+								console.log("The file has been removed succesfully");
+								// The file has been removed succesfully
+							}, function (error) {
+								// Error deleting the file
+								console.dir(error);
+							}, function () {
+								// The file doesn't exist
+								console.console("The file doesn't exist");
+							});
+						});
+					});
+				});
+				$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '"+goodId+"'").then(function(res){
+					if (callBack){
+						callBack();
+					}
+				});
+			})
+		}
+		
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -202,14 +241,36 @@ angular.module('LelongApp.services')
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
 								delete newGood.listPhoto;
-								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
-									if (result.rowsAffected > 0) {
-										for (var i = 0; i < goods.length; i++) {
-											if (goods[i].Guid == newGood.Guid) {
+								delete newGood.GoodPublishId;
+								
+								// update to old one
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '"+newGood.Guid+"'").then(function(result){
+									if (result.rowsAffected > 0){
+										for (var i=0; i<goods.length; i++){
+											if (goods[i].Guid == newGood.Guid){
+												// get id of current good in client app
+												var cId = goods[i].GoodPublishId;
+												
+												// clear old photos
+												deletePhotosByGood(cId, function(){
+													// save new photos
+													listPhoto.forEach(function(p){
+														p.GoodPublishId = cId;
+														$dbHelper.insert("GoodsPublishPhoto", p);
+													});
+												});
+												
+												/*$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '"+cId+"'").then(function(res){
+													
+												});
+												*/
+												
 												goods[i] = newGood;
 												break;
 											}
 										}
+										
+										
 									}
 								});
 							});
