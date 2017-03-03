@@ -116,7 +116,7 @@ angular.module('LelongApp.services')
 					if (res.insertId > 0 && arrFullPathImgs.length > 0) {
 						//insert photo for GoodsPublishPhoto
 						for (var i = 0; i < arrFullPathImgs.length; i++) {
-							$dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: arrFullPathImgs[i] }).then(function (response) {
+							$dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: arrFullPathImgs[i], PhotoName: getImageFileName(arrFullPathImgs[i]) }).then(function (response) {
 								console.log("INSERT IMG DONE:");
 							}, function (error) {
 								console.log("INSERT IMG FAILED: " + JsonParse(err));
@@ -167,45 +167,45 @@ angular.module('LelongApp.services')
 			publish: function (good) {
 				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', good, true).then(function (response) {
 					// upload images
-					if (good.listPhoto){
+					if (good.listPhoto) {
 						var imageAPI = "https://1f71ef25.ngrok.io/api/image/upload?guiIdGoods=" + good.Guid;
-						good.listPhoto.forEach(function(p){
+						good.listPhoto.forEach(function (p) {
 							imageService.uploadImage(imageAPI, p.PhotoUrl);
 						});
-						
+
 					}
-					
-					if (response.status == 200 && response.data){
+
+					if (response.status == 200 && response.data) {
 						// update lastsync value to current good
 						var params = {
 							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 						};
-						return $dbHelper.update("GoodsPublish", params, "GoodPublishId = '"+good.GoodPublishId+"'").then(function(result){
+						return $dbHelper.update("GoodsPublish", params, "GoodPublishId = '" + good.GoodPublishId + "'").then(function (result) {
 							return result.rowsAffected > 0;
 						});
 					}
 				});
 			},
-			sync: function(goods){
+			sync: function (goods) {
 				var params = "";//guidsArray.join(',');
-				if (goods){
-					goods.forEach(function(g){
+				if (goods) {
+					goods.forEach(function (g) {
 						if (params != "")
 							params += ",";
 						params += g.Guid;
 					});
-					
+
 					// request to API
 					return xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
-						if (response.data){
-							response.data.forEach(function(newGood){
+						if (response.data) {
+							response.data.forEach(function (newGood) {
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
 								delete newGood.listPhoto;
-								$dbHelper.update("GoodsPublish", newGood, "Guid = '"+newGood.Guid+"'").then(function(result){
-									if (result.rowsAffected > 0){
-										for (var i=0; i<goods.length; i++){
-											if (goods[i].Guid == newGood.Guid){
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
+									if (result.rowsAffected > 0) {
+										for (var i = 0; i < goods.length; i++) {
+											if (goods[i].Guid == newGood.Guid) {
 												goods[i] = newGood;
 												break;
 											}
@@ -218,6 +218,8 @@ angular.module('LelongApp.services')
 				}
 			}
 		};
-
+		function getImageFileName(fullNamePath) {
+			return fullNamePath.replace(/^.*[\\\/]/, '');
+		}
 		return goodService;
 	});

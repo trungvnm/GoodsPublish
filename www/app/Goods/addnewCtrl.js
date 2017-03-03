@@ -67,7 +67,7 @@ angular.module("LelongApp.Goods")
             {
                 name: 'save',
                 action: function () {
-                    $scope.saveClick();
+                    $scope.saveClick(true);
                 }
             }
         ];
@@ -256,7 +256,7 @@ angular.module("LelongApp.Goods")
 
         /**End Cordova file */
         /** Actions */
-        $scope.saveClick = function () {
+        $scope.saveClick = function (isRedirect) {
             var arrImage = [];
             if ($scope.imgURI.length > 0) {
                 for (var i = 0; i < $scope.imgURI.length; i++) {
@@ -281,7 +281,7 @@ angular.module("LelongApp.Goods")
                 goodsService.updateGoods($scope.goodItem, imgSave);
             } else {
                 /**insert */
-                goodsService.saveGoods($scope.goodItem, arrImage);
+                goodsService.saveGoods($scope.goodItem, arrImage,isRedirect);
             }
         }
 
@@ -300,30 +300,53 @@ angular.module("LelongApp.Goods")
         /** Post to server */
         function postToServer() {
             var listPhoto = [];
-            var newSource;
+            var newSource = {};
             /** Save goods to local device */
-           // $scope.saveClick();
-            /** post goods to server */
-            if ($scope.imgURI.length > 0) {
-                for (var i = 0; i < $scope.imgURI.length; i++) {
-                    var pName = getImageFileName($scope.imgURI[i].photoUrl);
-                    listPhoto.push({
-                        PhotoName: pName,
-                        PhotoUrl: pName,
-                        PhotoDescription: $scope.imgURI[i].photoDescription
-                    })
+            navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
+                if (result == 1) {
+                    $scope.saveClick(false);
+                    /** post goods to server */
+                    if ($scope.imgURI.length > 0) {
+                        for (var i = 0; i < $scope.imgURI.length; i++) {
+                            var pName = getImageFileName($scope.imgURI[i].photoUrl);
+                            listPhoto.push({
+                                PhotoName: pName,
+                                PhotoUrl: pName,
+                                PhotoDescription: ""
+                            })
+                        }
+                    };
+                    angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
+
+                    goodsService.publish(newSource).then(function (result) {
+                        if (result) {
+                            $cordovaToast.showLongTop('Publish successful!');
+                            $ionicHistory.clearCache().then(function () {
+                                $state.go('app.completes');
+                            });
+                        }
+                        else {
+                            $cordovaToast.showLongTop('Error: Publish failed!');
+                        }
+
+                    });
                 }
-            };
-            angular.extend(newSource,$scope.goodItem,{listPhoto:listPhoto});
-            console.log("EXTEND: " + JsonParse(newSource));
-            // goodsService.publish($scope.good).then(function (result) {
-            //     $ionicHistory.clearCache().then(function () {
-            //         $state.go('app.completes');
-            //     });
-            // });
+            });
+
         }
 
         /** end Post to server */
+        /** Gallery Options */
+        $scope.galleryOptions = {
+            pagination: '.swiper-pagination',
+            slidesPerView: 2,
+            loop: false,
+            centeredSlides: true,
+            paginationClickable: true,
+            spaceBetween: 5,
+            speed: 600
+        };
+        /** Gallery Options */
         /**helper method */
         function JsonParse(obj) {
             var jsonObj;
@@ -348,7 +371,7 @@ angular.module("LelongApp.Goods")
         };
         function updateSlide() {
             $timeout(function () {
-                $ionicSlideBoxDelegate.slide(0);
+                // $ionicSlideBoxDelegate.slide(0);
                 $ionicSlideBoxDelegate.update();
             });
         }

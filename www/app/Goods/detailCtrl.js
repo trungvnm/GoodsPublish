@@ -7,10 +7,10 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 	};
 
 	//-- setup action buttons
-	var actions = [
+	var actions = [		
 		{
 			name: 'edit',
-			action: function () {
+			action: function () {				
 				$ionicHistory.clearCache().then(function () {
 					$state.go('navbar.addnew', { goodsId: $stateParams.id });
 				});

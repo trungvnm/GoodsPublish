@@ -1,14 +1,14 @@
 <ion-view ng-init="init()" view-title="{{viewTitle}}">
-    <ion-content >
+    <ion-content>
         <div class="list">
             <!--Step 1-->
             <div id="addnew-step1" ng-show="step==1">
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Title</span>
+                <span class="input-label">Title<span class="input-required">(*)</span></span>
                 <input type="text" placeholder="Title" autofocus  ng-model="goodItem.Title">
             </label>
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Category</span>
+                <span class="input-label">Category<span class="input-required">(*)</span></span>
                 <div ng-show="editMode==false" ng-hide="goodItem.Category.length>0" ng-click="showPopup()">
                 <button  style="float: right" class="button button-clear button-positive" >
                     Choose category
@@ -19,34 +19,47 @@
                 </div>
             </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Condition</span>
+                    <span class="input-label">Condition<span class="input-required">(*)</span></span>
                     <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Brand</span>
+                    <span class="input-label">Brand<span class="input-required">(*)</span></span>
                     <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Quantity</span>
+                    <span class="input-label">Quantity<span class="input-required">(*)</span></span>
                     <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Weight</span>
-                    <input type="number" placeholder="Weight" ng-model="goodItem.Weight">
-                </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Price</span>
-                    <input type="number" placeholder="Price" ng-model="goodItem.Price">
-                </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">SalePrice</span>
-                    <input type="number" placeholder="Price" ng-model="goodItem.SalePrice">
+                    <span class="input-label">SalePrice<span class="input-required">(*)</span></span>
+                    <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice">
                 </label>
             </div>
             <!--Step 2 photo upload-->
             <div id="addnew-step2" ng-show="step==2">
                 <div id="addnew-photo-preview">
-                    <ion-slide-box>
+                    <!--<ion-slide-box>
+                        <ion-slide ng-repeat="image in imgURI">
+                            <div ng-if="$index > 0" style="float: left;">
+                                <img style="width: 118px;height: 100px" ng-src="{{imgURI[$index -1].photoUrl}}" alt="">
+                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(imgURI[$index -1].photoUrl,imgURI[$index -1].photoId)">{{$index}}</a>
+                            </div>
+                            <div style="float: left;">
+                                <img style="width: 118px;height: 100px" ng-src="{{image.photoUrl}}" alt="">
+                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(image.photoUrl,image.photoId)"></a>
+                            </div>
+                            <div ng-if="$index < (imgURI.length - 1)" style="float: left;">
+                                <img style="width: 118px;height: 100px" ng-src="{{imgURI[$index + 1].photoUrl}}" alt="">
+                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(imgURI[$index + 1].photoUrl,imgURI[$index + 1].photoId)"></a>
+                            </div>
+                        </ion-slide>
+                    </ion-slide-box>-->
+                    <ion-slides options="galleryOptions" slider="gallerySlider" ng-show="imgURI.length>0">
+                        <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
+                            <img style="width: 150px;height: 150px" ng-src="{{image.photoUrl}}">
+                        </ion-slide-page>
+                    </ion-slides>
+                    <!--<ion-slide-box>
                         <ion-slide ng-repeat="image in imgURI">
                             <div>
                                 <img style="width: 200px;height: 200px" ng-src="{{image.photoUrl}}" alt="">
@@ -54,7 +67,7 @@
                             </div>
                         </ion-slide>
                         </ion-slide>
-                    </ion-slide-box>
+                    </ion-slide-box>-->
 
                     <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">
                 </div>
@@ -66,6 +79,14 @@
             </div>
             <!--Step 3 optional field-->
             <div id="addnew-step3" ng-show="step==3">
+                 <label class="item item-input item-stacked-label">
+                    <span class="input-label">Price</span>
+                    <input type="number" placeholder="Price" ng-model="goodItem.Price">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Weight</span>
+                    <input type="number" placeholder="Weight" ng-model="goodItem.Weight">
+                </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">GSTType</span>
                     <input type="number" placeholder="GSTType" ng-model="goodItem.GstType" autofocus>
@@ -101,7 +122,7 @@
                 <label class="item item-input item-stacked-label">
                      <span class="input-label">Description</span>
                     <textarea placeholder="Description" ng-model="goodItem.Description"></textarea>
-                </label>               
+                </label>
             </div>
         </div>
         <!--Next, Previous button-->
@@ -109,7 +130,7 @@
             <button class="button button-stable" style="float: left" ng-click="prevClick()" ng-show="step > 1">
                 Prev
             </button>
-            <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-disabled="step==3">
+            <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-hide="step==3">
                 Next
             </button>
 

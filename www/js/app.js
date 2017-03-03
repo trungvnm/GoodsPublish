@@ -34,7 +34,7 @@
                 }
                 //initial db, tables
                 $rootScope.db = $dbHelper.openDB();
-                $dbHelper.initialDB();               
+                $dbHelper.initialDB();
             });
         })
 
@@ -70,7 +70,7 @@
                         }
                     }
                 })
-				.state('app.account', {
+                .state('app.account', {
                     url: '/account',
                     views: {
                         'menuContent': {
@@ -83,8 +83,9 @@
                         }
                     }
                 })
-				.state('navbar.addnew', {
+                .state('navbar.addnew', {
                     url: '/addnew/{goodsId}',
+                    cache: false,
                     views: {
                         'menuContent': {
                             templateUrl: 'app/Goods/addnew.html',
@@ -124,12 +125,12 @@
             $urlRouterProvider.otherwise('/login');
         });
 
-    angular.module('LelongApp.Wizard', []);    
+    angular.module('LelongApp.Wizard', []);
     angular.module('LelongApp.Goods', []);
     angular.module('LelongApp.Home', []);
     angular.module('LelongApp.Login', []);
     angular.module('LelongApp.Global', []);
-	angular.module('LelongApp.Account', []);
+    angular.module('LelongApp.Account', []);
 
     angular.module('LelongApp.services', ['ngResource']);
     angular.module('IonicGallery', ['ionic', 'ion-gallery']);
