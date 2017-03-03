@@ -16,7 +16,6 @@ angular.module("LelongApp.Wizard",[])
     $scope.isnew = false;
     $scope.objWizard = {};
     $scope.errorMessage = "";
-    $scope.bRead = false;
     $scope.save = function()
     {
         if ($scope.isValid())
@@ -45,7 +44,7 @@ angular.module("LelongApp.Wizard",[])
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {  
                 $cordovaToast.showLongTop('Save successful!').then( function (success) {   
                     $ionicHistory.clearCache().then(function () {  
-                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, Value: 'false'}, "SettingFieldId = 'Wizard" + $scope.objWizard.UserId + "'").then(function(res){
+                        $dbHelper.update("Setting",{SettingFieldId: 'Wizard' + $scope.objWizard.UserId, Value: false}, "SettingFieldId='Wizard" + $scope.objWizard.UserId + "'").then(function(res){
                             $scope.isnew = false;
                             $state.go('app.completes');
                             defer.resolve("update Setting success");
@@ -65,7 +64,7 @@ angular.module("LelongApp.Wizard",[])
         }
         else
         {
-             $dbHelper.update('Wizard',$scope.objWizard, "WizardId = "+ $scope.objWizard.WizardId).then(function (res) {       
+             $dbHelper.update('Wizard',$scope.objWizard, "WizardId="+ $scope.objWizard.WizardId).then(function (res) {       
                 $cordovaToast.showLongTop('Save successful!').then( function (success) {   
                     $ionicHistory.clearCache().then(function () {  
                         $scope.isnew = false;
@@ -118,12 +117,8 @@ angular.module("LelongApp.Wizard",[])
                    
     $scope.initWizardByUser = function(userId)
     {
-        $scope.isnew = true; 
-        $dbHelper.select("Wizard").then(function(es){
-            debugger;
-        })
-
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId = "+ userId)
+        $scope.isnew = true;       
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId="+ userId)
         .then(function(response){
             if  (response.length > 0)
             {

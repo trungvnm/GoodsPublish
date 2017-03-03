@@ -50,14 +50,12 @@
                     abstract: true,
                     templateUrl: 'app/Global/menu.html',
                     controller: 'MenuCtrl'
-
                 })
                 .state('navbar', {
                     url: '/navbar',
                     abstract: true,
                     templateUrl: 'app/Global/navbar.html',
                     controller: 'NavbarCtrl'
-
                 })
                 .state('app.completes', {
                     url: '/completes',

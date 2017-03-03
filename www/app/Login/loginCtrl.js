@@ -7,8 +7,12 @@
     $scope.goNext = function(){
         var userID = tokenService.getToken().userid;
         $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userID + "'").then(function(result){
-            if  (result.length > 0) {                
-                $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+            if  (result.length > 0) {   
+                if (result.Value == "false")
+                {
+                    $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+                }        
+                
             } else {
                 var setting = {
                     SettingFieldId: "Wizard" + userID,
