@@ -1,12 +1,12 @@
 angular.module('LelongApp.services')
 	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
-		function getPhotoApiUrl(guid){
+		function getPhotoApiUrl(guid) {
 			return "https://1f71ef25.ngrok.io/api/image/download?photoName=" + guid;
 		}
-		
+
 		// Delete all photos of a good
-		function deletePhotosByGood(goodId, callBack){
-			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='"+goodId+"'").then(function (result) {
+		function deletePhotosByGood(goodId, callBack) {
+			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='" + goodId + "'").then(function (result) {
 				var photoPaths = [];
 				if (result && result.length > 0) {
 					result.forEach(function (photo) {
@@ -34,14 +34,14 @@ angular.module('LelongApp.services')
 						});
 					});
 				});
-				$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '"+goodId+"'").then(function(res){
-					if (callBack){
+				$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
+					if (callBack) {
 						callBack();
 					}
 				});
 			})
 		}
-		
+
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -151,7 +151,7 @@ angular.module('LelongApp.services')
 				}
 				return false;
 			},
-			saveGoods: function (goodItemObj, arrFullPathImgs) {
+			saveGoods: function (goodItemObj, arrFullPathImgs, isShowToast) {
 				$rootScope.$broadcast('showSpinner');
 				$dbHelper.insert("GoodsPublish", goodItemObj).then(function (res) {
 					console.log("SUCCESS: " + JSON.stringify(res))
@@ -165,11 +165,13 @@ angular.module('LelongApp.services')
 							});
 						};
 					}
-					$cordovaToast.showLongTop('Save successfully!').then(function () {
-						$ionicHistory.clearCache().then(function () {
-							$state.go('app.completes');
+					if (isShowToast) {
+						$cordovaToast.showLongTop('Save successfully!').then(function () {
+							$ionicHistory.clearCache().then(function () {
+								$state.go('app.completes');
+							});
 						});
-					});
+					}
 					$rootScope.$broadcast('hideSpinner');
 				}, function (err) {
 					console.log("ERROR: " + JSON.stringify(err));
@@ -177,18 +179,20 @@ angular.module('LelongApp.services')
 				});
 			},
 			/** goodsPhotoObj: object GoodsPublishPhoto	with {photoId,PhotoUrl} */
-			updateGoods: function (goodsItemObj, goodsPhotoObj, goodItemWhereClause) {
+			updateGoods: function (goodsItemObj, goodsPhotoObj, goodItemWhereClause, isShowToast) {
 				var where = " GoodPublishId = " + goodsItemObj.GoodPublishId;
 				if (goodItemWhereClause !== undefined && goodItemWhereClause.trim().length > 0) {
 					where += " " + goodItemWhereClause;
 				}
 				$dbHelper.update("GoodsPublish", goodsItemObj, where).then(function (res) {
 					console.log("GoodsPublish UPDATED: " + JSON.stringify(res));
-					$cordovaToast.showLongTop('Update successfully!').then(function () {
-						$ionicHistory.clearCache().then(function () {
-							$state.go('app.completes');
+					if (isShowToast) {
+						$cordovaToast.showLongTop('Update successfully!').then(function () {
+							$ionicHistory.clearCache().then(function () {
+								$state.go('app.completes');
+							});
 						});
-					});
+					}
 				});
 				/** update GoodsPublishPhoto: if photoId>0: delete?insert */
 				if (goodsPhotoObj.length > 0) {
@@ -248,22 +252,22 @@ angular.module('LelongApp.services')
 								newGood.Active = 1;
 								delete newGood.listPhoto;
 								delete newGood.GoodPublishId;
-								
+
 								// update to old one
-								$dbHelper.update("GoodsPublish", newGood, "Guid = '"+newGood.Guid+"'").then(function(result){
-									if (result.rowsAffected > 0){
-										for (var i=0; i<goods.length; i++){
-											if (goods[i].Guid == newGood.Guid){
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
+									if (result.rowsAffected > 0) {
+										for (var i = 0; i < goods.length; i++) {
+											if (goods[i].Guid == newGood.Guid) {
 												// get id of current good in client app
 												var cId = goods[i].GoodPublishId;
-												
+
 												// clear old photos
-												deletePhotosByGood(cId, function(){
-													
+												deletePhotosByGood(cId, function () {
+
 													var uploadDir = "";
-													listPhoto.forEach(function(p){
+													listPhoto.forEach(function (p) {
 														// download photo from server
-														if (uploadDir == ""){
+														if (uploadDir == "") {
 															var dirName = "ImagesUpload";
 															var subDir = userId;
 															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
@@ -283,18 +287,18 @@ angular.module('LelongApp.services')
 														/*var saveLocal = "file:///data/user/0/com.ionicframework.goodspublish443924/files/files/ImagesUpload/1/396d77d2-7471-4800-a816-9861929deb26.jpg";*/
 													});
 												});
-												
+
 												/*$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '"+cId+"'").then(function(res){
 													
 												});
 												*/
-												
+
 												goods[i] = newGood;
 												break;
 											}
 										}
-										
-										
+
+
 									}
 								});
 							});

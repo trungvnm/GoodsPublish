@@ -88,7 +88,7 @@ a[disabled] {
 }
 
 .swiper-container {
-        width: 300px;
+        width: 330px;
         height: 200px;
         margin: 5px auto;
     }
@@ -113,6 +113,27 @@ a[disabled] {
 .input-required{
     color: red;
 }
+.ion-slides-delete {
+    	position: relative;
+    	vertical-align: middle;
+    	display: inline-block;
+    }
+    
+    .ion-slides-delete:after {
+    	content: '\d7';
+    	position:absolute;
+    	top:0;
+        right:0;
+    	height: 25px;
+    	width: 25px;
+    	background: #ff2424;
+        padding-left:6px;
+        font-size: 25px;
+        color: #FFF;
+        border-radius: 3px;
+        padding-top: 3px;
+        padding-right: 3px;
+    }
 /*End Addnew page*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;

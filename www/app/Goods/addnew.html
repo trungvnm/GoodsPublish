@@ -1,11 +1,12 @@
 <ion-view ng-init="init()" view-title="{{viewTitle}}">
     <ion-content>
+        <form name="addEditForm" novalidate="novalidate">
         <div class="list">
             <!--Step 1-->
             <div id="addnew-step1" ng-show="step==1">
                 <label class="item item-input item-stacked-label">
-                <span class="input-label">Title<span class="input-required"> *</span></span>
-                <input type="text" placeholder="Title" autofocus  ng-model="goodItem.Title">
+                <span class="input-label">Title<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                <input type="text" placeholder="Title" autofocus  ng-model="goodItem.Title" required>
             </label>
                 <label class="item item-input item-stacked-label">
                 <span class="input-label">Category</span>
@@ -18,57 +19,33 @@
                   {{goodItem.Category}}                 
                 </div>
             </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Condition<span class="input-required"> *</span></span>
-                    <input type="text" placeholder="Condition" ng-model="goodItem.Condition">
+                <label class="item item-input item-stacked-label" >
+                    <span class="input-label">Condition<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <input type="text" placeholder="Condition" ng-model="goodItem.Condition" required>
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Brand</span>
                     <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Quantity<span class="input-required"> *</span></span>
-                    <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity">
+                    <span class="input-label">Quantity<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity" required>
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">SalePrice<span class="input-required"> *</span></span>
-                    <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice">
+                    <span class="input-label">SalePrice<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice" required>
                 </label>
             </div>
             <!--Step 2 photo upload-->
             <div id="addnew-step2" ng-show="step==2">
                 <div id="addnew-photo-preview">
-                    <!--<ion-slide-box>
-                        <ion-slide ng-repeat="image in imgURI">
-                            <div ng-if="$index > 0" style="float: left;">
-                                <img style="width: 118px;height: 100px" ng-src="{{imgURI[$index -1].photoUrl}}" alt="">
-                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(imgURI[$index -1].photoUrl,imgURI[$index -1].photoId)">{{$index}}</a>
-                            </div>
-                            <div style="float: left;">
-                                <img style="width: 118px;height: 100px" ng-src="{{image.photoUrl}}" alt="">
-                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(image.photoUrl,image.photoId)"></a>
-                            </div>
-                            <div ng-if="$index < (imgURI.length - 1)" style="float: left;">
-                                <img style="width: 118px;height: 100px" ng-src="{{imgURI[$index + 1].photoUrl}}" alt="">
-                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(imgURI[$index + 1].photoUrl,imgURI[$index + 1].photoId)"></a>
-                            </div>
-                        </ion-slide>
-                    </ion-slide-box>-->
-                    <ion-slides options="galleryOptions" slider="gallerySlider" ng-show="imgURI.length>0">
+                    <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length>0">
                         <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
+                            <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)">
                             <img style="width: 150px;height: 150px" ng-src="{{image.photoUrl}}">
+                            </div>
                         </ion-slide-page>
                     </ion-slides>
-                    <!--<ion-slide-box>
-                        <ion-slide ng-repeat="image in imgURI">
-                            <div>
-                                <img style="width: 200px;height: 200px" ng-src="{{image.photoUrl}}" alt="">
-                                <a class="button button-icon icon ion-ios-close-empty" ng-click="deleteImg(image.photoUrl,image.photoId)"></a>
-                            </div>
-                        </ion-slide>
-                        </ion-slide>
-                    </ion-slide-box>-->
-
                     <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">
                 </div>
                 <div style="display: flex;padding-top: 20px;">
@@ -130,13 +107,10 @@
             <button class="button button-stable" style="float: left" ng-click="prevClick()" ng-show="step > 1">
                 Prev
             </button>
-            <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-hide="step==3">
+            <button class="button button-stable" style="float: right" ng-click="nextClick(addEditForm)" ng-hide="step==3">
                 Next
             </button>
-
-            <!--<button class="button button-positive" style="float: right" ng-click="getData()">
-                GET
-            </button>-->
         </div>
+        </form>
     </ion-content>
 </ion-view>

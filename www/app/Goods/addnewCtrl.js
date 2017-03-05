@@ -5,6 +5,7 @@ angular.module("LelongApp.Goods")
 
         $scope.goodsId = $stateParams.goodsId;
         $scope.editMode = false
+        $scope.hasError = false;
         if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
             $scope.editMode = true;
         }
@@ -42,12 +43,13 @@ angular.module("LelongApp.Goods")
                             for (var i = 0; i < result.length; i++) {
                                 $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
                             }
+                            updateSlide();
                         }
                     });
                 });
             } else {
                 /**ADD NEW GoodsPublish */
-                $scope.goodItem = { Category: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: generateUUID() };
+                $scope.goodItem = { Category: '', Title: '', Condition: '', Quantity: 0, SalePrice: 0, UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: generateUUID() };
             }
             requestAccessFs();
         }
@@ -198,11 +200,8 @@ angular.module("LelongApp.Goods")
                         break;
                     }
                 }
-                $timeout(function () {
-                    $ionicSlideBoxDelegate.slide(0);
-                    $ionicSlideBoxDelegate.update();
-                    $cordovaToast.showLongTop('Delete successfully!')
-                });
+                updateSlide();
+                $cordovaToast.showLongTop('Delete successfully!')
             });
         }
         /**End camera */
@@ -256,39 +255,50 @@ angular.module("LelongApp.Goods")
 
         /**End Cordova file */
         /** Actions */
-        $scope.saveClick = function (isRedirect) {
-            var arrImage = [];
-            if ($scope.imgURI.length > 0) {
-                for (var i = 0; i < $scope.imgURI.length; i++) {
-                    arrImage.push($scope.imgURI[i].photoUrl);
-                }
-            }
-            if ($scope.editMode) {
-                /**update */
-                var imgSave = [];
+        $scope.saveClick = function (isShowToast) {
+            var item = $scope.goodItem;
+            if (item.Title.trim().length == 0 || item.Condition.trim().length == 0) {
+                $scope.step = 1;
+                $scope.hasError = true;
+            } else {
+                var arrImage = [];
                 if ($scope.imgURI.length > 0) {
                     for (var i = 0; i < $scope.imgURI.length; i++) {
-                        if ($scope.imgURI[i].photoId == 0) {
-                            imgSave.push($scope.imgURI[i]);
+                        arrImage.push($scope.imgURI[i].photoUrl);
+                    }
+                }
+                if ($scope.editMode) {
+                    /**update */
+                    var imgSave = [];
+                    if ($scope.imgURI.length > 0) {
+                        for (var i = 0; i < $scope.imgURI.length; i++) {
+                            if ($scope.imgURI[i].photoId == 0) {
+                                imgSave.push($scope.imgURI[i]);
+                            }
                         }
                     }
-                }
-                if ($scope.imageDeleted.length > 0) {
-                    for (var i = 0; i < $scope.imageDeleted.length; i++) {
-                        imgSave.push($scope.imageDeleted[i]);
+                    if ($scope.imageDeleted.length > 0) {
+                        for (var i = 0; i < $scope.imageDeleted.length; i++) {
+                            imgSave.push($scope.imageDeleted[i]);
+                        }
                     }
+                    goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast);
+                } else {
+                    /**insert */
+                    goodsService.saveGoods($scope.goodItem, arrImage, isShowToast);
                 }
-                goodsService.updateGoods($scope.goodItem, imgSave);
-            } else {
-                /**insert */
-                goodsService.saveGoods($scope.goodItem, arrImage,isRedirect);
             }
         }
 
-        $scope.nextClick = function () {
-            $scope.step += 1;
-            if ($scope.step == 2) {
-                updateSlide();
+        $scope.nextClick = function (form) {
+            if (form.$invalid) {
+                $scope.hasError = true;
+            } else {
+                $scope.hasError = false;
+                $scope.step += 1;
+                if ($scope.step == 2) {
+                    updateSlide();
+                }
             }
         }
 
@@ -301,38 +311,44 @@ angular.module("LelongApp.Goods")
         function postToServer() {
             var listPhoto = [];
             var newSource = {};
-            /** Save goods to local device */
-            navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
-                if (result == 1) {
-                    $scope.saveClick(false);
-                    /** post goods to server */
-                    if ($scope.imgURI.length > 0) {
-                        for (var i = 0; i < $scope.imgURI.length; i++) {
-                            var pName = getImageFileName($scope.imgURI[i].photoUrl);
-                            listPhoto.push({
-                                PhotoName: pName,
-                                PhotoUrl: $scope.imgURI[i].photoUrl,
-                                PhotoDescription: ""
-                            })
-                        }
-                    };
-                    angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
+            var item = $scope.goodItem;
+            if (item.Title.trim().length == 0 || item.Condition.trim().length == 0) {
+                $scope.step = 1;
+                $scope.hasError = true;
+            }
+            else {
+                /** Save goods to local device */
+                navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
+                    if (result == 1) {
+                        $scope.saveClick(false);
+                        /** post goods to server */
+                        if ($scope.imgURI.length > 0) {
+                            for (var i = 0; i < $scope.imgURI.length; i++) {
+                                var pName = getImageFileName($scope.imgURI[i].photoUrl);
+                                listPhoto.push({
+                                    PhotoName: pName,
+                                    PhotoUrl: $scope.imgURI[i].photoUrl,
+                                    PhotoDescription: ""
+                                })
+                            }
+                        };
+                        angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
 
-                    goodsService.publish(newSource).then(function (result) {
-                        if (result) {
-                            $cordovaToast.showLongTop('Publish successful!');
-                            $ionicHistory.clearCache().then(function () {
-                                $state.go('app.completes');
-                            });
-                        }
-                        else {
-                            $cordovaToast.showLongTop('Error: Publish failed!');
-                        }
+                        goodsService.publish(newSource).then(function (result) {
+                            if (result) {
+                                $cordovaToast.showLongTop('Publish successful!');
+                                $ionicHistory.clearCache().then(function () {
+                                    $state.go('app.completes');
+                                });
+                            }
+                            else {
+                                $cordovaToast.showLongTop('Error: Publish failed!');
+                            }
 
-                    });
-                }
-            });
-
+                        });
+                    }
+                });
+            }
         }
 
         /** end Post to server */
@@ -341,11 +357,20 @@ angular.module("LelongApp.Goods")
             pagination: '.swiper-pagination',
             slidesPerView: 2,
             loop: false,
-            centeredSlides: true,
+            centeredSlides: false,
             paginationClickable: true,
             spaceBetween: 5,
             speed: 600
         };
+        $scope.$on("$ionicSlides.sliderInitialized", function (event, data) {
+            // data.slider is the instance of Swiper
+            $scope.slider = data.slider;
+        });
+        $scope.$on("$ionicSlides.slideChangeEnd", function (event, data) {
+            // note: the indexes are 0-based
+            $scope.activeIndex = data.slider.activeIndex;
+            $scope.previousIndex = data.slider.previousIndex;
+        });
         /** Gallery Options */
         /**helper method */
         function JsonParse(obj) {
@@ -372,7 +397,9 @@ angular.module("LelongApp.Goods")
         function updateSlide() {
             $timeout(function () {
                 // $ionicSlideBoxDelegate.slide(0);
-                $ionicSlideBoxDelegate.update();
+                if ($scope.slider) {
+                    $scope.slider.update();
+                }
             });
         }
         function getImageFileName(fullNamePath) {
