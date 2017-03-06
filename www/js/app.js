@@ -102,11 +102,6 @@
                         }
                     }
                 })
-                .state('edit', {
-                    url: '/edit',
-                    templateUrl: 'app/Goods/edit.html',
-                    controller: 'EditCtrl'
-                })
                 .state('app.wizard', {
                     cache: false,
                     url: '/wizard',
