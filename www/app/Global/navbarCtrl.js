@@ -86,7 +86,8 @@
 	
 	// back to referrer
 	$scope.goBack = function(){
-		$ionicHistory.goBack();
+		//$ionicHistory.goBack();
+		$ionicHistory.backView().go();
 	};
 	
 	// when click search button, open search box on header
