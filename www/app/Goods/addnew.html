@@ -1,11 +1,16 @@
 <ion-view ng-init="init()" view-title="{{viewTitle}}">
     <ion-content>
-        <form name="addEditForm" novalidate="novalidate">
+        <div class="show-error">
+                <ul ng-repeat="error in errors"> 
+                    <li>{{error.message}}</li>
+                </ul>
+            </div>
+        <form name="addEditForm" novalidate>
         <div class="list">
             <!--Step 1-->
-            <div id="addnew-step1" ng-show="step==1">
-                <label class="item item-input item-stacked-label">
-                <span class="input-label">Title<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+            <div id="addnew-step1" ng-show="step==1" >
+                <label class="item item-input item-stacked-label validated">
+                <span class="input-label">Title<span class="input-required"> * </span></span>
                 <input type="text" placeholder="Title" autofocus  ng-model="goodItem.Title" required>
             </label>
                 <label class="item item-input item-stacked-label">
@@ -20,7 +25,7 @@
                 </div>
             </label>
                 <label class="item item-input item-stacked-label" >
-                    <span class="input-label">Condition<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <span class="input-label">Condition<span class="input-required"> * </span></span>
                     <input type="text" placeholder="Condition" ng-model="goodItem.Condition" required>
                 </label>
                 <label class="item item-input item-stacked-label">
@@ -28,11 +33,11 @@
                     <input type="text" placeholder="Brand" ng-model="goodItem.Brand">
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Quantity<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <span class="input-label">Quantity<span class="input-required"> * </span></span>
                     <input type="number" placeholder="Quantity" ng-model="goodItem.Quantity" required>
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">SalePrice<span class="input-required"> * </span><span class="input-required" ng-show="hasError">This field is required</span></span>
+                    <span class="input-label">SalePrice<span class="input-required"> * </span></span>
                     <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice" required>
                 </label>
             </div>
@@ -46,7 +51,7 @@
                             </div>
                         </ion-slide-page>
                     </ion-slides>
-                    <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;">
+                    <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 100px;padding-top: 15px">
                 </div>
                 <div style="text-align: center; padding-top: 20px;">
                     <button class="button icon ion-ios-camera" ng-click="choosePhotoAction()"> 
@@ -107,7 +112,7 @@
             <button class="button button-stable" style="float: left" ng-click="prevClick()" ng-show="step > 1">
                 Prev
             </button>
-            <button class="button button-stable" style="float: right" ng-click="nextClick(addEditForm)" ng-hide="step==3">
+            <button class="button button-stable" style="float: right" ng-click="nextClick()" ng-hide="step==3">
                 Next
             </button>
         </div>
