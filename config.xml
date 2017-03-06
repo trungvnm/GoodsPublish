@@ -9,6 +9,13 @@
     </author>
   <content src="index.html"/>
   <access origin="*"/>
+   <access origin="content://*" />
+  <access origin="cdvfile://*"/>
+  <allow-navigation href="file:///**/*"/>
+  <allow-navigation href="*://**.phdesign.com.br/*"/>
+  <allow-navigation href="filesystem://**/*"/>
+  <allow-navigation href="cdvfile://**/*"/>
+  
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
