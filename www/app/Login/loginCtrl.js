@@ -1,4 +1,4 @@
-﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper, $state, $ionicHistory) {
+﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($rootScope, $scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper, $state, $ionicHistory) {
 	
     $scope.username = "";
     $scope.password = "";
@@ -47,7 +47,7 @@
         $scope.errorMessage = "";
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
         var data = 'username=' + encodeURIComponent($scope.username) + '&password=' + encodeURIComponent($scope.password) + '&client_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=password';
-       
+        $rootScope.$broadcast('showSpinner');
         xhttpService.login(urlLogin, data).then(function (result) {            
             // save user and token to localStogate
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
@@ -61,6 +61,7 @@
 					tokenService.saveToken(token);
 					$scope.updateLoginAttempt(token.userid,0);
                     $scope.updateUserToServer(token);
+                    $rootScope.$broadcast('hideSpinner');
 				}
 				else{
 					// if current user has not stored before, save new one to User table, and get user id to go further
@@ -72,6 +73,7 @@
 						tokenService.saveToken(token);
                         $scope.updateLoginAttempt(token.userid,0);
                         $scope.updateUserToServer(token);
+                        $rootScope.$broadcast('hideSpinner');
 					});
 				}
 			});
@@ -88,6 +90,7 @@
                 } else {
                     $scope.errorMessage ="Account: " + $scope.username + " has been blocked!";
                 }
+                $rootScope.$broadcast('hideSpinner');
             })
         });
     };
