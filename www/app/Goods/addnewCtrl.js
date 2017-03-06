@@ -5,13 +5,14 @@ angular.module("LelongApp.Goods")
 
         $scope.goodsId = $stateParams.goodsId;
         $scope.editMode = false
-        $scope.hasError = false;
         if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
             $scope.editMode = true;
         }
         $scope.viewTitle = "Add new";
         $scope.tokenServ = tokenService.getToken();
         $rootScope.$broadcast('hideSearch');
+        $scope.errors = [];
+
 
         $scope.init = function () {
             $scope.step = 1;
@@ -56,7 +57,7 @@ angular.module("LelongApp.Goods")
 
         $scope.$on("$ionicView.leave", function (event, data) {
             // handle event
-            $scope.init();
+            $ionicHistory.clearCache();
         });
         /**Top bar actions */
         var actions = [
@@ -256,11 +257,12 @@ angular.module("LelongApp.Goods")
         /**End Cordova file */
         /** Actions */
         $scope.saveClick = function (isShowToast) {
-            var item = $scope.goodItem;
-            if (item.Title.trim().length == 0 || item.Condition.trim().length == 0) {
-                $scope.step = 1;
-                $scope.hasError = true;
-            } else {
+            // var form=this.ctrl.addEditForm;
+            // if(form.$invalid){
+            //     form.$submitted=true;
+            //     form.$dirty=true;
+            // }else
+            if (formIsValid()) {
                 var arrImage = [];
                 if ($scope.imgURI.length > 0) {
                     for (var i = 0; i < $scope.imgURI.length; i++) {
@@ -290,11 +292,8 @@ angular.module("LelongApp.Goods")
             }
         }
 
-        $scope.nextClick = function (form) {
-            if (form.$invalid) {
-                $scope.hasError = true;
-            } else {
-                $scope.hasError = false;
+        $scope.nextClick = function () {
+            if (formIsValid()) {
                 $scope.step += 1;
                 if ($scope.step == 2) {
                     updateSlide();
@@ -311,12 +310,8 @@ angular.module("LelongApp.Goods")
         function postToServer() {
             var listPhoto = [];
             var newSource = {};
-            var item = $scope.goodItem;
-            if (item.Title.trim().length == 0 || item.Condition.trim().length == 0) {
+            if (formIsValid()) {
                 $scope.step = 1;
-                $scope.hasError = true;
-            }
-            else {
                 /** Save goods to local device */
                 navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
                     if (result == 1) {
@@ -396,7 +391,6 @@ angular.module("LelongApp.Goods")
         };
         function updateSlide() {
             $timeout(function () {
-                // $ionicSlideBoxDelegate.slide(0);
                 if ($scope.slider) {
                     $scope.slider.update();
                 }
@@ -406,4 +400,22 @@ angular.module("LelongApp.Goods")
             return fullNamePath.replace(/^.*[\\\/]/, '');
         }
         /**end helper method */
+        function formIsValid() {
+            var item = $scope.goodItem;
+            $scope.errors=[];
+            if (item.Title === undefined || item.Title.trim().length == 0) {
+                $scope.errors.push({ type: 'title', message: 'Title is required.' })
+            }
+           else if (item.Condition === undefined || item.Condition.trim().length == 0) {
+                $scope.errors.push({ type: 'condition', message: 'Condition is required.' })
+            }
+           else if (item.Quantity === undefined) {
+                $scope.errors.push({ type: 'quantity', message: 'Quantity is required.' })
+            }
+           else if (item.SalePrice === undefined) {
+                $scope.errors.push({ type: 'saleprice', message: 'SalePrice is required.' })
+            }
+            return $scope.errors.length == 0;
+        }
+
     });

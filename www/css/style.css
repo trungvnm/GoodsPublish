@@ -80,8 +80,7 @@ a[disabled] {
 /*Addnew page*/
 #addnew-photo-preview{
     text-align: center;
-    padding: 0px;
-    padding-top: 15px;    
+    padding: 0px;   
 }
 .slider-pager{
     bottom: 0px !important;
@@ -133,7 +132,13 @@ a[disabled] {
         border-radius: 3px;
         padding-top: 3px;
         padding-right: 3px;
+        cursor: pointer;
     }
+.show-error{
+    list-style: none;
+    color: red;
+    text-align: center;
+}
 /*End Addnew page*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;
