@@ -67,12 +67,13 @@ angular.module('LelongApp.services')
 				uri,
 				saveUrl,
 				function(entry) {
+					console.log("DOWNLOAD SUCCESS");
+					console.dir(entry);
 					return entry;
 				},
 				function(error) {
-					console.log("download error source " + error.source);
-					console.log("download error target " + error.target);
-					console.log("download error code" + error.code);
+					console.log("DOWNLOAD ERROR");
+					console.dir(error);
 				},
 				false,
 				{

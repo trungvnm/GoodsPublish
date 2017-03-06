@@ -1,4 +1,12 @@
 angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory, goodsService) {
+	var syncButton = {
+		name: 'sync',
+		action: function () {
+			goodsService.sync([$scope.good]).then(function(res){
+				$scope.getDetail();
+			});
+		}
+	};
 	var id = $stateParams.id;
 	$scope.photos = [];
 
@@ -27,6 +35,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 									if (result){
 										$scope.good.LastSync = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 										$cordovaToast.showLongTop('Publish successful!');
+										actions.push(syncButton);
 									}
 									else{
 										$cordovaToast.showLongTop('Error: Publish failed!');
@@ -53,8 +62,6 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 								goodsService.deleteGoods([$scope.good]).then(function (result) {
 									//if (result){
 									// call api to delete from server
-
-
 									$cordovaToast.showLongTop('Delete successful!').then(function () {
 										$ionicHistory.clearCache().then(function () {
 											$state.go('app.completes');
@@ -75,17 +82,13 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 	];
 
 	$scope.getDetail = function () {
+		$scope.photos = [];
 		// load all metadata of current good
 		goodsService.getGoodsById(id).then(function (result) {
 			if (result != null) {
 				$scope.good = result;
 				if ($scope.good.LastSync && $scope.good.LastSync != '') { // has not synced before
-					actions.push({
-						name: 'sync',
-						action: function () {
-							goodsService.sync([$scope.good]);
-						}
-					});
+					actions.push(syncButton);
 				}
 				$rootScope.$broadcast("setMainActions", actions);
 			}

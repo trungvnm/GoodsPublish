@@ -16,6 +16,18 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-filepath": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
         "cordova-plugin-image-picker": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
@@ -28,22 +40,10 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
-        },
-        "cordova-plugin-filepath": {
-            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
-        },
-        "cordova-plugin-file-transfer": {
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         }
     },

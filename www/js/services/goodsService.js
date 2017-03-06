@@ -252,11 +252,12 @@ angular.module('LelongApp.services')
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
 								newGood.Active = 1;
+								newGood.UserId = userId;
 								delete newGood.listPhoto;
 								delete newGood.GoodPublishId;
 
 								// update to old one
-								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
+								return $dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
 									if (result.rowsAffected > 0) {
 										for (var i = 0; i < goods.length; i++) {
 											if (goods[i].Guid == newGood.Guid) {
@@ -269,31 +270,29 @@ angular.module('LelongApp.services')
 													var uploadDir = "";
 													listPhoto.forEach(function (p) {
 														// download photo from server
-														if (uploadDir == "") {
+														//if (uploadDir == "") {
 															var dirName = "ImagesUpload";
 															var subDir = userId;
 															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
 																dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-																	subDirEntry.getDirectory(subDir, { create: true }, function (success) {
-																		var uploadDir = LocalFileSystem.PERSISTENT + "/" + dirName + "/" + subDir + "/" + p.PhotoName;
-																		var remoteImgUrl = getPhotoApiUrl(p.PhotoName);
-																		imageService.downloadImage(remoteImgUrl, uploadDir);
+																	subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
+																		var uploadDir = success.nativeURL + p.PhotoName;
+																		var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+																		if (remoteImgUrl.trim() != ''){
+																			imageService.downloadImage(remoteImgUrl, uploadDir);
+																			
+																			// save to database
+																			p.GoodPublishId = cId;
+																			p.PhotoUrl = uploadDir;
+																			$dbHelper.insert("GoodsPublishPhoto", p);
+																			return true;
+																		}
 																	})
 																});
 															});
-														}
-														// save to database
-														p.GoodPublishId = cId;
-														p.PhotoUrl = uploadDir;
-														$dbHelper.insert("GoodsPublishPhoto", p);
-														/*var saveLocal = "file:///data/user/0/com.ionicframework.goodspublish443924/files/files/ImagesUpload/1/396d77d2-7471-4800-a816-9861929deb26.jpg";*/
+														//}
 													});
 												});
-
-												/*$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '"+cId+"'").then(function(res){
-													
-												});
-												*/
 
 												goods[i] = newGood;
 												break;
@@ -302,6 +301,7 @@ angular.module('LelongApp.services')
 
 
 									}
+									return false;
 								});
 							});
 						}
