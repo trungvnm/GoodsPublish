@@ -221,12 +221,14 @@ angular.module('LelongApp.services')
 
 					}
 
+					// console.log("RESPONESE FROM PUBLISH: " + JSON.stringify(response));
+
 					if (response.status == 200 && response.data) {
 						// update lastsync value to current good
 						var params = {
 							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 						};
-						return $dbHelper.update("GoodsPublish", params, "GoodPublishId = '" + good.GoodPublishId + "'").then(function (result) {
+						return $dbHelper.update("GoodsPublish", params, "Guid = '" + good.Guid + "'").then(function (result) {
 							return result.rowsAffected > 0;
 						});
 					}
