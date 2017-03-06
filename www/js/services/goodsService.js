@@ -184,7 +184,11 @@ angular.module('LelongApp.services')
 				if (goodItemWhereClause !== undefined && goodItemWhereClause.trim().length > 0) {
 					where += " " + goodItemWhereClause;
 				}
-				$dbHelper.update("GoodsPublish", goodsItemObj, where).then(function (res) {
+				//reupdate LastEdited:
+				var newSource = {};
+				angular.extend(newSource,goodsItemObj, { LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') });
+
+				$dbHelper.update("GoodsPublish", newSource, where).then(function (res) {
 					console.log("GoodsPublish UPDATED: " + JSON.stringify(res));
 					if (isShowToast) {
 						$cordovaToast.showLongTop('Update successfully!').then(function () {
@@ -271,25 +275,25 @@ angular.module('LelongApp.services')
 													listPhoto.forEach(function (p) {
 														// download photo from server
 														//if (uploadDir == "") {
-															var dirName = "ImagesUpload";
-															var subDir = userId;
-															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
-																dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-																	subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
-																		var uploadDir = success.nativeURL + p.PhotoName;
-																		var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
-																		if (remoteImgUrl.trim() != ''){
-																			imageService.downloadImage(remoteImgUrl, uploadDir);
-																			
-																			// save to database
-																			p.GoodPublishId = cId;
-																			p.PhotoUrl = uploadDir;
-																			$dbHelper.insert("GoodsPublishPhoto", p);
-																			return true;
-																		}
-																	})
-																});
+														var dirName = "ImagesUpload";
+														var subDir = userId;
+														window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+															dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+																subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
+																	var uploadDir = success.nativeURL + p.PhotoName;
+																	var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+																	if (remoteImgUrl.trim() != '') {
+																		imageService.downloadImage(remoteImgUrl, uploadDir);
+
+																		// save to database
+																		p.GoodPublishId = cId;
+																		p.PhotoUrl = uploadDir;
+																		$dbHelper.insert("GoodsPublishPhoto", p);
+																		return true;
+																	}
+																})
 															});
+														});
 														//}
 													});
 												});

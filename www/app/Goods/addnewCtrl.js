@@ -50,7 +50,7 @@ angular.module("LelongApp.Goods")
                 });
             } else {
                 /**ADD NEW GoodsPublish */
-                $scope.goodItem = { Category: '', Title: '', Condition: '', Quantity: 0, SalePrice: 0, UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: generateUUID() };
+                $scope.goodItem = { Category: '', Title: '', Condition: '', Quantity: 0, SalePrice: 0, UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: generateUUID() };
             }
             requestAccessFs();
         }
@@ -402,17 +402,17 @@ angular.module("LelongApp.Goods")
         /**end helper method */
         function formIsValid() {
             var item = $scope.goodItem;
-            $scope.errors=[];
+            $scope.errors = [];
             if (item.Title === undefined || item.Title.trim().length == 0) {
                 $scope.errors.push({ type: 'title', message: 'Title is required.' })
             }
-           else if (item.Condition === undefined || item.Condition.trim().length == 0) {
+            else if (item.Condition === undefined || item.Condition.trim().length == 0) {
                 $scope.errors.push({ type: 'condition', message: 'Condition is required.' })
             }
-           else if (item.Quantity === undefined) {
+            else if (item.Quantity === undefined) {
                 $scope.errors.push({ type: 'quantity', message: 'Quantity is required.' })
             }
-           else if (item.SalePrice === undefined) {
+            else if (item.SalePrice === undefined) {
                 $scope.errors.push({ type: 'saleprice', message: 'SalePrice is required.' })
             }
             return $scope.errors.length == 0;
