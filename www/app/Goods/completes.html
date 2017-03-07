@@ -25,18 +25,6 @@
 				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
 				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)"></button>
 				</a>
-				
-				<a class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
-				  <div class="main_photo">
-						<img ng-src="{{g.PhotoUrl}}"/>
-						<img class="inlay" src="./img/Check-icon.png" ng-show="g.LastSync && g.LastSync.trim() != ''"/>
-					</div>				
-				  <h2>{{g.Title}}</h2>
-				  <p>{{g.Description}}</p>
-				  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
-				  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
-				  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)"></button>
-				</a>
 			</div>
 			
 			<div class="list" id="list-editmode" ng-show="quickactions">
