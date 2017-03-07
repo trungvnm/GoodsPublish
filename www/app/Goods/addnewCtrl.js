@@ -199,8 +199,7 @@ angular.module("LelongApp.Goods")
                         $scope.imageDeleted.push({ photoId: photoId, photoUrl: fullNamePath });
                     }else{
                         // delete the img that isn't save into db
-                        imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
-                            console.log("REMOVE IMG [NOT SAVE DB] SUCCESS");
+                        imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {                            
                         });
                     }
                     break;
@@ -282,8 +281,7 @@ angular.module("LelongApp.Goods")
                         for (var i = 0; i < $scope.imageDeleted.length; i++) {
                             imgSave.push($scope.imageDeleted[i]);
                             //delete the image saved into db
-                            imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {
-                                console.log("REMOVE IMG [SAVED DB] SUCCESS");
+                            imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {                               
                             });
                         }
                     }
@@ -313,8 +311,7 @@ angular.module("LelongApp.Goods")
         function postToServer() {
             var listPhoto = [];
             var newSource = {};
-            if (formIsValid()) {
-                $scope.step = 1;
+            if (formIsValid()) {                
                 /** Save goods to local device */
                 navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
                     if (result == 1) {
@@ -338,11 +335,7 @@ angular.module("LelongApp.Goods")
                                 $ionicHistory.clearCache().then(function () {
                                     $state.go('app.completes');
                                 });
-                            }
-                            else {
-                                $cordovaToast.showLongTop('Error: Publish failed!');
-                            }
-
+                            }                            
                         });
                     }
                 });
