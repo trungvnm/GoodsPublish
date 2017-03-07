@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {	
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
 	$scope.init = function(){
@@ -6,7 +6,7 @@
 		$scope.goods = [];
 		$scope.unSyncedGoods = [];
 		$scope.syncedGoods = [];
-		goodsService.getAll().then(function(result) {
+		return goodsService.getAll().then(function(result) {
 			if (result){
 				result.forEach(function(g){
 					if (!g.PhotoUrl || g.PhotoUrl.trim() == ''){
@@ -92,6 +92,7 @@
         $rootScope.$broadcast('updateIsSearch', params);
 	});
 	
+	// delete any selected goods
 	$scope.$on('multiDelete', function(event, args){
 		if (navigator.notification){
 			navigator.notification.confirm('Are you sure to delete selected items?', function(result){
@@ -106,8 +107,13 @@
 						goodsService.deleteGoods(selecteds).then(function(result){
 							if (result){
 								$cordovaToast.showLongTop('Delete successful!');
-								$scope.init();
 								$scope.quickactions = false;
+								$scope.init().then(function(){
+									// update new quantity to menubar
+									var menuParams = {};
+									menuParams.goodCounter = $scope.goods.length;
+									$rootScope.$broadcast('update',menuParams);
+								});
 							}
 							else{
 								$cordovaToast.showLongTop('Delete failed!');

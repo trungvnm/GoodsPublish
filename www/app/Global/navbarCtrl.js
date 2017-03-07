@@ -8,6 +8,11 @@
 	$scope.$on("setSubActions", function(event, actionsList){
 		$scope.subActions = actionsList;
 	});
+	
+	// when button back clicked
+	$scope.onbacked = function(){
+		$rootScope.$broadcast('onbacked');
+	}
 	$scope.$on("disableMainAction", function(event, name){
 		for (var i = 0; i < $scope.mainActions.length; i++){
 			var action = $scope.mainActions[i];

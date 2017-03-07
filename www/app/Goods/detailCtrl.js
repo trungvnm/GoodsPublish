@@ -1,4 +1,8 @@
 angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $rootScope, $dbHelper, $stateParams, $state, $cordovaToast, $ionicHistory, goodsService) {
+	$scope.$on("onbacked", function(event, args){
+		$rootScope.$broadcast("setMainActions", actions);
+	});
+	
 	var syncButton = {
 		name: 'sync',
 		action: function () {
@@ -8,7 +12,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 					if (navigator.notification) {
 						navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
 							if (result == 1) {
-								goodsService.sync([$scope.good]).then(function(res){
+								goodsService.sync([$scope.good],function(){
 									$ionicHistory.clearCache().then(function(){
 										$state.go('app.completes');
 									});
@@ -16,12 +20,6 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 							}
 						});
 					}
-				} else {
-					goodsService.sync([$scope.good]).then(function(res){
-						$ionicHistory.clearCache().then(function(){
-							$state.go('app.completes');
-						});
-					});
 				}
 			}
 		}

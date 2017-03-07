@@ -48,6 +48,16 @@
 		});
 	};
 	
+	// update total number of goods
+	$scope.$on("update", function(event, args){
+		for(var propertyName in args) {
+			var value = args[propertyName];
+			$scope[propertyName] = value;
+		   // propertyName is what you want
+		   // you can get the value like this: myObject[propertyName]
+		}
+	});
+	
 	$scope.goodMenuClick = function(){
 		$ionicHistory.clearCache().then(function(){
 			$state.go('app.completes');
