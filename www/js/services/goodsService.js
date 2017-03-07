@@ -12,34 +12,33 @@ angular.module('LelongApp.services')
 					result.forEach(function (photo) {
 						photoPaths.push(photo.PhotoUrl);
 					});
-				}
-				photoPaths.forEach(function (p) {
-					var nameSegments = p.split('/');
-					var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
-					var filename = nameSegments[nameSegments.length - 1];
-
-					// delete file
-					window.resolveLocalFileSystemURL(path, function (dir) {
-						dir.getFile(filename, { create: false }, function (fileEntry) {
-							fileEntry.remove(function (result) {
-								console.log("The file has been removed succesfully");
-								$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
-									if (callBack) {
-										callBack();
-									}
+					
+					$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
+						photoPaths.forEach(function (p) {
+							var nameSegments = p.split('/');
+							var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
+							var filename = nameSegments[nameSegments.length - 1];
+							// delete file
+							window.resolveLocalFileSystemURL(path, function (dir) {
+								dir.getFile(filename, { create: false }, function (fileEntry) {
+									fileEntry.remove(function (result) {
+										console.log("The file has been removed succesfully");
+										// The file has been removed succesfully
+									}, function (error) {
+										// Error deleting the file
+										console.dir(error);
+									}, function () {
+										// The file doesn't exist
+										console.console("The file doesn't exist");
+									});
 								});
-								// The file has been removed succesfully
-							}, function (error) {
-								// Error deleting the file
-								console.dir(error);
-							}, function () {
-								// The file doesn't exist
-								console.console("The file doesn't exist");
 							});
-						});
+						})
+						if (callBack) {
+							callBack();
+						}
 					});
-				});
-				
+				}
 			})
 		}
 
