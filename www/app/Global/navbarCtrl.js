@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService){
+﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $state){
 	$scope.disabled = {};
 	$scope.mainActions = [];
 	$scope.subActions = [];
@@ -87,7 +87,13 @@
 	// back to referrer
 	$scope.goBack = function(){
 		//$ionicHistory.goBack();
-		$ionicHistory.backView().go();
+		if ($ionicHistory.backView().url.indexOf('app/complete')) {
+			$ionicHistory.clearCache().then(function () {
+				$state.go('app.completes');
+			});
+		} else {
+			$ionicHistory.backView().go();
+		}
 	};
 	
 	// when click search button, open search box on header
