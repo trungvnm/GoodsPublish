@@ -10,7 +10,7 @@
 			if (result){
 				result.forEach(function(g){
 					if (!g.PhotoUrl || g.PhotoUrl.trim() == ''){
-						g.PhotoUrl = 'img/nophoto.jpg';
+						g.PhotoUrl = './img/nophoto.jpg';
 					}
 					if (g.LastSync && g.LastSync.trim() != ''){
 						$scope.syncedGoods.push(g);
