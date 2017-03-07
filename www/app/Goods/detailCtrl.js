@@ -4,20 +4,25 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 		action: function () {
 			if ($scope.good){
 				if ($scope.good.LastSync && $scope.good.LastEdited && 
-					new Date($scope.good.LastSync).getTime() < new Date($scope.good.LastEdited).getTime()){
-						if (navigator.notification) {
-							navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
-								if (result != 1) {
-									return;
-								}
-							});
-						}
+				new Date($scope.good.LastSync).getTime() < new Date($scope.good.LastEdited).getTime()){
+					if (navigator.notification) {
+						navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
+							if (result == 1) {
+								goodsService.sync([$scope.good]).then(function(res){
+									$ionicHistory.clearCache().then(function(){
+										$state.go('app.completes');
+									});
+								});
+							}
+						});
 					}
-				goodsService.sync([$scope.good]).then(function(res){
-					$ionicHistory.clearCache().then(function(){
-						$state.go('app.completes');
+				} else {
+					goodsService.sync([$scope.good]).then(function(res){
+						$ionicHistory.clearCache().then(function(){
+							$state.go('app.completes');
+						});
 					});
-				});
+				}
 			}
 		}
 	};
