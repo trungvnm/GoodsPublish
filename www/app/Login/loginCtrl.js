@@ -8,10 +8,12 @@
         var userID = tokenService.getToken().userid;
         $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userID + "'").then(function(result){
             if  (result.length > 0
-            && result[0].Value.toLowerCase() == 'true') {   
+            && result[0].Value.toLowerCase() == 'true') {
+                $rootScope.$broadcast('hideSpinner');
                 $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
             } else {
                 $scope.updateSetting(userID);
+                $rootScope.$broadcast('hideSpinner');
                 if (navigator.notification) {
 					navigator.notification.confirm('This is the first time you login. Do you want to setup wizard?', function (result) {
                         if (result == 1) {
@@ -61,7 +63,6 @@
 					tokenService.saveToken(token);
 					$scope.updateLoginAttempt(token.userid,0);
                     $scope.updateUserToServer(token);
-                    $rootScope.$broadcast('hideSpinner');
 				}
 				else{
 					// if current user has not stored before, save new one to User table, and get user id to go further
@@ -73,7 +74,6 @@
 						tokenService.saveToken(token);
                         $scope.updateLoginAttempt(token.userid,0);
                         $scope.updateUserToServer(token);
-                        $rootScope.$broadcast('hideSpinner');
 					});
 				}
 			});

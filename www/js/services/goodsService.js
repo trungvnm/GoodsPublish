@@ -53,8 +53,8 @@ angular.module('LelongApp.services')
 				// Query to extract data
 				var query = 'SELECT	GoodPublishId, Title, SalePrice, Description, Quantity, LastSync, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
 				query += ' FROM	GoodsPublish';
-				query += ' ORDER BY datetime(LastEdited) DESC';
 				query += whereClause;
+				query += ' ORDER BY datetime(LastEdited) DESC';
 
 				return $dbHelper.selectCustom(query).then(function (result) {
 					return result;
