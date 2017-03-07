@@ -28,9 +28,6 @@
         "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
-        "cordova-plugin-image-picker": {
-            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
-        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
@@ -44,6 +41,9 @@
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
+        },
+        "cordova-plugin-image-picker": {
             "PACKAGE_NAME": "com.ionicframework.goodspublish443924"
         }
     },
