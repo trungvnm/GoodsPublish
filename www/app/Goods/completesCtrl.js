@@ -118,6 +118,60 @@
 			})
 		}
 	});
+
+	$scope.$on('multiSync', function(event, args){
+		if (navigator.notification){
+			navigator.notification.confirm('Are you sure to download selected items?', function(result){
+				if (result == 1){
+					var selecteds = [];
+					$scope.goods.forEach(function(g){
+						if (g.Checked){
+							selecteds.push(g);
+						}
+					});
+					if (selecteds.length > 0){
+						goodsService.sync(selecteds).then(function(result){
+							if (result){
+								$cordovaToast.showLongTop('Sync successful!');
+								$scope.init();
+								$scope.quickactions = false;
+							}
+							else{
+								$cordovaToast.showLongTop('Sync failed!');
+							}
+						});
+					}
+				}
+			})
+		}
+	});
+
+	$scope.$on('multiPublish', function(event, args){
+		if (navigator.notification){
+			navigator.notification.confirm('Are you sure to publish selected items?', function(result){
+				if (result == 1){
+					var selecteds = [];
+					$scope.goods.forEach(function(g){
+						if (g.Checked){
+							selecteds.push(g);
+						}
+					});
+					if (selecteds.length > 0){
+						/*goodsService.publish(selecteds).then(function(result){
+							if (result){
+								$cordovaToast.showLongTop('Delete successful!');
+								$scope.init();
+								$scope.quickactions = false;
+							}
+							else{
+								$cordovaToast.showLongTop('Delete failed!');
+							}
+						});*/
+					}
+				}
+			})
+		}
+	});
 	
 	$(document).ready(function(){
 		$("#list-readmode > a.item").on("click", function(e){

@@ -38,6 +38,14 @@
 	$scope.multiDelete = function(){
 		$rootScope.$broadcast("multiDelete", {});
 	};
+
+	$scope.multiSync = function(){
+		$rootScope.$broadcast("multiSync", {});
+	};
+
+	$scope.multiPublish = function(){
+		$rootScope.$broadcast("multiPublish", {});
+	};
 	
 	$scope.searchboxkeyUp = function($event){
 		if ($event.keyCode == 13 && $scope.searchkey && $scope.searchkey.trim() != ''){ // Enter
