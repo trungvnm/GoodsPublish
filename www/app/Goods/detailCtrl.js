@@ -2,9 +2,23 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 	var syncButton = {
 		name: 'sync',
 		action: function () {
-			goodsService.sync([$scope.good]).then(function(res){
-				$scope.getDetail();
-			});
+			if ($scope.good){
+				if ($scope.good.LastSync && $scope.good.LastEdited && 
+					new Date($scope.good.LastSync).getTime() < new Date($scope.good.LastEdited).getTime()){
+						if (navigator.notification) {
+							navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
+								if (result != 1) {
+									return;
+								}
+							});
+						}
+					}
+				goodsService.sync([$scope.good]).then(function(res){
+					$ionicHistory.clearCache().then(function(){
+						$state.go('app.completes');
+					});
+				});
+			}
 		}
 	};
 	var id = $stateParams.id;
@@ -99,7 +113,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 			if (result && result.length > 0) {
 				result.forEach(function (photo) {
 					$scope.photos.push({
-						src: photo.PhotoUrl,
+						src: photo.PhotoUrl + "?" + (new Date()).getTime(),
 						sub: photo.PhotoDescription
 					});
 

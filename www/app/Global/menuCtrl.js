@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService, $state) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService, $state, $ionicHistory) {
 	$scope.goodCounter = 0;
     $scope.account = {};
     $scope.account.name = $window.localStorage.getItem("Lelong_UserLogined");
@@ -45,6 +45,12 @@
 		// count quantity of goods 
 		goodsService.countAll().then(function(quantity){
 			$scope.goodCounter = quantity;
+		});
+	};
+	
+	$scope.goodMenuClick = function(){
+		$ionicHistory.clearCache().then(function(){
+			$state.go('app.completes');
 		});
 	}
 })

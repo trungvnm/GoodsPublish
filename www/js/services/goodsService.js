@@ -21,8 +21,13 @@ angular.module('LelongApp.services')
 					// delete file
 					window.resolveLocalFileSystemURL(path, function (dir) {
 						dir.getFile(filename, { create: false }, function (fileEntry) {
-							fileEntry.remove(function () {
+							fileEntry.remove(function (result) {
 								console.log("The file has been removed succesfully");
+								$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
+									if (callBack) {
+										callBack();
+									}
+								});
 								// The file has been removed succesfully
 							}, function (error) {
 								// Error deleting the file
@@ -34,11 +39,7 @@ angular.module('LelongApp.services')
 						});
 					});
 				});
-				$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
-					if (callBack) {
-						callBack();
-					}
-				});
+				
 			})
 		}
 
@@ -57,6 +58,9 @@ angular.module('LelongApp.services')
 				query += ' ORDER BY datetime(LastEdited) DESC';
 
 				return $dbHelper.selectCustom(query).then(function (result) {
+					result.forEach(function(r){
+						r.PhotoUrl += "?" + (new Date()).getTime();
+					});
 					return result;
 				});
 			},
@@ -258,12 +262,15 @@ angular.module('LelongApp.services')
 								var listPhoto = newGood.listPhoto;
 								newGood.Active = 1;
 								newGood.UserId = userId;
-								newGood.LastEdited = newGood.LastSync = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+								
+								var lastMoment = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+								newGood.LastSync = lastMoment;
+								newGood.LastEdited = lastMoment;
 								delete newGood.listPhoto;
 								delete newGood.GoodPublishId;
 
 								// update to old one
-								return $dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
 									if (result.rowsAffected > 0) {
 										for (var i = 0; i < goods.length; i++) {
 											if (goods[i].Guid == newGood.Guid) {
@@ -277,28 +284,37 @@ angular.module('LelongApp.services')
 													listPhoto.forEach(function (p) {
 														// download photo from server
 														//if (uploadDir == "") {
-														var dirName = "ImagesUpload";
-														var subDir = userId;
-														window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
-															dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-																subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
-																	var uploadDir = success.nativeURL + p.PhotoName;
-																	var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
-																	if (remoteImgUrl.trim() != '') {
-																		imageService.downloadImage(remoteImgUrl, uploadDir);
-
-																		// save to database
-																		p.GoodPublishId = cId;
-																		p.PhotoUrl = uploadDir;
-																		$dbHelper.insert("GoodsPublishPhoto", p);
-																		return true;
-																	}
-																})
+															var dirName = "ImagesUpload";
+															var subDir = userId;
+															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+																dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+																	subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
+																		var uploadDir = success.nativeURL + p.PhotoName;
+																		var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+																		if (remoteImgUrl.trim() != ''){
+																			imageService.downloadImage(remoteImgUrl, uploadDir, function(){
+																				// save to database
+																				var newPhoto = {
+																					GoodPublishId: cId,
+																					PhotoUrl: uploadDir,
+																					PhotoName: p.PhotoName,
+																					PhotoDescription: p.Description
+																				}
+																				$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function(r){
+																					return true;
+																				});
+																			},
+																			function(){
+																				
+																			});
+																		}
+																	})
+																});
 															});
 														});
 														//}
 													});
-												});
+												};
 
 												goods[i] = newGood;
 												break;
@@ -306,17 +322,17 @@ angular.module('LelongApp.services')
 										}
 
 
-									}
-									return false;
+									})
 								});
-							});
-						}
-					});
+							}
+						})
+					}
 				}
+			};
+			
+			function getImageFileName(fullNamePath) {
+				return fullNamePath.replace(/^.*[\\\/]/, '');
 			}
-		};
-		function getImageFileName(fullNamePath) {
-			return fullNamePath.replace(/^.*[\\\/]/, '');
-		}
-		return goodService;
-	});
+			return goodService;
+		});
+	

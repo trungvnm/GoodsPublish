@@ -59,22 +59,15 @@ angular.module('LelongApp.services')
 		};
 		
 		// Download image from an server by its url
-		self.downloadImage = function(serverUrl, saveUrl){
+		self.downloadImage = function(serverUrl, saveUrl, finishCallback, erorCallback){
 			var fileTransfer = new FileTransfer();
 			var uri = encodeURI(serverUrl);
 
 			return fileTransfer.download(
 				uri,
 				saveUrl,
-				function(entry) {
-					console.log("DOWNLOAD SUCCESS");
-					console.dir(entry);
-					return entry;
-				},
-				function(error) {
-					console.log("DOWNLOAD ERROR");
-					console.dir(error);
-				},
+				finishCallback(),
+				erorCallback(),
 				false,
 				{
 					headers: {
