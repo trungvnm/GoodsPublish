@@ -17,7 +17,7 @@
 				<a ng-repeat="g in goods" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img ng-src="{{g.PhotoUrl}}"/>
-						<img class="inlay" src="./img/Check-icon.png" />
+						<img class="inlay" src="./img/Check-icon.png" ng-show="g.LastSync && g.LastSync.trim() != ''"/>
 					</div>				
 				  <h2>{{g.Title}}</h2>
 				  <p>{{g.Description}}</p>
@@ -54,7 +54,6 @@
 				<a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img ng-src="{{g.PhotoUrl}}"/>
-						<img class="inlay" src="./img/Check-icon.png" />
 					</div>				
 				  <h2>{{g.Title}}</h2>
 				  <p>{{g.Description}}</p>

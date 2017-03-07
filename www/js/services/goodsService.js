@@ -51,8 +51,9 @@ angular.module('LelongApp.services')
 				var whereClause = ' WHERE UserId=\'' + userId + '\' AND Active = 1 ';
 
 				// Query to extract data
-				var query = 'SELECT	GoodPublishId, Title, SalePrice, Description, Quantity, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
-				query += 'FROM	GoodsPublish';
+				var query = 'SELECT	GoodPublishId, Title, SalePrice, Description, Quantity, LastSync, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
+				query += ' FROM	GoodsPublish';
+				query += ' ORDER BY datetime(LastEdited) DESC';
 				query += whereClause;
 
 				return $dbHelper.selectCustom(query).then(function (result) {
