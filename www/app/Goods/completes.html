@@ -50,7 +50,7 @@
 				<a class="button button-small button-icon icon ion-android-cancel" ng-click="exitSearching()"></a>
 			</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
-				<p class="item" ng-show="goods.length == 0">No items</p>
+				<p class="item" ng-show="unSyncedGoods.length == 0">No items</p>
 				<a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img ng-src="{{g.PhotoUrl}}"/>
@@ -85,7 +85,7 @@
 				<a class="button button-small button-icon icon ion-android-cancel" ng-click="exitSearching()"></a>
 			</span>
 			<div class="list" id="list-readmode" ng-hide="quickactions">
-				<p class="item" ng-show="goods.length == 0">No items</p>
+				<p class="item" ng-show="syncedGoods.length == 0">No items</p>
 				<a ng-repeat="g in syncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden">
 				  <div class="main_photo">
 						<img ng-src="{{g.PhotoUrl}}"/>
