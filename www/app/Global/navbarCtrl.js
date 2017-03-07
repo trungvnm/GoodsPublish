@@ -11,7 +11,8 @@
 	
 	// when button back clicked
 	$scope.onbacked = function(){
-		$rootScope.$broadcast('onbacked');
+		$ionicHistory.goBack();
+		$rootScope.$broadcast("setMainActions", $scope.actions);
 	}
 	$scope.$on("disableMainAction", function(event, name){
 		for (var i = 0; i < $scope.mainActions.length; i++){

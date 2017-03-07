@@ -23,6 +23,10 @@
 		if (args.issearch){
 			setTimeout(function(){jQuery("#searchbox").focus();}, 100);
 		}
+		else{
+			$scope.searchkey = '';
+			//$scope.cancelSearchingg();
+		}
 	});
 	
 	$scope.cancelSearchingg = function(){

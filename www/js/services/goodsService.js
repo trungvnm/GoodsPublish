@@ -1,8 +1,11 @@
 angular.module('LelongApp.services')
 	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
+		// Get API Url for downloading photo
 		function getPhotoApiUrl(guid) {
 			return "https://1f71ef25.ngrok.io/api/image/download?photoName=" + guid;
 		}
+		
+		var syncAllApi = "https://1f71ef25.ngrok.io/api/goods/getall";
 
 		// Delete all photos of a good
 		function deletePhotosByGood(goodId, callBack) {
@@ -340,6 +343,62 @@ angular.module('LelongApp.services')
 						}
 					})
 				}
+			},
+			syncAll: function(localGoods, callBack){
+				var token = tokenService.getToken();
+				var userId = token.userid;
+				xhttpService.get(syncAllApi, true).then(function(response){
+					if (response.data) {
+						var couter = 0;
+						response.data.forEach(function (newGood) {
+							// update new goods to app database
+							var listPhoto = newGood.listPhoto;
+							newGood.Active = 1;
+							newGood.UserId = userId;
+							
+							var lastMoment = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+							newGood.LastSync = lastMoment;
+							newGood.LastEdited = lastMoment;
+							delete newGood.listPhoto;
+							delete newGood.GoodPublishId;
+							
+							// check local goods for exist good
+							var exist = false;
+							for (var i = 0; i < localGoods.length; i++){
+								var good = localGoods[i];
+								if (good.Guid == newGood.Guid){
+									// if good is exist, update it
+									exist = true;
+									$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function(res){
+										couter++;
+										var gId = good.GoodPublishId;
+										if (couter == response.data.length){
+											downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+										}
+										else
+											downloadPhotosOfGood(gId, newGood, listPhoto);
+									});
+									break;
+								}
+							}
+							
+							if (!exist){
+								// if new good is not exist on local, insert new one
+								$dbHelper.insert("GoodsPublish", newGood).then(function(res){
+									couter++;
+									if (res && res.insertId){
+										var gId = res.insertId;
+										if (couter == response.data.length){
+											downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+										}
+										else
+											downloadPhotosOfGood(gId, newGood, listPhoto);
+									}
+								});
+							}
+						})
+					}
+				});
 			}
 		};
 		

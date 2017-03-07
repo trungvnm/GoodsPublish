@@ -43,6 +43,10 @@
 		$scope.goods.forEach(function(g){
 			g.hidden = false;
 		});
+		
+		var params = {};
+		params.issearch = false;
+		$rootScope.$broadcast('updateIsSearch', params);
 	};
 	
     $scope.goodOnHold = function(listType){
@@ -71,6 +75,12 @@
 	$scope.addnewButtonClick = function(){
 		$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew'); });
 	};
+	$scope.syncAll = function(){
+		goodsService.syncAll($scope.goods, function(result){
+			$cordovaToast.showLongTop('Sync all successful!');
+			$scope.init();
+		});
+	}
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
 		$scope.quickactions = args.quickactions;
 		if (!$scope.quickactions){
