@@ -258,6 +258,7 @@ angular.module('LelongApp.services')
 								var listPhoto = newGood.listPhoto;
 								newGood.Active = 1;
 								newGood.UserId = userId;
+								newGood.LastEdited = newGood.LastSync = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 								delete newGood.listPhoto;
 								delete newGood.GoodPublishId;
 
