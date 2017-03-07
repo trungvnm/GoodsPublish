@@ -136,16 +136,19 @@
 						}
 					});
 					if (selecteds.length > 0){
-						goodsService.sync(selecteds).then(function(result){
-							if (result){
-								$cordovaToast.showLongTop('Sync successful!');
-								$scope.init();
-								$scope.quickactions = false;
-							}
-							else{
-								$cordovaToast.showLongTop('Sync failed!');
-							}
+						var total = 0;
+						selecteds.forEach(function(g){
+							goodsService.sync(selecteds, function() {
+								total++;
+							});
 						});
+						if (selecteds.length = total) {
+							$cordovaToast.showLongTop('Sync successful!');
+							$scope.init();
+							$scope.quickactions = false;
+						} else {
+							$cordovaToast.showLongTop('Sync failed!');
+						}
 					}
 				}
 			})
@@ -163,16 +166,37 @@
 						}
 					});
 					if (selecteds.length > 0){
-						/*goodsService.publish(selecteds).then(function(result){
-							if (result){
-								$cordovaToast.showLongTop('Delete successful!');
-								$scope.init();
-								$scope.quickactions = false;
-							}
-							else{
-								$cordovaToast.showLongTop('Delete failed!');
-							}
-						});*/
+						var total = 0;
+						selecteds.forEach(function(g){
+							g = goodsService.getGoodsById(g.GoodPublishId);
+							$dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + id + '\'').then(function (result) {
+								if (result && result.length > 0) {
+									result.forEach(function (photo) {
+										if (!g.listPhoto)
+											g.listPhoto = [];
+										g.listPhoto.push({
+											PhotoName: photo.PhotoName,
+											PhotoUrl: photo.PhotoUrl,
+											PhotoDescription: photo.PhotoDescription
+										});
+									});
+
+									return g;
+								}
+							});
+							goodsService.publish(g).then(function () {
+								if (result){
+									total++;
+								}
+							});
+						});
+						if (selecteds.length = total) {
+							$cordovaToast.showLongTop('Post successful!');
+							$scope.init();
+							$scope.quickactions = false;
+						} else {
+							$cordovaToast.showLongTop('Post failed!');
+						}
 					}
 				}
 			})
