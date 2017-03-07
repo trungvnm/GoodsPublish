@@ -46,8 +46,9 @@
                 <div id="addnew-photo-preview">
                     <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length>0">
                         <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
-                            <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)">
-                            <img style="width: 150px;height: 150px" ng-src="{{image.photoUrl}}">
+                            <div>
+                                <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>                               
+                                <img style="width: 150px;height: 150px" ng-src="{{image.photoUrl}}">
                             </div>
                         </ion-slide-page>
                     </ion-slides>

@@ -351,7 +351,6 @@ angular.module("LelongApp.Goods")
         $scope.galleryOptions = {
             pagination: '.swiper-pagination',
             slidesPerView: 2,
-            loop: false,
             centeredSlides: false,
             paginationClickable: true,
             spaceBetween: 5,

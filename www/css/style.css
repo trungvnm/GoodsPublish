@@ -113,7 +113,7 @@ a[disabled] {
     color: red;
 }
 .ion-slides-delete {
-    	position: relative;
+    	/*position: relative;*/
     	vertical-align: middle;
     	display: inline-block;
     }
@@ -133,6 +133,8 @@ a[disabled] {
         padding-top: 3px;
         padding-right: 3px;
         cursor: pointer;
+        margin-top: 23px;
+        margin-right: 5px;
     }
 .show-error{
     list-style: none;
