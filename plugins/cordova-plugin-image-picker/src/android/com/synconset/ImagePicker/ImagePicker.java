@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
+import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -38,7 +38,7 @@ public class ImagePicker extends CordovaPlugin {
 				desiredWidth = this.params.getInt("width");
 			}
 			if (this.params.has("height")) {
-				desiredHeight = this.params.getInt("height");
+				desiredWidth = this.params.getInt("height");
 			}
 			if (this.params.has("quality")) {
 				quality = this.params.getInt("quality");
@@ -69,4 +69,8 @@ public class ImagePicker extends CordovaPlugin {
 			this.callbackContext.error("No images selected");
 		}
 	}
+
+  public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+    this.callbackContext = callbackContext;
+  }
 }
