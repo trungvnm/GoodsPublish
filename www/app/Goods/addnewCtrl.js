@@ -190,20 +190,24 @@ angular.module("LelongApp.Goods")
         };
 
         $scope.deleteImg = function (fullNamePath, photoId) {
-            imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
-                for (var i = 0; i < $scope.imgURI.length; i++) {
-                    var file = getImageFileName($scope.imgURI[i].photoUrl);
-                    if (file === res) {
-                        $scope.imgURI.splice(i, 1);
-                        if (photoId > 0) {
-                            $scope.imageDeleted.push({ photoId: photoId, photoUrl: '' });
-                        }
-                        break;
+            for (var i = 0; i < $scope.imgURI.length; i++) {
+                var file = getImageFileName($scope.imgURI[i].photoUrl);
+                var fileDel=getImageFileName(fullNamePath);
+                if (file === fileDel) {
+                    $scope.imgURI.splice(i, 1);
+                    if (photoId > 0) {
+                        $scope.imageDeleted.push({ photoId: photoId, photoUrl: fullNamePath });
+                    }else{
+                        // delete the img that isn't save into db
+                        imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
+                            console.log("REMOVE IMG [NOT SAVE DB] SUCCESS");
+                        });
                     }
+                    break;
                 }
-                updateSlide();
-                $cordovaToast.showLongTop('Delete successfully!')
-            });
+            }
+            updateSlide();
+            $cordovaToast.showLongTop('Delete successfully!')
         }
         /**End camera */
         /**Cordova file */
@@ -256,12 +260,7 @@ angular.module("LelongApp.Goods")
 
         /**End Cordova file */
         /** Actions */
-        $scope.saveClick = function (isShowToast) {
-            // var form=this.ctrl.addEditForm;
-            // if(form.$invalid){
-            //     form.$submitted=true;
-            //     form.$dirty=true;
-            // }else
+        $scope.saveClick = function (isShowToast) {            
             if (formIsValid()) {
                 var arrImage = [];
                 if ($scope.imgURI.length > 0) {
@@ -282,6 +281,10 @@ angular.module("LelongApp.Goods")
                     if ($scope.imageDeleted.length > 0) {
                         for (var i = 0; i < $scope.imageDeleted.length; i++) {
                             imgSave.push($scope.imageDeleted[i]);
+                            //delete the image saved into db
+                            imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {
+                                console.log("REMOVE IMG [SAVED DB] SUCCESS");
+                            });
                         }
                     }
                     goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast);
