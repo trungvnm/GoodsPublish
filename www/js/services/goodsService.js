@@ -8,7 +8,7 @@ angular.module('LelongApp.services')
 		function deletePhotosByGood(goodId, callBack) {
 			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='" + goodId + "'").then(function (result) {
 				var photoPaths = [];
-				if (result && result.length > 0) {
+				//if (result && result.length > 0) {
 					result.forEach(function (photo) {
 						photoPaths.push(photo.PhotoUrl);
 					});
@@ -19,7 +19,7 @@ angular.module('LelongApp.services')
 							var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
 							var filename = nameSegments[nameSegments.length - 1];
 							// delete file
-							window.resolveLocalFileSystemURL(path, function (dir) {
+							/*window.resolveLocalFileSystemURL(path, function (dir) {
 								dir.getFile(filename, { create: false }, function (fileEntry) {
 									fileEntry.remove(function (result) {
 										console.log("The file has been removed succesfully");
@@ -32,16 +32,61 @@ angular.module('LelongApp.services')
 										console.console("The file doesn't exist");
 									});
 								});
-							});
+							});*/
 						})
 						if (callBack) {
 							callBack();
 						}
 					});
-				}
+				//}
 			})
 		}
 
+		// download photos of a good from server 
+		function downloadPhotosOfGood(goodId, good, listPhoto, callBack){
+			var cId = goodId;
+			var userId = good.UserId;
+			var couter = 0;
+			listPhoto.forEach(function (p) {
+				// download photo from server
+					var dirName = "ImagesUpload";
+					var subDir = userId;
+					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+						dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+							subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
+								var uploadDir = success.nativeURL + p.PhotoName;
+								var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+								if (remoteImgUrl.trim() != ''){
+									imageService.downloadImage(remoteImgUrl, uploadDir, function(){
+										// save to database
+										var newPhoto = {
+											GoodPublishId: cId,
+											PhotoUrl: uploadDir,
+											PhotoName: p.PhotoName,
+											PhotoDescription: p.Description
+										}
+										
+										// insert record to database for new photo
+										$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function(r){
+											couter++;
+											if (couter == listPhoto.length && callBack){
+												callBack();
+											}
+										});
+									},
+									function(){
+										couter++;
+										if (couter == listPhoto.length && callBack){
+											callBack();
+										}
+									});
+								}
+							})
+						});
+					});
+				});
+		}
+		
 		var goodService = {
 			getAll: function () {
 				var token = tokenService.getToken();
@@ -58,7 +103,9 @@ angular.module('LelongApp.services')
 
 				return $dbHelper.selectCustom(query).then(function (result) {
 					result.forEach(function(r){
-						r.PhotoUrl += "?" + (new Date()).getTime();
+						if (r.PhotoUrl && r.PhotoUrl.trim() != ''){
+							r.PhotoUrl += "?" + (new Date()).getTime();
+						}
 					});
 					return result;
 				});
@@ -242,7 +289,7 @@ angular.module('LelongApp.services')
 					}
 				});
 			},
-			sync: function (goods) {
+			sync: function (goods, callBack) {
 				var token = tokenService.getToken();
 				var userId = token.userid;
 				var params = "";//guidsArray.join(',');
@@ -278,60 +325,27 @@ angular.module('LelongApp.services')
 
 												// clear old photos
 												deletePhotosByGood(cId, function () {
+													downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+												});
+											};
 
-													var uploadDir = "";
-													listPhoto.forEach(function (p) {
-														// download photo from server
-														//if (uploadDir == "") {
-															var dirName = "ImagesUpload";
-															var subDir = userId;
-															window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
-																dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-																	subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
-																		var uploadDir = success.nativeURL + p.PhotoName;
-																		var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
-																		if (remoteImgUrl.trim() != ''){
-																			imageService.downloadImage(remoteImgUrl, uploadDir, function(){
-																				// save to database
-																				var newPhoto = {
-																					GoodPublishId: cId,
-																					PhotoUrl: uploadDir,
-																					PhotoName: p.PhotoName,
-																					PhotoDescription: p.Description
-																				}
-																				$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function(r){
-																					return true;
-																				});
-																			},
-																			function(){
-																				
-																			});
-																		}
-																	})
-																});
-															});
-														});
-														//}
-													});
-												};
-
-												goods[i] = newGood;
-												break;
-											}
+											goods[i] = newGood;
+											break;
 										}
+									}
 
 
-									})
-								});
-							}
-						})
-					}
+								})
+							});
+						}
+					})
 				}
-			};
-			
-			function getImageFileName(fullNamePath) {
-				return fullNamePath.replace(/^.*[\\\/]/, '');
 			}
-			return goodService;
-		});
+		};
+		
+		function getImageFileName(fullNamePath) {
+			return fullNamePath.replace(/^.*[\\\/]/, '');
+		}
+		return goodService;
+	});
 	
