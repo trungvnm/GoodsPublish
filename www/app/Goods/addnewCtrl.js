@@ -12,7 +12,7 @@ angular.module("LelongApp.Goods")
         $scope.tokenServ = tokenService.getToken();
         $rootScope.$broadcast('hideSearch');
         $scope.errors = [];
-
+        $scope.CatesName = '';
 
         $scope.init = function () {
             $scope.step = 1;
@@ -37,6 +37,7 @@ angular.module("LelongApp.Goods")
                 $scope.viewTitle = "Edit"
                 goodsService.getGoodsById($scope.goodsId).then(function (res) {
                     $scope.goodItem = res;
+                    $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
                     /** get photos by goodsId */
                     var where = "GoodPublishId=" + $scope.goodsId;
                     $dbHelper.select("GoodsPublishPhoto", "*", where).then(function (result) {
@@ -83,7 +84,7 @@ angular.module("LelongApp.Goods")
                     var arrOldCate = $scope.goodItem.Category.split(';');
                     for (var i = 0; i < arrOldCate.length; i++) {
                         for (var j = 0; j < $scope.defaultCategory.length; j++) {
-                            if (arrOldCate[i] == $scope.defaultCategory[j].name) {
+                            if (arrOldCate[i] === $scope.defaultCategory[j].value) {
                                 $scope.defaultCategory[j].isChecked = true;
                                 break;
                             }
@@ -105,13 +106,16 @@ angular.module("LelongApp.Goods")
                 ]
             });
             myPopup.then(function () {
-                var lstCate = [];
+                var lstCateValue = [];
+                var lstCateName = [];
                 for (var i = 0; i < $scope.defaultCategory.length; i++) {
                     if ($scope.defaultCategory[i].isChecked) {
-                        lstCate.push($scope.defaultCategory[i].name);
+                        lstCateValue.push($scope.defaultCategory[i].value);
+                        lstCateName.push($scope.defaultCategory[i].name);
                     }
                 }
-                $scope.goodItem.Category = lstCate.join(';');
+                $scope.CatesName = lstCateName.join(';');
+                $scope.goodItem.Category = lstCateValue.join(';');
                 $ionicPopup.close;
             });
         }
@@ -192,14 +196,14 @@ angular.module("LelongApp.Goods")
         $scope.deleteImg = function (fullNamePath, photoId) {
             for (var i = 0; i < $scope.imgURI.length; i++) {
                 var file = getImageFileName($scope.imgURI[i].photoUrl);
-                var fileDel=getImageFileName(fullNamePath);
+                var fileDel = getImageFileName(fullNamePath);
                 if (file === fileDel) {
                     $scope.imgURI.splice(i, 1);
                     if (photoId > 0) {
                         $scope.imageDeleted.push({ photoId: photoId, photoUrl: fullNamePath });
-                    }else{
+                    } else {
                         // delete the img that isn't save into db
-                        imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {                            
+                        imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
                         });
                     }
                     break;
@@ -259,7 +263,7 @@ angular.module("LelongApp.Goods")
 
         /**End Cordova file */
         /** Actions */
-        $scope.saveClick = function (isShowToast) {            
+        $scope.saveClick = function (isShowToast) {
             if (formIsValid()) {
                 var arrImage = [];
                 if ($scope.imgURI.length > 0) {
@@ -281,7 +285,7 @@ angular.module("LelongApp.Goods")
                         for (var i = 0; i < $scope.imageDeleted.length; i++) {
                             imgSave.push($scope.imageDeleted[i]);
                             //delete the image saved into db
-                            imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {                               
+                            imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {
                             });
                         }
                     }
@@ -311,7 +315,7 @@ angular.module("LelongApp.Goods")
         function postToServer() {
             var listPhoto = [];
             var newSource = {};
-            if (formIsValid()) {                
+            if (formIsValid()) {
                 /** Save goods to local device */
                 navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
                     if (result == 1) {
@@ -335,7 +339,7 @@ angular.module("LelongApp.Goods")
                                 $ionicHistory.clearCache().then(function () {
                                     $state.go('app.completes');
                                 });
-                            }                            
+                            }
                         });
                     }
                 });
@@ -394,7 +398,23 @@ angular.module("LelongApp.Goods")
         function getImageFileName(fullNamePath) {
             return fullNamePath.replace(/^.*[\\\/]/, '');
         }
-        /**end helper method */
+
+        function convertCateIdToName(catesId) {
+            var lstName = [];
+            if (catesId.length > 0) {
+                var lstId = catesId.split(';');
+                for (var i = 0; i < lstId.length; i++) {
+                    for (var j = 0; j < $scope.defaultCategory.length; j++) {
+                        if (lstId[i] === $scope.defaultCategory[j].value) {
+                            lstName.push($scope.defaultCategory[j].name);
+                            break;
+                        }
+                    }
+                }
+            }
+            return lstName.join(';');
+        }
+
         function formIsValid() {
             var item = $scope.goodItem;
             $scope.errors = [];
@@ -412,5 +432,7 @@ angular.module("LelongApp.Goods")
             }
             return $scope.errors.length == 0;
         }
+        /**end helper method */
+
 
     });
