@@ -20,6 +20,12 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 							}
 						});
 					}
+				} else {
+					goodsService.sync([$scope.good],function(){
+						$ionicHistory.clearCache().then(function(){
+							$state.go('app.completes');
+						});
+					});
 				}
 			}
 		}
