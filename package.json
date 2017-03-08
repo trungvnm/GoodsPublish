@@ -23,12 +23,12 @@
     "cordova-plugin-splashscreen",
 	 "cordova-sqlite-storage",
     "cordova-plugin-camera",
-    "cordova-plugin-image-picker",
+    "https://github.com/Findiglay/cordova-imagePicker",
     "cordova-plugin-x-toast",
     "cordova-plugin-file",
     "cordova-plugin-filepath",
-	"cordova-plugin-dialogs",
-	"cordova-plugin-file-transfer"
+	  "cordova-plugin-dialogs",
+	  "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": [
     "android"
