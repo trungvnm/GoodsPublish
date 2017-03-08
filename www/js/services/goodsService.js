@@ -313,9 +313,11 @@ angular.module('LelongApp.services')
 					});
 
 					// request to API
-					return xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
+					xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
 						if (response.data) {
+							var couter = 0;
 							response.data.forEach(function (newGood) {
+								couter++;
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
 								newGood.Active = 1;
@@ -328,6 +330,7 @@ angular.module('LelongApp.services')
 								delete newGood.GoodPublishId;
 
 								// update to old one
+								var finish = couter == goods.length;
 								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
 									if (result.rowsAffected > 0) {
 										for (var i = 0; i < goods.length; i++) {
@@ -337,12 +340,18 @@ angular.module('LelongApp.services')
 
 												// clear old photos
 												deletePhotosByGood(cId, function () {
-													downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+													if (finish && callBack){
+														downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+													}
+													else{
+														downloadPhotosOfGood(cId, goods[i], listPhoto);
+													}
 												});
+												goods[i] = newGood;
+												break;
 											};
 
-											goods[i] = newGood;
-											break;
+											
 										}
 									}
 

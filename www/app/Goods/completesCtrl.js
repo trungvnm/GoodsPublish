@@ -140,13 +140,19 @@
 			navigator.notification.confirm('Are you sure to download selected items?', function(result){
 				if (result == 1){
 					var selecteds = [];
-					$scope.goods.forEach(function(g){
+					$scope.syncedGoods.forEach(function(g){
 						if (g.Checked){
 							selecteds.push(g);
 						}
 					});
+					
 					if (selecteds.length > 0){
-						var total = 0;
+							goodsService.sync(selecteds, function(){
+							$cordovaToast.showLongTop('Sync successful!');
+							$scope.init();
+							$scope.quickactions = false;
+						});
+						/*var total = 0;
 						selecteds.forEach(function(g){
 							goodsService.sync(selecteds, function() {
 								total++;
@@ -158,7 +164,7 @@
 							$scope.quickactions = false;
 						} else {
 							$cordovaToast.showLongTop('Sync failed!');
-						}
+						}*/
 					}
 				}
 			})
