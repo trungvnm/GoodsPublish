@@ -125,7 +125,7 @@ a[disabled] {
         right:0;
     	height: 25px;
     	width: 25px;
-    	background: #ff2424;
+    	background: rgba(247, 39, 3, 0.6);
         padding-left:6px;
         font-size: 25px;
         color: #FFF;
