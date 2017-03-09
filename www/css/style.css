@@ -55,7 +55,6 @@ a[disabled] {
 	padding: 0 15px;
 	font-size: 15px
 }
-
 .popup-button{
 	position: fixed;
     bottom: 60px;
@@ -77,10 +76,53 @@ a[disabled] {
 	color: white;
     padding-top: 4px;
 }
+.popup-button.inputmore{
+    background: #387ef5;
+    bottom: 20px;
+}
+.popup-button.inputmore:hover{
+    background: #0a9dc7;
+}
+.popup-button.top{
+    background: #ccc6c6;
+    top: 58px;
+    right: 10px;
+}
 /*Addnew page*/
+.action-camera-button{
+        text-align: right;
+        z-index: 50;
+        top: 135px;
+        position: absolute;
+        width: 100%;
+        padding-right: 10px;
+}
+.action-camera-button a::before{
+    line-height: 35px !important;
+}
+.action-camera-button a{
+        color: blue;
+        width: 45px;
+        height: 45px;
+        border: 1px solid #ccc;
+        border-radius: 30px;
+}
+.action-camera-button a:hover{
+        color: black;
+        border: 1px dotted #ccc;
+}
+.add-new-headerbar{
+    top: 40px;
+    border: 0px;
+    background-image:none !important;
+}
+.add-new-ioncontent{
+    top:230px;
+}
 #addnew-photo-preview{
     text-align: center;
     padding: 0px;   
+    width: 100%;
 }
 .slider-pager{
     bottom: 0px !important;
@@ -88,7 +130,7 @@ a[disabled] {
 
 .swiper-container {
         width: 330px;
-        height: 200px;
+        height: 175px;
         margin: 5px auto;
     }
 .swiper-slide {
@@ -133,9 +175,13 @@ a[disabled] {
         padding-top: 3px;
         padding-right: 3px;
         cursor: pointer;
-        margin-top: 23px;
+        margin-top: 10px;
         margin-right: 5px;
     }
+/*pager css*/
+.swiper-container-horizontal > .swiper-pagination{
+    bottom: 0px !important;
+}
 .show-error{
     list-style: none;
     color: red;

@@ -1,7 +1,7 @@
 angular.module("LelongApp.Goods")
     .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory,
         $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
-        $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams) {
+        $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate) {
 
         $scope.goodsId = $stateParams.goodsId;
         $scope.editMode = false
@@ -13,6 +13,7 @@ angular.module("LelongApp.Goods")
         $rootScope.$broadcast('hideSearch');
         $scope.errors = [];
         $scope.CatesName = '';
+        $scope.inputMore = { hide: false, class: 'ion-ios-arrow-down' };
 
         $scope.init = function () {
             $scope.step = 1;
@@ -34,9 +35,9 @@ angular.module("LelongApp.Goods")
 
             if ($scope.editMode) {
                 /** UPDATE GoodsPublish: get publishGood by id */
-                $scope.viewTitle = "Edit"
                 goodsService.getGoodsById($scope.goodsId).then(function (res) {
                     $scope.goodItem = res;
+                    $scope.viewTitle = res.Title
                     $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
                     /** get photos by goodsId */
                     var where = "GoodPublishId=" + $scope.goodsId;
@@ -296,19 +297,16 @@ angular.module("LelongApp.Goods")
                 }
             }
         }
-
-        $scope.nextClick = function () {
-            if (formIsValid()) {
-                $scope.step += 1;
-                if ($scope.step == 2) {
-                    updateSlide();
-                }
+        $scope.showMoreInput = function (isHidden) {
+            if (!isHidden) {
+                $scope.inputMore = { hide: true, class: 'ion-ios-arrow-up' };
+                $location.hash('anchorPrice');
+                $ionicScrollDelegate.anchorScroll();
+            } else {
+                $scope.inputMore = { hide: false, class: 'ion-ios-arrow-down' };
             }
         }
 
-        $scope.prevClick = function () {
-            $scope.step -= 1;
-        }
         /** End Actions */
 
         /** Post to server */
@@ -351,6 +349,7 @@ angular.module("LelongApp.Goods")
         $scope.galleryOptions = {
             pagination: '.swiper-pagination',
             slidesPerView: 2,
+            zoom:true,
             centeredSlides: false,
             paginationClickable: true,
             spaceBetween: 5,
@@ -430,9 +429,11 @@ angular.module("LelongApp.Goods")
             else if (item.SalePrice === undefined) {
                 $scope.errors.push({ type: 'saleprice', message: 'SalePrice is required.' })
             }
-            return $scope.errors.length == 0;
+            var result = $scope.errors.length == 0;
+            if (!result) {
+               $ionicScrollDelegate.scrollTop();
+            }
+            return result
         }
         /**end helper method */
-
-
     });
