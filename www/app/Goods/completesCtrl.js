@@ -232,7 +232,7 @@
 							listGoods.push(g);
 						});
 						goodsService.publish(listGoods).then(function (result) {
-						    if (result) {
+						    if (result.message === 'Success') {
 						        $cordovaToast.showLongTop('Post successful!');
 						        $scope.init();
 						        $scope.quickactions = false;

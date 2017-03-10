@@ -333,7 +333,7 @@ angular.module("LelongApp.Goods")
                         var listGoods = []; listGoods.push(newSource);
 
                         goodsService.publish(listGoods).then(function (result) {
-                            if (result) {
+                            if (result.message === 'Success') {
                                 $cordovaToast.showLongTop('Publish successful!');
                                 $ionicHistory.clearCache().then(function () {
                                     $state.go('app.completes');

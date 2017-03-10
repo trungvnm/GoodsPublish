@@ -302,7 +302,7 @@ angular.module('LelongApp.services')
 			    var deffered = $q.defer();
 			    var objectResult = { message: "", listGoodsPublishFailed: [], listImagePublishFailed: [] };
 			    var listImageObj = [];
-			    return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
+			    xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
 			        var listGoodsPublishFailed = [];
 			        var listGoodsPublishOK = listGoods;
@@ -342,7 +342,7 @@ angular.module('LelongApp.services')
 			            uploadMultipleImages(listImageObj).then(function (result) {
 			                result.forEach(function (r) {
 			                    if (r.result != 1) {
-			                        console.log("upload faild goods: " + r.goodsTitle);
+			                        console.log("upload failed goods: " + r.goodsTitle);
 			                        objectResult.listImagePublishFailed.push(r);
 			                    };
 			                });
@@ -351,25 +351,15 @@ angular.module('LelongApp.services')
 			                    objectResult.message = "Failed";
 			                } else {
 			                    console.log("upload all images success");
-			                    objectResult.message = "success";
+			                    objectResult.message = "Success";
 			                }
 			                deffered.resolve(objectResult);
 			            });
 			        }
-
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
-			        $cordovaToast.showLongTop('Publish Failed!').then(function () {
-			            $ionicHistory.clearCache().then(function () {
-			                $state.go('app.completes');
-			                objectResult.message = "Failed when call api publish goods";
-			                deffered.resolve(objectResult);
-			            });
-			        }, function (err) {
-			            console.log('TOAST FAILED: ' + JSON.stringify(err));
-			            objectResult.message = "Failed when call api publish goods";
-			            deffered.resolve(objectResult);
-			        });
+			        objectResult.message = "Failed when call api publish goods: " + err;
+			        deffered.reject(objectResult);
 			    });
 			    return deffered.promise;
 			},
