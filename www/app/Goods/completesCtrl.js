@@ -1,7 +1,7 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
-	var offset = 1;
+	var offset = 0;
 	var allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
 	$scope.hasRemainGoods = false;
 	
