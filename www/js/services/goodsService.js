@@ -359,7 +359,7 @@ angular.module('LelongApp.services')
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
 			        objectResult.message = "Failed when call api publish goods: " + err;
-			        deffered.reject(objectResult);
+			        deffered.resolve(objectResult);
 			    });
 			    return deffered.promise;
 			},
