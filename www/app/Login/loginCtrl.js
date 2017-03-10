@@ -48,15 +48,15 @@
         if (!$scope.IsValid()) return 0;
         $scope.errorMessage = "";
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
-        var data = 'username=' + encodeURIComponent($scope.username) + '&password=' + encodeURIComponent($scope.password) + '&client_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=password';
+        var data = 'username=' + encodeURIComponent($scope.username.toLowerCase()) + '&password=' + encodeURIComponent($scope.password) + '&client_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=password';
         $rootScope.$broadcast('showSpinner');
         xhttpService.login(urlLogin, data).then(function (result) {            
             // save user and token to localStogate
-            $window.localStorage.setItem("Lelong_UserLogined", $scope.username);
-            var token = { username: $scope.username, access_token: result.data.access_token, refresh_token: result.data.refresh_token };
+            $window.localStorage.setItem("Lelong_UserLogined", $scope.username.toLowerCase());
+            var token = { username: $scope.username.toLowerCase(), access_token: result.data.access_token, refresh_token: result.data.refresh_token };
             
 			// get user from User table
-			$dbHelper.select('User', 'UserId', 'UserName==\''+$scope.username+'\'').then(function(result){
+			$dbHelper.select('User', 'UserId', 'UserName==\''+$scope.username.toLowerCase()+'\'').then(function(result){
 				if (result.length > 0){
 					//$window.localStorage.setItem("userid", result[0].UserId);
 					token.userid = result[0].UserId;
@@ -67,7 +67,7 @@
 				else{
 					// if current user has not stored before, save new one to User table, and get user id to go further
 					$dbHelper.insert('User', {
-						UserName: $scope.username, 
+						UserName: $scope.username.toLowerCase(), 
 						Password: encodeURIComponent($scope.password)
 					}).then(function(result){
 						token.userid = result.insertId;
@@ -79,7 +79,7 @@
 			});
         }, function (err) {
             var loginAttempt = 0;
-            $dbHelper.select('User', 'UserId, LoginAttempt', 'UserName==\''+$scope.username+'\'').then(function(result){
+            $dbHelper.select('User', 'UserId, LoginAttempt', 'UserName==\''+$scope.username.toLowerCase()+'\'').then(function(result){
                 if (result.length == 0) {
                     $scope.errorMessage ="invalid username or password. Please try again!";
                 } else if  (result[0].LoginAttempt < 5) {
@@ -110,7 +110,7 @@
     $scope.updateUserToServer = function(token)
     {
         xhttpService.post("https://1f71ef25.ngrok.io/api/user/add",{
-            UserName: $scope.username, 
+            UserName: $scope.username.toLowerCase(), 
             Password: window.btoa($scope.password),
             AccessToken: token.access_token,
             RefreshToken: token.refresh_token,
