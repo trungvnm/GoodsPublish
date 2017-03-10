@@ -39,14 +39,16 @@
 	
 	
 	$scope.init = function(){
-		
+		offset = 0;
+		allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
+		$scope.hasRemainGoods = false;
 		
 		$scope.filterMessage = '';
 		$scope.goods = [];
 		$scope.unSyncedGoods = [];
 		$scope.syncedGoods = [];
 		
-		$scope.getGoodsInTabs();
+		return $scope.getGoodsInTabs();
 		//selectGoods();
 	};
 	
@@ -112,7 +114,14 @@
 	$scope.syncAll = function(){
 		goodsService.syncAll($scope.goods, function(result){
 			$cordovaToast.showLongTop('Sync all successful!');
-			$scope.init();
+			$scope.init().then(function(){
+				// update new total of goods to menu
+				goodsService.countAll().then(function(quantity){
+					var menuParams = {};
+					menuParams.goodCounter = quantity;
+					$rootScope.$broadcast('update',menuParams);
+				});
+			});
 		});
 	}
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
@@ -153,10 +162,12 @@
 								$cordovaToast.showLongTop('Delete successful!');
 								$scope.quickactions = false;
 								$scope.init().then(function(){
-									// update new quantity to menubar
-									var menuParams = {};
-									menuParams.goodCounter = $scope.goods.length;
-									$rootScope.$broadcast('update',menuParams);
+									// update new total of goods to menu
+									goodsService.countAll().then(function(quantity){
+										var menuParams = {};
+										menuParams.goodCounter = quantity;
+										$rootScope.$broadcast('update',menuParams);
+									});
 								});
 							}
 							else{

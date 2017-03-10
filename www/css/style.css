@@ -62,7 +62,12 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
 	font-size: 15px
 }
 #list-editmode .item-checkbox .checkbox{
-	top: 85% !important
+	top: 20px !important;
+	left: 0px;
+}
+
+#list-editmode .item-checkbox{
+	border: none
 }
 
 .popup-button{

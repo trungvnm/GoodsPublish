@@ -139,6 +139,9 @@ angular.module('LelongApp.services')
 						if (r.PhotoUrl && r.PhotoUrl.trim() != '') {
 							r.PhotoUrl += "?" + (new Date()).getTime();
 						}
+						else{
+							r.PhotoUrl = "./img/nophoto.jpg";
+						}
 					});
 					return result;
 				});

@@ -20,7 +20,7 @@
 					<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('all')" ng-disabled="quickactions" ng-hide="g.hidden" ng-click="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
@@ -46,7 +46,7 @@
 					<ion-checkbox ng-repeat="g in group"  class="col col-33" ng-model="g.Checked" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
@@ -87,7 +87,7 @@
 					<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('unsynced')" ng-disabled="quickactions" ng-hide="g.hidden" ng-click="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
@@ -112,7 +112,7 @@
 					<ion-checkbox ng-repeat="g in group"  class="col col-33" ng-model="g.Checked" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
@@ -153,7 +153,7 @@
 					<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden" ng-click="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
@@ -179,7 +179,7 @@
 					<ion-checkbox ng-repeat="g in group"  class="col col-33" ng-model="g.Checked" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
-								<img src="{{g.PhotoUrl}}"/> </span>
+								<img ng-src="{{g.PhotoUrl}}"/> </span>
 							<span class="price">RM{{g.SalePrice}}</span>
 							<span class="title">{{g.Title}}</span>
 						</a>
