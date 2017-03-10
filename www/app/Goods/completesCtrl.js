@@ -2,12 +2,17 @@
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
 	var offset = 1;
+	var allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
 	$scope.hasRemainGoods = false;
 	
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
 	
 	$scope.getGoodsInTabs = function(){
+		if (!allowLoadMore){
+			return;
+		}
+		allowLoadMore = false; // disallow other getGoodsInTabs() actions running for conflict resist
 		// get data for All Tab
 		return goodsService.getAll('all', offset, $scope.limit).then(function(result) {
 			$scope.goods.push.apply($scope.goods, result);
@@ -23,6 +28,7 @@
 						offset += $scope.limit;
 						
 						$scope.$broadcast('scroll.infiniteScrollComplete');
+						allowLoadMore = true;
 						return true;
 					});
 				});
