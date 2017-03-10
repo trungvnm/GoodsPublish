@@ -330,8 +330,9 @@ angular.module("LelongApp.Goods")
                             }
                         };
                         angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
+                        var listGoods = []; listGoods.push(newSource);
 
-                        goodsService.publish(newSource).then(function (result) {
+                        goodsService.publish(listGoods).then(function (result) {
                             if (result) {
                                 $cordovaToast.showLongTop('Publish successful!');
                                 $ionicHistory.clearCache().then(function () {

@@ -210,7 +210,8 @@
 						}
 					});
 					if (selecteds.length > 0){
-						var total = 0;
+					    var total = 0;
+					    var listGoods = [];
 						selecteds.forEach(function(g){
 							g = goodsService.getGoodsById(g.GoodPublishId);
 							$dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + id + '\'').then(function (result) {
@@ -228,19 +229,17 @@
 									return g;
 								}
 							});
-							goodsService.publish(g).then(function () {
-								if (result){
-									total++;
-								}
-							});
+							listGoods.push(g);
 						});
-						if (selecteds.length = total) {
-							$cordovaToast.showLongTop('Post successful!');
-							$scope.init();
-							$scope.quickactions = false;
-						} else {
-							$cordovaToast.showLongTop('Post failed!');
-						}
+						goodsService.publish(listGoods).then(function (result) {
+						    if (result) {
+						        $cordovaToast.showLongTop('Post successful!');
+						        $scope.init();
+						        $scope.quickactions = false;
+						    } else {
+						        $cordovaToast.showLongTop('Post failed!');
+						    }
+						});
 					}
 				}
 			})
