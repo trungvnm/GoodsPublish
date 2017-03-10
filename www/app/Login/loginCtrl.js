@@ -91,7 +91,7 @@
                     $scope.errorMessage ="Account: " + $scope.username + " has been blocked!";
                 }
                 $rootScope.$broadcast('hideSpinner');
-            })
+            });
         });
     };
 
@@ -101,9 +101,11 @@
             UserId: userId,
             LoginAttempt: loginAttempt
         }, 'UserId=' +userId).then(function(res){
-            $scope.goNext();
-        });          
-    }
+            if (loginAttempt === 0) {
+                $scope.goNext();
+            }
+        });
+    };
 
     $scope.updateUserToServer = function(token)
     {
@@ -117,7 +119,7 @@
             PostingAlready: true,
             NumberOfPhotosAllow: 10
         });          
-    }
+    };
 
     $scope.updateSetting = function(userId) {
         $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userId + "'").then(function(result){
@@ -137,5 +139,5 @@
     $scope.logout = function () {
         this.$window.localStorage.clear();
         $location.url('/login');
-    }
+    };
 });
