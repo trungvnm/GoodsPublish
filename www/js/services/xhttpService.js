@@ -11,11 +11,18 @@
         this.$http = $http;
         this.tokenService = tokenService;
     }
-
-
-    XhttpService.prototype.login = function (loginUrl, data) {
+    function checkShowSpinner(showSpinner)
+    {
+        if (showSpinner === false) {
+            $("ion-spinner").removeClass("show");
+        } else {
+            $("ion-spinner").addClass("show");
+        }
+    }
+    XhttpService.prototype.login = function (loginUrl, data, showSpinner) {
         var defer = this.$q.defer();
         var self = this;
+        checkShowSpinner(showSpinner);
         var header = {
             'Access-Control-Allow-Origin': 'www.lelong.com.my',
             'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
@@ -23,20 +30,20 @@
             'Content-type': 'application/x-www-form-urlencoded',
             "Accept": "application/json"
         }
+
         self.$http.post(loginUrl, data, header).then(function (response) {
             console.log('logined');
             defer.resolve(response);
         }, function (err) {
-
             defer.reject(err);
+        }).finally(function() {
+            $("ion-spinner").removeClass("show");
         });
         return defer.promise;
     }
 
     XhttpService.prototype.get = function (url, showSpinner) {
-		if (showSpinner){
-			$("ion-spinner").addClass("show");
-		}
+        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -48,14 +55,10 @@
                 }
                 self.$http.get(url, {headers: header}).then(function (response) {
                     defer.resolve(response);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
                 }, function (err) {
                     defer.reject(err);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
+                }).finally(function () {
+                    $("ion-spinner").removeClass("show");
                 });
             }
         })
@@ -63,9 +66,7 @@
     }
 
     XhttpService.prototype.post = function (url, data, showSpinner) {
-		if (showSpinner){
-			$("ion-spinner").addClass("show");
-		}
+        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -78,14 +79,10 @@
                 }
                 self.$http.post(url, data, {headers: header}).then(function (response) {
                     defer.resolve(response);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
                 }, function (err) {
                     defer.reject(err);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
+                }).finally(function () {
+                    $("ion-spinner").removeClass("show");
                 });
             }
         })
@@ -93,9 +90,7 @@
     }
 
     XhttpService.prototype.put = function (url, data, showSpinner) {
-		if (showSpinner){
-			$("ion-spinner").addClass("show");
-		}
+        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -108,14 +103,10 @@
                 }
                 self.$http.put(url, data, {headers: header}).then(function (response) {
                     defer.resolve(response);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
                 }, function (err) {
                     defer.reject(err);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
+                }).finally(function () {
+                    $("ion-spinner").removeClass("show");
                 });
             }
         })
@@ -123,9 +114,7 @@
     }
 
     XhttpService.prototype.delete = function (url, showSpinner) {
-		if (showSpinner){
-			$("ion-spinner").addClass("show");
-		}
+        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -137,15 +126,11 @@
                 }
                 self.$http.delete(url, {headers: header}).then(function (response) {
                     defer.resolve(response);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
                 }, function (err) {
 
                     defer.reject(err);
-					if (showSpinner){
-						$("ion-spinner").removeClass("show");
-					}
+                }).finally(function () {
+                    $("ion-spinner").removeClass("show");
                 });
             }
         })
