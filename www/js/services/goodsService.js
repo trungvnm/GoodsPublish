@@ -300,6 +300,7 @@ angular.module('LelongApp.services')
 			},
 			publish: function (listGoods) {
 			    var deffered = $q.defer();
+			    var objectResult = { message: "", listGoodsPublishFailed: [], listImagePublishFailed: [] };
 			    var listImageObj = [];
 			    return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
@@ -317,6 +318,7 @@ angular.module('LelongApp.services')
 			                });
 			            }
 			        }
+			        objectResult.listGoodsPublishFailed = listGoodsPublishFailed;
 
 			        for (var i = 0; i < listGoodsPublishOK.length; i++) {
 			            for (var j = 0; j < listGoodsPublishOK[i].listPhoto.length; j++) {
@@ -334,37 +336,42 @@ angular.module('LelongApp.services')
 			                });
 			            }
 			        }
+                    
 			        // upload images
 			        if (listImageObj && listImageObj.length > 0) {
 			            uploadMultipleImages(listImageObj).then(function (result) {
 			                result.forEach(function (r) {
 			                    if (r.result != 1) {
 			                        console.log("upload faild goods: " + r.goodsTitle);
-			                        $cordovaToast.showLongTop("upload faild goods: " + r.goodsTitle);
-			                        deffered.resolve(false);
+			                        objectResult.listImagePublishFailed.push(r);
 			                    };
 			                });
-			                console.log("upload all images success");
-			                deffered.resolve(true);
+			                if (objectResult.listImagePublishFailed.length > 0)
+			                {
+			                    objectResult.message = "Failed";
+			                } else {
+			                    console.log("upload all images success");
+			                    objectResult.message = "success";
+			                }
+			                deffered.resolve(objectResult);
 			            });
 			        }
-
-			        // console.log("RESPONESE FROM PUBLISH: " + JSON.stringify(response));
-
-
 
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
 			        $cordovaToast.showLongTop('Publish Failed!').then(function () {
 			            $ionicHistory.clearCache().then(function () {
 			                $state.go('app.completes');
-			                deffered.resolve(false);
+			                objectResult.message = "Failed when call api publish goods";
+			                deffered.resolve(objectResult);
 			            });
 			        }, function (err) {
 			            console.log('TOAST FAILED: ' + JSON.stringify(err));
-			            deffered.resolve(false);
+			            objectResult.message = "Failed when call api publish goods";
+			            deffered.resolve(objectResult);
 			        });
 			    });
+			    return deffered.promise;
 			},
 			sync: function (goods, callBack) {
 				var token = tokenService.getToken();
