@@ -31,32 +31,34 @@ angular.module('LelongApp.services')
         };
 		
 		// upload image to an server by its path
-		self.uploadImage = function(serverUrl, filePath){
-			/*this.tokenService.verify().then(function (token) {
+        self.uploadImage = function (serverUrl, filePath) {
+            /*this.tokenService.verify().then(function (token) {
             if (token) {*/
-			var win = function (r) {
-				console.log("UPLOAD image success ");
-				return r.response.indexOf("Success") > -1;
-			}
+            var deffered = $q.defer();
+            var win = function (r) {
+                console.log("UPLOAD image success ");
+                deffered.resolve(1);
+            }
 
-			var fail = function (error) {
-				console.log("error on upload image ");
-				console.dir(error);
-			}
-			var options = new FileUploadOptions();
-			options.fileKey = "file";
-			options.fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
-			options.mimeType = "text/plain";
+            var fail = function (error) {
+                console.log("error on upload image ");
+                deffered.resolve(0);
+            }
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+            options.mimeType = "text/plain";
 
-			var headers = {
-                    "Authorization": "Bearer " + token.access_token,
-                    "X-User-Context" : token.username,
-                };
-			options.headers = headers;
+            var headers = {
+                "Authorization": "Bearer " + token.access_token,
+                "X-User-Context": token.username,
+            };
+            options.headers = headers;
 
-			var ft = new FileTransfer();
-			return ft.upload(filePath, encodeURI(serverUrl), win, fail, options);
-		};
+            var ft = new FileTransfer();
+            ft.upload(filePath, encodeURI(serverUrl), win, fail, options);
+            return deffered.promise;
+        };
 		
 		// Download image from an server by its url
 		self.downloadImage = function(serverUrl, saveUrl, finishCallback, erorCallback){

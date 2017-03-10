@@ -298,38 +298,73 @@ angular.module('LelongApp.services')
 					}
 				}
 			},
-			publish: function (good) {
-				return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', good, true).then(function (response) {
-					// upload images
-					if (good.listPhoto) {
-						var imageAPI = "https://1f71ef25.ngrok.io/api/image/upload?guiIdGoods=" + good.Guid;
-						good.listPhoto.forEach(function (p) {
-							imageService.uploadImage(imageAPI, p.PhotoUrl);
-						});
+			publish: function (listGoods) {
+			    var deffered = $q.defer();
+			    var listImageObj = [];
+			    return xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
-					}
+			        var listGoodsPublishFailed = [];
+			        var listGoodsPublishOK = listGoods;
 
-					// console.log("RESPONESE FROM PUBLISH: " + JSON.stringify(response));
+			        if (response.status == 200 && response.data) {
+			            if (response.data.message == "Failed") {
+			                response.data.listGuidPublishFailed.forEach(function (r) {
+			                    var failedItems = listGoods(function (g) { return g.Guid == r; });
+			                    listGoodsPublishFailed.push(failedItems);
+			                    for (i = listGoodsPublishOK.length - 1; i >= 0; i--) {
+			                        if (listGoodsPublishOK[i].Guid == failedItems.Guid) listGoodsPublishOK.splice(i, 1);
+			                    }
+			                });
+			            }
+			        }
 
-					if (response.status == 200 && response.data) {
-						// update lastsync value to current good
-						var params = {
-							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-						};
-						return $dbHelper.update("GoodsPublish", params, "Guid = '" + good.Guid + "'").then(function (result) {
-							return result.rowsAffected > 0;
-						});
-					}
-				}, function (err) {
-					console.log("Publish Failed: " + JSON.stringify(err));
-					$cordovaToast.showLongTop('Publish Failed!').then(function () {
-						$ionicHistory.clearCache().then(function () {
-							$state.go('app.completes');
-						});
-					}, function (err) {
-						console.log('TOAST FAILED: ' + JSON.stringify(err));
-					});
-				});
+			        for (var i = 0; i < listGoodsPublishOK.length; i++) {
+			            for (var j = 0; j < listGoodsPublishOK[i].listPhoto.length; j++) {
+			                var obj = {}
+			                obj.goodsTitle = listGoodsPublishOK[i].Title;
+			                obj.goodsGuid = listGoodsPublishOK[i].Guid;
+			                obj.photoObject = listGoodsPublishOK[i].listPhoto[j];
+			                listImageObj.push(obj);
+
+			                // update lastsync value to current good
+			                var params = {
+			                    LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+			                };
+			                $dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
+			                });
+			            }
+			        }
+			        // upload images
+			        if (listImageObj && listImageObj.length > 0) {
+			            uploadMultipleImages(listImageObj).then(function (result) {
+			                result.forEach(function (r) {
+			                    if (r.result != 1) {
+			                        console.log("upload faild goods: " + r.goodsTitle);
+			                        $cordovaToast.showLongTop("upload faild goods: " + r.goodsTitle);
+			                        deffered.resolve(false);
+			                    };
+			                });
+			                console.log("upload all images success");
+			                deffered.resolve(true);
+			            });
+			        }
+
+			        // console.log("RESPONESE FROM PUBLISH: " + JSON.stringify(response));
+
+
+
+			    }, function (err) {
+			        console.log("Publish Failed: " + JSON.stringify(err));
+			        $cordovaToast.showLongTop('Publish Failed!').then(function () {
+			            $ionicHistory.clearCache().then(function () {
+			                $state.go('app.completes');
+			                deffered.resolve(false);
+			            });
+			        }, function (err) {
+			            console.log('TOAST FAILED: ' + JSON.stringify(err));
+			            deffered.resolve(false);
+			        });
+			    });
 			},
 			sync: function (goods, callBack) {
 				var token = tokenService.getToken();
@@ -450,9 +485,29 @@ angular.module('LelongApp.services')
 			}
 		};
 
+		function uploadMultipleImages(listPhoto) {
+		    var promises = [];
+		    listPhoto.forEach(function (p) {
+		        var deffered = $q.defer();
+		        var resultObj = {};
+		        resultObj.goodsTitle = p.goodsTitle;
+		        var imageAPI = "https://1f71ef25.ngrok.io/api/image/upload?guiIdGoods=" + p.goodsGuid;
+		        imageService.uploadImage(imageAPI, p.photoObject.PhotoUrl).then(function (resultUpload) {
+		            resultObj.result = resultUpload;
+		            deffered.resolve(resultObj);
+		        }, function (err) {
+		            resultObj.result = resultUpload;
+		            deffered.resolve(resultObj);
+		        });
+		        promises.push(deffered.promise);
+		    });
+		    return $q.all(promises);
+		}
+
 		function getImageFileName(fullNamePath) {
 			return fullNamePath.replace(/^.*[\\\/]/, '');
 		}
+
 		return goodService;
 	});
 
