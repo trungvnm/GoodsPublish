@@ -10,38 +10,52 @@ angular.module('LelongApp.services')
 		// Delete all photos of a good
 		function deletePhotosByGood(goodId, callBack) {
 			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='" + goodId + "'").then(function (result) {
-				var photoPaths = [];
-				//if (result && result.length > 0) {
-				result.forEach(function (photo) {
-					photoPaths.push(photo.PhotoUrl);
-				});
+				try {
+					var photoPaths = [];
+					//if (result && result.length > 0) {
+					result.forEach(function (photo) {
+						photoPaths.push(photo.PhotoUrl);
+					});
 
-				$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
-					photoPaths.forEach(function (p) {
-						var nameSegments = p.split('/');
-						var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
-						var filename = nameSegments[nameSegments.length - 1];
-						// delete file
-						/*window.resolveLocalFileSystemURL(path, function (dir) {
-							dir.getFile(filename, { create: false }, function (fileEntry) {
-								fileEntry.remove(function (result) {
-									console.log("The file has been removed succesfully");
-									// The file has been removed succesfully
-								}, function (error) {
-									// Error deleting the file
-									console.dir(error);
-								}, function () {
-									// The file doesn't exist
-									console.console("The file doesn't exist");
-								});
-							});
-						});*/
-					})
-					if (callBack) {
-						callBack();
+					$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
+						try{
+							photoPaths.forEach(function (p) {
+								var nameSegments = p.split('/');
+								var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
+								var filename = nameSegments[nameSegments.length - 1];
+								// delete file
+								/*window.resolveLocalFileSystemURL(path, function (dir) {
+									dir.getFile(filename, { create: false }, function (fileEntry) {
+										fileEntry.remove(function (result) {
+											console.log("The file has been removed succesfully");
+											// The file has been removed succesfully
+										}, function (error) {
+											// Error deleting the file
+											console.dir(error);
+										}, function () {
+											// The file doesn't exist
+											console.console("The file doesn't exist");
+										});
+									});
+								});*/
+							})
+							if (callBack) {
+								callBack();
+							}
+						}
+						catch(err){
+							if (callBack) {
+								callBack(err);
+							}
+						}
+					});
+					//}
+				}
+				catch (err){
+					if (callBack){
+						callBack(err);
 					}
-				});
-				//}
+				}
 			})
 		}
 
@@ -91,18 +105,34 @@ angular.module('LelongApp.services')
 		}
 
 		var goodService = {
-			getAll: function () {
+			getAll: function (type, offset, limit) {
 				var token = tokenService.getToken();
 				var userId = token.userid;
 
 				// Condition for filter
 				var whereClause = ' WHERE UserId=\'' + userId + '\' AND Active = 1 ';
+				if (type == 'unsync'){
+					whereClause += " AND (LastSync == '' OR LastSync IS NULL) ";
+				}
+				else if (type == 'synced'){
+					whereClause += " AND LastSync IS NOT NULL AND LastSync != '' ";
+				}
+				var limitClause = '';
+				if (limit){
+					if (offset){
+						limitClause = ' LIMIT ' + offset + "," + limit;
+					}
+					else{
+						limitClause = ' LIMIT ' + limit;
+					}
+				}
 
 				// Query to extract data
 				var query = 'SELECT	GoodPublishId, Title, Guid, SalePrice, Description, Quantity, LastSync, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
 				query += ' FROM	GoodsPublish';
 				query += whereClause;
-				query += ' ORDER BY datetime(LastEdited) DESC';
+				query += ' ORDER BY datetime(LastEdited) DESC ';
+				query += limitClause;
 
 				return $dbHelper.selectCustom(query).then(function (result) {
 					result.forEach(function (r) {

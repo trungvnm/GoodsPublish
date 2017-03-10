@@ -1,31 +1,59 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {
+	$scope.viewmode = 'grid';
+	$scope.limit = 12;
+	var offset = 1;
+	$scope.hasRemainGoods = false;
+	
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
+	
+	$scope.getGoodsInTabs = function(){
+		// get data for All Tab
+		return goodsService.getAll('all', offset, $scope.limit).then(function(result) {
+			$scope.goods.push.apply($scope.goods, result);
+			if (result && result.length > 0){
+				$scope.hasRemainGoods = true;
+				// get data for Unsync Tab
+				return goodsService.getAll('unsync', offset, $scope.limit).then(function(res) {
+					$scope.unSyncedGoods.push.apply($scope.unSyncedGoods, res);
+					return goodsService.getAll('synced', offset, $scope.limit).then(function(r) {
+						$scope.syncedGoods.push.apply($scope.syncedGoods, r);
+						
+						// increase offset for loading more
+						offset += $scope.limit;
+						
+						$scope.$broadcast('scroll.infiniteScrollComplete');
+						return true;
+					});
+				});
+			}
+			else $scope.hasRemainGoods = false;
+		});
+	}
+	
+	
 	$scope.init = function(){
+		
+		
 		$scope.filterMessage = '';
 		$scope.goods = [];
 		$scope.unSyncedGoods = [];
 		$scope.syncedGoods = [];
-		return goodsService.getAll().then(function(result) {
-			if (result){
-				result.forEach(function(g){
-					if (!g.PhotoUrl || g.PhotoUrl.trim() == ''){
-						g.PhotoUrl = './img/nophoto.jpg';
-					}
-					if (g.LastSync && g.LastSync.trim() != ''){
-						$scope.syncedGoods.push(g);
-					}
-					else{
-						$scope.unSyncedGoods.push(g);
-					}
-				});
-			}
-			$scope.goods = result;
-			
-		});
-
+		
+		$scope.getGoodsInTabs();
 		//selectGoods();
 	};
+	
+	// Load more goods from database
+	/*$scope.loadMore=function(type){
+		if (allowLoadMore){
+			getGoodsInTabs().then(function(result){
+				if (result){
+					
+				}
+			});
+		}
+	};*/
 	
 	// when a tab has been selected
 	$scope.onTabSelected = function(){

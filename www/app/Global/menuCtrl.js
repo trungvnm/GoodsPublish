@@ -20,6 +20,11 @@
 		$scope.issearch = args.issearch;
 	});
 	
+	$scope.$on('getTotalGoods', function (event, args) {
+        // do what you want to do
+		args.totalGoods = $scope.goodCounter;
+	});
+	
 	//======= snippet control =====
 	$scope.$on("showSpinner", function(event){
 		$("ion-spinner").addClass("show");
