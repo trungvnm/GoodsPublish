@@ -94,6 +94,8 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
 .popup-button.inputmore{
     background: #387ef5;
     bottom: 20px;
+    width: 45px;
+    height: 45px;
 }
 .popup-button.inputmore:hover{
     background: #0a9dc7;
@@ -105,12 +107,12 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
 }
 /*Addnew page*/
 .action-camera-button{
-        text-align: right;
-        z-index: 50;
-        top: 135px;
-        position: absolute;
-        width: 100%;
-        padding-right: 10px;
+    text-align: right;
+    z-index: 50;
+    top: 110px;
+    position: absolute;
+    width: 15%;
+    right: 8px;
 }
 .action-camera-button a::before{
     line-height: 35px !important;
@@ -122,31 +124,31 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
         border: 1px solid #ccc;
         border-radius: 30px;
 }
-.action-camera-button a:hover{
-        color: black;
-        border: 1px dotted #ccc;
-}
 .add-new-headerbar{
     top: 40px;
     border: 0px;
     background-image:none !important;
 }
 .add-new-ioncontent{
-    top:230px;
+    top:212px;
 }
 #addnew-photo-preview{
     text-align: center;
     padding: 0px;   
     width: 100%;
+    height: 150px;
 }
 .slider-pager{
     bottom: 0px !important;
 }
 
 .swiper-container {
-        width: 330px;
-        height: 175px;
+        width: 100%;
+        height: 100%;
         margin: 5px auto;
+    }
+    #slider2 .swiper-container {
+        height: 100%
     }
 .swiper-slide {
         text-align: center;
@@ -190,9 +192,18 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
         padding-top: 3px;
         padding-right: 3px;
         cursor: pointer;
-        margin-top: 10px;
-        margin-right: 5px;
+        margin-top: 18px;
+        margin-right: 0px;
     }
+    #category-ellipsis{
+            height: 34px;
+            padding-top: 8px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 300px;
+            padding-right: 10px;
+        }
 /*pager css*/
 .swiper-container-horizontal > .swiper-pagination{
     bottom: 0px !important;
@@ -202,6 +213,44 @@ a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-over
     color: red;
     text-align: center;
 }
+/*image zoom*/
+.transparent {
+  background: transparent !important;
+}
+.image-modal {
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+}
+.fullscreen-image {
+  max-width: 100%;
+  max-height: 100%;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+/* Fix modal backdrop for smaller devices */
+@media (max-width: 679px) {
+  .active .modal-backdrop-bg {
+    opacity: .5;
+  }
+  .modal-backdrop-bg {
+    -webkit-transition: opacity 300ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
+    background-color: #000;
+    opacity: 0;
+  }
+}
+.swiper-pagination-bullet{
+    background:#4966f9
+}
+
 /*End Addnew page*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;

@@ -1,5 +1,5 @@
 angular.module('LelongApp.services')
-	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService) {
+	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService,$timeout) {
 		// Get API Url for downloading photo
 		function getPhotoApiUrl(guid) {
 			return "https://1f71ef25.ngrok.io/api/image/download?photoName=" + guid;
@@ -169,10 +169,13 @@ angular.module('LelongApp.services')
 
 				// Query to extract data
 				var query = 'SELECT	* FROM	GoodsPublish ' + whereClause;
-
+				var deffered=$q.defer();
 				return $dbHelper.selectCustom(query).then(function (result) {
 					if (result && result.length > 0) {
-						return result[0];
+						$timeout(function() {
+							deffered.resolve(result[0]);
+						}, 200);
+						return deffered.promise;
 					}
 					return null;
 				});

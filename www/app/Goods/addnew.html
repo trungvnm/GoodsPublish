@@ -1,20 +1,22 @@
 <ion-view ng-init="init()" view-title="{{viewTitle}}">
-     <!--Step photo upload-->
+    <!--Step photo upload-->
     <ion-header-bar class="add-new-headerbar" align-title="center">
         <div id="addnew-step2" style="width: 100%">
             <div id="addnew-photo-preview">
-                <ion-slides options="galleryOptions" slider="data.slider" zoom="true" ng-show="imgURI.length>0">
+
+                <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length>0">
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
                         <div>
                             <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
-                            <img style="width: 150px;height: 150px" ng-src="{{image.photoUrl}}">
+                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
                         </div>
                     </ion-slide-page>
                 </ion-slides>
-                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 150px;height: 170px;padding-top: 10px">
+
+                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
             </div>
-            <div class="action-camera-button" ng-click="choosePhotoAction()">
-                <a class="button button-icon icon ion-ios-camera"></a>
+            <div class="action-camera-button">
+                <a class="button button-icon icon ion-ios-camera" ng-click="choosePhotoAction()"></a>
             </div>
         </div>
     </ion-header-bar>
@@ -25,7 +27,7 @@
             </ul>
         </div>
         <form name="addEditForm" novalidate>
-            <div class="list">            
+            <div class="list">
                 <!--Step Required field-->
                 <div id="addnew-step1" ng-show="step==1">
                     <label class="item item-input">
@@ -37,7 +39,7 @@
                         <button  style="float: right;padding-bottom: 3px" ng-show="editMode==false" ng-hide="goodItem.Category.length>0" ng-click="showPopup()" class="button button-clear button-positive" >
                                 Choose category
                         </button>
-                        <div style="height: 34px;line-height: 16px;padding-top: 8px;" ng-show="editMode==true || goodItem.Category.length>0" ng-model="goodItem.Category">
+                        <div id="category-ellipsis" ng-show="goodItem.Category.length>0" ng-model="goodItem.Category">
                         {{CatesName}}                 
                         </div>
                     </label>
@@ -63,7 +65,7 @@
                 </label>
                     <label class="item item-input">
                      <span class="input-label">Description</span>
-                    <textarea placeholder="Description" ng-model="goodItem.Description"></textarea>
+                    <input type="text" placeholder="Description" ng-model="goodItem.Description">
                 </label>
                 </div>
                 <!--Step 3 optional field-->
@@ -75,7 +77,7 @@
                 </label>
                     <label class="item item-input">
                     <span class="input-label">GSTType</span>
-                    <input type="number" placeholder="GSTType" ng-model="goodItem.GstType" autofocus>
+                    <input type="number" placeholder="GSTType" ng-model="goodItem.GstType">
                 </label>
                     <label class="item item-input">
                     <span class="input-label">SaleType</span>
@@ -110,6 +112,6 @@
         </form>
     </ion-content>
     <span class="popup-button inputmore">
-        <a class="button button-icon icon" ng-class="inputMore.class" ng-click="showMoreInput(inputMore.hide)"></a>
+        <a class="button button-icon icon" style="padding-top: 0px" ng-class="inputMore.class" ng-click="showMoreInput(inputMore.hide)"></a>
     </span>
 </ion-view>
