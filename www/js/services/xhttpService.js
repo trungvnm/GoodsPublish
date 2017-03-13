@@ -13,14 +13,9 @@
     }
     function checkShowSpinner(showSpinner)
     {
-		if (showSpinner) {
-            $("ion-spinner").addClass("show");
+        if (showSpinner !== false) {
+			$("ion-spinner").addClass("show");
         }
-        /*if (showSpinner === false) {
-            $("ion-spinner").removeClass("show");
-        } else {
-            $("ion-spinner").addClass("show");
-        }*/
     }
     XhttpService.prototype.login = function (loginUrl, data, showSpinner) {
         var defer = this.$q.defer();

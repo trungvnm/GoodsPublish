@@ -95,9 +95,9 @@ angular.module('LelongApp.services')
 										});
 									},
 									function () {
-										if (currentCouter == listPhoto.length && callBack) {
+										/*if (currentCouter == listPhoto.length && callBack) {
 											callBack();
-										}
+										}*/
 									}
 								);
 							}
