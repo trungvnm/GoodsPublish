@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading) {
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
 	var offset = 0;
@@ -229,53 +229,60 @@
 		}
 	});
 
-	$scope.$on('multiPublish', function(event, args){
-		if (navigator.notification){
-			navigator.notification.confirm('Are you sure to publish selected items?', function(result){
-				if (result == 1){
-					var selecteds = [];
-					$scope.goods.forEach(function(g){
-						if (g.Checked){
-							selecteds.push(g);
-						}
-					});
-					if (selecteds.length > 0){
-					    var total = 0;
-					    var listGoods = [];
-						selecteds.forEach(function(g){
-							g = goodsService.getGoodsById(g.GoodPublishId);
-							$dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + id + '\'').then(function (result) {
-								if (result && result.length > 0) {
-									result.forEach(function (photo) {
-										if (!g.listPhoto)
-											g.listPhoto = [];
-										g.listPhoto.push({
-											PhotoName: photo.PhotoName,
-											PhotoUrl: photo.PhotoUrl,
-											PhotoDescription: photo.PhotoDescription
-										});
-									});
+	$scope.$on('multiPublish', function (event, args) {
+	    if (navigator.notification) {
+	        navigator.notification.confirm('Are you sure to publish selected items?', function (result) {
+	            if (result == 1) {
+	                var selecteds = [];
+	                $scope.unSyncedGoods.forEach(function (g) {
+	                    if (g.Checked) {
+	                        selecteds.push(g);
+	                    }
+	                });
+	                if (selecteds.length > 0) {
+	                    getListGoodsPublish(selecteds).then(function (listGoodsPublish) {
+	                        goodsService.publish(listGoodsPublish).then(function (result) {
+	                            if (result.message === 'Success') {
+	                                $cordovaToast.showLongTop('Post successful!');
+	                                $scope.init();
+	                                $scope.quickactions = false;
+	                            } else {
+	                                $cordovaToast.showLongTop('Post failed!');
+	                            }
+	                        });
+	                    })
 
-									return g;
-								}
-							});
-							listGoods.push(g);
-						});
-						goodsService.publish(listGoods).then(function (result) {
-						    if (result.message === 'Success') {
-						        $cordovaToast.showLongTop('Post successful!');
-						        $scope.init();
-						        $scope.quickactions = false;
-						    } else {
-						        $cordovaToast.showLongTop('Post failed!');
-						    }
-						});
-					}
-				}
-			})
-		}
+	                }
+	            }
+	        })
+	    }
 	});
-	
+
+	function getListGoodsPublish(selecteds) {
+	    var promises = [];
+	    selecteds.forEach(function (g) {
+	        var deffered = $q.defer();
+	        goodsService.getGoodsById(g.GoodPublishId).then(function (goodsObj) {
+	            $dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + g.GoodPublishId + '\'').then(function (result) {
+	                if (result && result.length > 0) {
+	                    result.forEach(function (photo) {
+	                        if (!goodsObj.listPhoto)
+	                            goodsObj.listPhoto = [];
+	                        goodsObj.listPhoto.push({
+	                            PhotoName: photo.PhotoName,
+	                            PhotoUrl: photo.PhotoUrl,
+	                            PhotoDescription: photo.PhotoDescription
+	                        });
+	                    });
+
+	                    deffered.resolve(goodsObj);
+	                }
+	            });
+	        });
+	        promises.push(deffered.promise);
+	    });
+	    return $q.all(promises);
+	}
 	$(document).ready(function(){
 		$("#list-readmode > a.item").on("click", function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
