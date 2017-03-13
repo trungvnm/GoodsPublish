@@ -107,6 +107,20 @@
                     <span class="input-label">PaymentMethod</span>
                     <input type="text" placeholder="PaymentMethod" ng-model="goodItem.PaymentMethod">
                 </label>
+                <div ng-show="editMode==true">
+                 <label class="item item-input">
+                    <span class="input-label">LastEdited</span>
+                    <p class="detail-value">{{goodItem.LastEdited}}</p>
+                  </label>
+                  <label class="item item-input">
+                    <span class="input-label">LastSync</span>
+                    <p class="detail-value">{{goodItem.LastSync}}</p>
+                  </label>
+                  <label class="item item-input">
+                    <span class="input-label">CreatedDate</span>
+                    <p class="detail-value">{{goodItem.CreatedDate}}</p>
+                  </label>
+                  </div>    
                 </div>
             </div>
         </form>

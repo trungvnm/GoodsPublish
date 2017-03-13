@@ -34,7 +34,8 @@ $scope.init = function () {
         { value: 10, name: "Books & Comics", isChecked: false }
     ];
 
-    if ($scope.editMode) {      
+    if ($scope.editMode) {  
+        $scope.viewTitle='';    
         /** UPDATE GoodsPublish: get publishGood by id */
         goodsService.getGoodsById($scope.goodsId).then(function (res) {
             $scope.goodItem = res;   
@@ -73,7 +74,7 @@ var actions = [
     {
         name: 'save',
         action: function () {
-            $scope.saveClick(true);
+           saveClick(true);
         }
     }
 ];
@@ -83,7 +84,7 @@ var delButton = {
             navigator.notification.confirm('Are you sure to delete this item?', function (result) {
                 if (result == 1) {                                                     
                     if ($scope.goodsId  != undefined && parseInt($scope.goodsId) >0) {
-                        goodsService.deleteGoods([$scope.good]).then(function (result) {
+                        goodsService.deleteGoods([$scope.goodItem]).then(function (result) {
                             // call api to delete from server
                             $cordovaToast.showLongTop('Delete successful!').then(function () {
                                 $ionicHistory.clearCache().then(function () {
@@ -97,7 +98,30 @@ var delButton = {
         }
     }
 };
-var syncButton = { name: 'sync', action: function () { } };
+var syncButton = { name: 'sync', action: function () {
+    if ($scope.goodItem){
+                if ($scope.goodItem.LastSync && $scope.goodItem.LastEdited && 
+                new Date($scope.goodItem.LastSync).getTime() < new Date($scope.goodItem.LastEdited).getTime()){
+                    if (navigator.notification) {
+                        navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
+                            if (result == 1) {
+                                goodsService.sync([$scope.goodItem],function(){
+                                    $ionicHistory.clearCache().then(function(){
+                                        $state.go('app.completes');
+                                    });
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    goodsService.sync([$scope.goodItem],function(){
+                        $ionicHistory.clearCache().then(function(){
+                            $state.go('app.completes');
+                        });
+                    });
+                }
+            }
+ } };
 if ($scope.editMode) {
     // actions.push(delButton);
     // actions.push(syncButton);
@@ -295,7 +319,7 @@ function copyImgToPerFolder(originPath) {
 
 /**End Cordova file */
 /** Actions */
-$scope.saveClick = function (isShowToast) {
+function saveClick (isShowToast) {
     if (formIsValid()) {
         var arrImage = [];
         if ($scope.imgURI.length > 0) {
@@ -348,7 +372,8 @@ function postToServer() {
         /** Save goods to local device */
         navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
             if (result == 1) {
-                $scope.saveClick(false);
+                
+            saveClick(false);
                 /** post goods to server */
                 if ($scope.imgURI.length > 0) {
                     for (var i = 0; i < $scope.imgURI.length; i++) {
@@ -428,8 +453,11 @@ function generateUUID() {
 };
 function updateSlide() {
     $timeout(function () {
-        if ($scope.slider) {
-            $scope.slider.update();
+        if ($scope.slider) 
+        {
+            try{
+                  $scope.slider.update();
+              }catch(err){};
         }
     });
 }
