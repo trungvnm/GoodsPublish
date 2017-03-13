@@ -50,8 +50,7 @@ $scope.init = function () {
                     }                    
                     updateSlide();
                 }
-            });
-            $scope.$apply();
+            });           
         });
     } else {
         requestAccessFs();
@@ -216,8 +215,6 @@ $scope.takeCameraPicture = function () {
         sourceType: Camera.PictureSourceType.CAMERA,
         allowEdit: false,
         encodingType: Camera.EncodingType.JPEG,
-        targetWidth: 300,
-        targetHeight: 300,
         popoverOptions: CameraPopoverOptions,
         saveToPhotoAlbum: false,
         correctOrientation: true
@@ -234,8 +231,6 @@ $scope.takeCameraPicture = function () {
 $scope.getImageFromLibrary = function () {
     var options = {
         maximumImagesCount: 5,
-        width: 300,
-        height: 300,
         quality: 75
     };
 

@@ -16,24 +16,41 @@
                         $compile(elem)(scope);
 
                         var zoomViewTemplate = `
-                            <style>
-                                .zoom-view .scroll { height:100%; }
+                            <style>                               
+                                .image-modal {
+                                    width: 100% !important;
+                                    height: 100%;
+                                    top: 0 !important;
+                                    left: 0 !important;
+                                }
+                                 
+                                .transparent {
+                                  background: rgba(0,0,0,0.7);
+                                }
+                                 
+                                .slider {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+                                 
+                                .image {
+                                    width: 100%;
+                                    height: 600px;
+                                    background-size: contain;
+                                    background-repeat: no-repeat;
+                                    background-position: center, center;
+                                }
                             </style>
-                            <ion-modal-view class="zoom-view">
-                                <ion-header-bar>
-                                <h1 class="title"></h1>
-                                <button ng-click="closeZoomView()" class="button button-clear button-dark">Close</button>
-                                </ion-header-bar>
-                                <ion-content>
-                                 <ion-slides options="galleryOptionsThumb" slider="data.slider">
-                                    <ion-slide-page ng-repeat="image in imgURI">
-                                        <div>
-                                            <img style="width: 100%;height: 100%" ng-src="{{image.photoUrl}}">
-                                        </div>
-                                    </ion-slide-page>
-                                </ion-slides>
-                                </ion-content>
-                            </ion-modal-view>
+                            <div class="modal image-modal transparent" ng-click='closeZoomView()' on-swipe-down="closeZoomView()">
+                              <ion-slide-box active-slide="ngSrc">
+                                <ion-slide ng-repeat="image in imgURI">
+                                  <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
+                                  zooming="true" min-zoom="1" style="width: 100%; height: 100%">
+                                  <div class="image" style="background-image: url( {{image.photoUrl}} )"></div>
+                                </ion-scroll>
+                              </ion-slide>
+                            </ion-slide-box>
+                            </div>
                         `;
 
                         scope.zoomViewModal = $ionicModal.fromTemplate(zoomViewTemplate, {
