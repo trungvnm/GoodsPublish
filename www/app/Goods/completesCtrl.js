@@ -274,9 +274,8 @@
 	                            PhotoDescription: photo.PhotoDescription
 	                        });
 	                    });
-
-	                    deffered.resolve(goodsObj);
 	                }
+	                deffered.resolve(goodsObj);
 	            });
 	        });
 	        promises.push(deffered.promise);

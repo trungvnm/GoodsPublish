@@ -370,6 +370,8 @@ angular.module('LelongApp.services')
 			                deffered.resolve(objectResult);
 			            });
 			        } else {
+			            // in case goods with no images
+			            objectResult.message = "Success";
 			            deffered.resolve(objectResult);
 			        }
 			    }, function (err) {
