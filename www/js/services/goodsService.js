@@ -308,7 +308,7 @@ angular.module('LelongApp.services')
 			    var deffered = $q.defer();
 			    var objectResult = { message: "", listGoodsPublishFailed: [], listImagePublishFailed: [] };
 			    var listImageObj = [];
-			    return xhttpService.post('http://d00dd351.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
+			    xhttpService.post('http://d00dd351.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
 			        var listGoodsPublishFailed = [];
 			        var listGoodsPublishOK = listGoods;
@@ -364,9 +364,9 @@ angular.module('LelongApp.services')
 			                }
 			                deffered.resolve(objectResult);
 			            });
+			        } else {
+			            deffered.resolve(objectResult);
 			        }
-					
-					return response;
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
 			        objectResult.message = "Failed when call api publish goods: " + err;

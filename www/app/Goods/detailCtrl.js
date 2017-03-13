@@ -57,7 +57,7 @@ angular.module("LelongApp.Goods").controller("DetailCtrl", function ($scope, $ro
 						        var listGoods = [];
 						        listGoods.push($scope.good);
 						        goodsService.publish(listGoods).then(function (result) {
-						            if (result.data.message === 'Success') {
+						            if (result.message === 'Success') {
 										$scope.good.LastSync = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 										$cordovaToast.showLongTop('Publish successful!');
 										actions.push(syncButton);
