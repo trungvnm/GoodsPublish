@@ -63,45 +63,46 @@ angular.module('LelongApp.services')
 		function downloadPhotosOfGood(goodId, good, listPhoto, callBack) {
 			var cId = goodId;
 			var userId = good.UserId;
-			var couter = 0;
-			listPhoto.forEach(function (p) {
+			
+			listPhoto.forEach(function(p, index){
 				// download photo from server
 				var dirName = "ImagesUpload";
 				var subDir = userId;
+				var currentCouter = index+1;
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
 					dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
 						subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
 							var uploadDir = success.nativeURL + p.PhotoName;
 							var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
 							if (remoteImgUrl.trim() != '') {
-								imageService.downloadImage(remoteImgUrl, uploadDir, function () {
-									// save to database
-									var newPhoto = {
-										GoodPublishId: cId,
-										PhotoUrl: uploadDir,
-										PhotoName: p.PhotoName,
-										PhotoDescription: p.Description
-									}
-
-									// insert record to database for new photo
-									$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
-										couter++;
-										if (couter == listPhoto.length && callBack) {
-											callBack();
-										}
-									});
-								},
+								imageService.downloadImage(remoteImgUrl, uploadDir, 
 									function () {
-										couter++;
-										if (couter == listPhoto.length && callBack) {
+										// save to database
+										var newPhoto = {
+											GoodPublishId: cId,
+											PhotoUrl: uploadDir,
+											PhotoName: p.PhotoName,
+											PhotoDescription: p.Description
+										}
+
+										// insert record to database for new photo
+										$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+											if (currentCouter == listPhoto.length && callBack) {
+												callBack();
+											}
+										});
+									},
+									function () {
+										if (currentCouter == listPhoto.length && callBack) {
 											callBack();
 										}
-									});
+									}
+								);
 							}
 						})
 					});
 				});
-			});
+			})
 		}
 
 		var goodService = {
@@ -438,10 +439,11 @@ angular.module('LelongApp.services')
 			syncAll: function (localGoods, callBack) {
 				var token = tokenService.getToken();
 				var userId = token.userid;
-				xhttpService.get(syncAllApi, true).then(function (response) {
+				xhttpService.get(syncAllApi, false).then(function (response) {
 					if (response.data) {
-						var couter = 0;
-						response.data.forEach(function (newGood) {
+						response.data.forEach(function(newGood, index){
+							var currentCouter = index + 1;
+							
 							// update new goods to app database
 							var listPhoto = newGood.listPhoto;
 							newGood.Active = 1;
@@ -454,39 +456,35 @@ angular.module('LelongApp.services')
 							delete newGood.GoodPublishId;
 
 							// check local goods for exist good
-							var exist = false;
-							for (var i = 0; i < localGoods.length; i++) {
-								var good = localGoods[i];
-								if (good.Guid == newGood.Guid) {
+							$dbHelper.select("GoodsPublish", "*", "Guid = '"+newGood.Guid+"'").then(function(result){
+								if (result.length > 0){
 									// if good is exist, update it
-									exist = true;
+									var oldGood = result[0];
 									$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (res) {
-										couter++;
-										var gId = good.GoodPublishId;
-										if (couter == response.data.length) {
-											downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
-										}
-										else
-											downloadPhotosOfGood(gId, newGood, listPhoto);
+										var gId = oldGood.GoodPublishId;
+										deletePhotosByGood(gId, function () {
+											if (currentCouter == response.data.length && callBack) {
+												downloadPhotosOfGood(gId, newGood, listPhoto,callBack);
+											}
+											else
+												downloadPhotosOfGood(gId, newGood, listPhoto);
+										});
 									});
-									break;
 								}
-							}
-
-							if (!exist) {
-								// if new good is not exist on local, insert new one
-								$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
-									couter++;
-									if (res && res.insertId) {
-										var gId = res.insertId;
-										if (couter == response.data.length) {
-											downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+								else{
+									// if new good is not exist on local, insert new one
+									$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
+										if (res && res.insertId) {
+											var gId = res.insertId;
+											if (currentCouter == response.data.length && callBack) {
+												downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+											}
+											else
+												downloadPhotosOfGood(gId, newGood, listPhoto);
 										}
-										else
-											downloadPhotosOfGood(gId, newGood, listPhoto);
-									}
-								});
-							}
+									});
+								}
+							})
 						})
 					}
 				});

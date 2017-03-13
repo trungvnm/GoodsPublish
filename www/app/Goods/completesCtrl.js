@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading) {
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
 	var offset = 0;
@@ -101,25 +101,38 @@
 		
 	};
 	$scope.editButtonClick = function(gId){
-		$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew',{goodsId:gId}); });
+		//$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew',{goodsId:gId}); });
+		$ionicHistory.clearCache().then(function () {
+			$state.go('navbar.addnew', { goodsId: gId });
+		});
 	};
 	$scope.goodClick = function($event,goodId){
 		if ($event.target.className.indexOf("edit-button") != -1)
 			return false;
-		$ionicHistory.clearCache().then(function(){ $state.go('navbar.detail', {id: goodId, context: 'navbar.detail'}); });
+		$ionicHistory.clearCache().then(function () {
+			$state.go('navbar.addnew', { goodsId: goodId });
+		});
 	};
 	$scope.addnewButtonClick = function(){
 		$ionicHistory.clearCache().then(function(){ $state.go('navbar.addnew'); });
 	};
 	$scope.syncAll = function(){
+		/*$scope.goods = [];
+		$scope.unSyncedGoods = [];
+		$scope.syncedGoods = []; */
+		$ionicLoading.show({
+			  template: 'Loading...'
+			});
 		goodsService.syncAll($scope.goods, function(result){
 			$cordovaToast.showLongTop('Sync all successful!');
 			$scope.init().then(function(){
 				// update new total of goods to menu
-				goodsService.countAll().then(function(quantity){
+				return goodsService.countAll().then(function(quantity){
 					var menuParams = {};
 					menuParams.goodCounter = quantity;
 					$rootScope.$broadcast('update',menuParams);
+					//$rootScope.$broadcast('hideSpinner');
+					$ionicLoading.hide();
 				});
 			});
 		});
@@ -133,7 +146,7 @@
 	$scope.$on('search', function(event, args){
 		if ($scope.goods){
 			var key = args.searchkey;
-			$scope.filterMessage = 'Search for \''+key+'\':';
+			$scope.filterMessage = 'Filtered by \''+key+'\':';
 			$scope.goods.forEach(function(g){
 				if (g.Title.toLowerCase().indexOf(key.toLowerCase()) == -1){
 					g.hidden = true;

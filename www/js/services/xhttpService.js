@@ -13,11 +13,14 @@
     }
     function checkShowSpinner(showSpinner)
     {
-        if (showSpinner === false) {
+		if (showSpinner) {
+            $("ion-spinner").addClass("show");
+        }
+        /*if (showSpinner === false) {
             $("ion-spinner").removeClass("show");
         } else {
             $("ion-spinner").addClass("show");
-        }
+        }*/
     }
     XhttpService.prototype.login = function (loginUrl, data, showSpinner) {
         var defer = this.$q.defer();
@@ -58,7 +61,9 @@
                 }, function (err) {
                     defer.reject(err);
                 }).finally(function () {
-                    $("ion-spinner").removeClass("show");
+					if (showSpinner) {
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
@@ -82,7 +87,9 @@
                 }, function (err) {
                     defer.reject(err);
                 }).finally(function () {
-                    $("ion-spinner").removeClass("show");
+                    if (showSpinner) {
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
@@ -106,7 +113,9 @@
                 }, function (err) {
                     defer.reject(err);
                 }).finally(function () {
-                    $("ion-spinner").removeClass("show");
+                    if (showSpinner) {
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
@@ -130,7 +139,9 @@
 
                     defer.reject(err);
                 }).finally(function () {
-                    $("ion-spinner").removeClass("show");
+                    if (showSpinner) {
+						$("ion-spinner").removeClass("show");
+					}
                 });
             }
         })
