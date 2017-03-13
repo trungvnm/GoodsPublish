@@ -327,20 +327,23 @@ angular.module('LelongApp.services')
 			        objectResult.listGoodsPublishFailed = listGoodsPublishFailed;
 
 			        for (var i = 0; i < listGoodsPublishOK.length; i++) {
-			            for (var j = 0; j < listGoodsPublishOK[i].listPhoto.length; j++) {
-			                var obj = {}
-			                obj.goodsTitle = listGoodsPublishOK[i].Title;
-			                obj.goodsGuid = listGoodsPublishOK[i].Guid;
-			                obj.photoObject = listGoodsPublishOK[i].listPhoto[j];
-			                listImageObj.push(obj);
+			            if (listGoodsPublishOK[i].listPhoto) {
+			                for (var j = 0; j < listGoodsPublishOK[i].listPhoto.length; j++) {
+			                    var obj = {}
+			                    obj.goodsTitle = listGoodsPublishOK[i].Title;
+			                    obj.goodsGuid = listGoodsPublishOK[i].Guid;
+			                    obj.photoObject = listGoodsPublishOK[i].listPhoto[j];
+			                    listImageObj.push(obj);
 
-			                // update lastsync value to current good
-			                var params = {
-			                    LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-			                };
-			                $dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
-			                });
+			                    // update lastsync value to current good
+			                    var params = {
+			                        LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+			                    };
+			                    $dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
+			                    });
+			                }
 			            }
+			            
 			        }
                     
 			        // upload images
