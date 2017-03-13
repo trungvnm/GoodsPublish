@@ -31,10 +31,11 @@ a[disabled] {
 
 #list-readmode{margin-bottom: 80px}
 a.item-grid{display: block;cursor: pointer;}
-a.item-grid .avt{display: flex;height: 110px;border: solid 1px #bfbfbf;margin-bottom: 5px;}
-a.item-grid img{display: block;max-width: 100%;max-height: 100%;margin: auto;}
+a.item-grid .avt{display: flex;height: 110px;border: solid 1px #bfbfbf;margin-bottom: 5px;position: relative;}
+a.item-grid img{display: block;max-width: 100%;max-height: 100%;margin: auto;/* left: 0; *;;absolute; */}
 a.item-grid .price{display: block;font-size: 16px;color: #ff2424;white-space: nowrap;overflow: auto;}
 a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-overflow: ellipsis;}
+a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 
 #list-readmode > a.item{left:0}
 #list-readmode > a.item.slided{

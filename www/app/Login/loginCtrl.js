@@ -109,7 +109,7 @@
 
     $scope.updateUserToServer = function(token)
     {
-        xhttpService.post("https://1f71ef25.ngrok.io/api/user/add",{
+        xhttpService.post("http://d00dd351.ngrok.io/api/user/add",{
             UserName: $scope.username.toLowerCase(), 
             Password: window.btoa($scope.password),
             AccessToken: token.access_token,

@@ -308,7 +308,7 @@ angular.module('LelongApp.services')
 			    var deffered = $q.defer();
 			    var objectResult = { message: "", listGoodsPublishFailed: [], listImagePublishFailed: [] };
 			    var listImageObj = [];
-			    xhttpService.post('http://d00dd351.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
+			    return xhttpService.post('http://d00dd351.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
 			        var listGoodsPublishFailed = [];
 			        var listGoodsPublishOK = listGoods;
@@ -334,16 +334,16 @@ angular.module('LelongApp.services')
 			                    obj.goodsGuid = listGoodsPublishOK[i].Guid;
 			                    obj.photoObject = listGoodsPublishOK[i].listPhoto[j];
 			                    listImageObj.push(obj);
+							}
+						}
 
-			                    // update lastsync value to current good
-			                    var params = {
-			                        LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-			                    };
-			                    $dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
-			                    });
-			                }
-			            }
-			            
+						// update lastsync value to current good in Sqlite
+						var params = {
+							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+						};
+						listGoods[i].LastSync = params.LastSync; // Update new status to client object
+						$dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
+						});
 			        }
                     
 			        // upload images
@@ -365,6 +365,8 @@ angular.module('LelongApp.services')
 			                deffered.resolve(objectResult);
 			            });
 			        }
+					
+					return response;
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
 			        objectResult.message = "Failed when call api publish goods: " + err;
