@@ -68,10 +68,12 @@ angular.module('LelongApp.services')
 				// download photo from server
 				var dirName = "ImagesUpload";
 				var subDir = userId;
+				var goodsDir=good.Guid;
 				var currentCouter = index+1;
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
 					dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-						subDirEntry.getDirectory(subDir.toString(), { create: true }, function (success) {
+						subDirEntry.getDirectory(subDir.toString(), { create: true }, function (dir) {
+							dir.getDirectory(goodsDir,{create:true},function(success){
 							var uploadDir = success.nativeURL + p.PhotoName;
 							var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
 							if (remoteImgUrl.trim() != '') {
@@ -99,6 +101,8 @@ angular.module('LelongApp.services')
 									}
 								);
 							}
+							})
+		
 						})
 					});
 				});

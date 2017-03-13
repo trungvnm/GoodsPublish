@@ -47,10 +47,11 @@ $scope.init = function () {
                 if (result.length > 0) {
                     for (var i = 0; i < result.length; i++) {
                         $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
-                    }
+                    }                    
                     updateSlide();
                 }
             });
+            $scope.$apply();
         });
     } else {
         requestAccessFs();
@@ -78,8 +79,9 @@ var actions = [
         }
     }
 ];
-var delButton = {
-    name: 'delete', action: function () {
+var subActions = [
+{
+    name: 'Delete', action: function () {
         if (navigator.notification) {
             navigator.notification.confirm('Are you sure to delete this item?', function (result) {
                 if (result == 1) {                                                     
@@ -97,8 +99,8 @@ var delButton = {
             });
         }
     }
-};
-var syncButton = { name: 'sync', action: function () {
+},
+ { name: 'Sync', action: function () {
     if ($scope.goodItem){
                 if ($scope.goodItem.LastSync && $scope.goodItem.LastEdited && 
                 new Date($scope.goodItem.LastSync).getTime() < new Date($scope.goodItem.LastEdited).getTime()){
@@ -121,15 +123,14 @@ var syncButton = { name: 'sync', action: function () {
                     });
                 }
             }
- } };
+ } 
+}]
 if ($scope.editMode) {
-    // actions.push(delButton);
-    // actions.push(syncButton);
     $rootScope.$broadcast("setMainActions", actions);
+    $rootScope.$broadcast("setSubActions", subActions);
 } else {
     $rootScope.$broadcast("setMainActions", actions);
 }
-
 /**End Top bar actions */
 /** Choose Category */
 $scope.showPopup = function () {
@@ -303,7 +304,7 @@ function copyImgToPerFolder(originPath) {
             fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
                 fileEntry.copyTo(desFolder, newFileName, function (success) {
                     console.log("COPY FILE SUCCESS:" + JsonParse(success));
-                    $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });
+                    $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });                   
                     updateSlide();
                     deffered.resolve();
                 }, function (error) {
@@ -411,14 +412,7 @@ $scope.galleryOptions = {
     spaceBetween: 5,
     speed: 600
 };
-$scope.galleryOptionsThumb = {
-    pagination: '.swiper-pagination',
-    slidesPerView: 1,
-    centeredSlides: false,
-    paginationClickable: true,
-    spaceBetween: 5,
-    speed: 600
-};
+
 $scope.$on("$ionicSlides.sliderInitialized", function (event, data) {
     // data.slider is the instance of Swiper
     $scope.slider = data.slider;

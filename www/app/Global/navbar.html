@@ -29,7 +29,7 @@
 			<button class="button global-action button-icon icon ion-android-cancel ng-hide" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
-			<button class="button button-icon icon ion-android-more-vertical ng-hide" ng-click="openSearch()" ng-show="subActions.length > 0"></button>
+			<button class="button button-icon icon ion-android-more-vertical ng-hide" ng-click="popover.show($event)" ng-show="subActions.length > 0"></button>
 		</ion-nav-buttons>
 	</ion-nav-bar>
     <ion-nav-view name="menuContent">
@@ -48,6 +48,20 @@
 			</div>
 		</div>
 	</ion-nav-view>
-	
+
+	<script id="templates/popover.html" type="text/ng-template">
+      <ion-popover-view class="fit">
+        <ion-content scroll="false">
+          <div class="list">
+          <div ng-repeat="sub in subActions">
+            <button class="button button-clear button-subactions" ng-click="exeSubAction('{{sub.name}}')">
+              {{sub.name}}
+            </button>
+            </div>           
+          </div>
+        </ion-content>
+      </ion-popover-view>
+    </script>
+
   </ion-side-menu-content>
 </ion-side-menus>

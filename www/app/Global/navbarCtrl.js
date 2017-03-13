@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $state){
+﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $state,$ionicPopover){
 	$scope.disabled = {};
 	$scope.mainActions = [];
 	$scope.subActions = [];
@@ -85,6 +85,7 @@
 			var action = $scope.subActions[i];
 			if (action.name == name && action.action != undefined){
 				action.action();
+				$scope.popover.hide();
 				return;
 			}
 		}
@@ -111,4 +112,10 @@
 	$scope.cancelSearchingg = function(){
 		$scope.isSearchEnabled = false;
 	};
+
+	 $ionicPopover.fromTemplateUrl('templates/popover.html', {
+	    scope: $scope,
+	  }).then(function(popover) {
+	    $scope.popover = popover;
+	  });
 })

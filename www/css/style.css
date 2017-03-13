@@ -255,6 +255,32 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 }
 
 /*End Addnew page*/
+
+/*popover menu*/
+ion-popover-view.fit {
+  height: auto;
+}
+
+ion-popover-view.fit ion-content {
+  position: relative;
+}
+
+.platform-android ion-popover-view.fit {
+  margin-top: 10px;
+}
+
+.platform-ios ion-popover-view.fit {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.button-subactions{
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+    color: black !important;
+    padding-left: 20px;
+}
+/*End popover menu*/
 #detail-actions .button{border-radius: 0}
 .pop-mask{    background: white;
     opacity: 0.7;
