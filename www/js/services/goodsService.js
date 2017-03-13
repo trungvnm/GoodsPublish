@@ -2,10 +2,10 @@ angular.module('LelongApp.services')
 	.factory('goodsService', function ($dbHelper, $rootScope, $q, tokenService, $cordovaToast, $ionicHistory, $state, xhttpService, imageService,$timeout) {
 		// Get API Url for downloading photo
 		function getPhotoApiUrl(guid) {
-			return "https://1f71ef25.ngrok.io/api/image/download?photoName=" + guid;
+			return "http://d00dd351.ngrok.io/api/image/download?photoName=" + guid;
 		}
 
-		var syncAllApi = "https://1f71ef25.ngrok.io/api/goods/getall";
+		var syncAllApi = "http://d00dd351.ngrok.io/api/goods/getall";
 
 		// Delete all photos of a good
 		function deletePhotosByGood(goodId, callBack) {
@@ -190,7 +190,7 @@ angular.module('LelongApp.services')
 				});
 
 				// call API to delete from server 
-				xhttpService.put('https://1f71ef25.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) { });
+				xhttpService.put('http://d00dd351.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) { });
 
 				var whereClause = '';
 				if (goodIds && goodIds.length > 0) {
@@ -308,7 +308,7 @@ angular.module('LelongApp.services')
 			    var deffered = $q.defer();
 			    var objectResult = { message: "", listGoodsPublishFailed: [], listImagePublishFailed: [] };
 			    var listImageObj = [];
-			    xhttpService.post('https://1f71ef25.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
+			    xhttpService.post('http://d00dd351.ngrok.io/api/goods/publish', listGoods, true).then(function (response) {
 
 			        var listGoodsPublishFailed = [];
 			        var listGoodsPublishOK = listGoods;
@@ -381,7 +381,7 @@ angular.module('LelongApp.services')
 					});
 
 					// request to API
-					xhttpService.get('https://1f71ef25.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
+					xhttpService.get('http://d00dd351.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
 						if (response.data) {
 							var couter = 0;
 							response.data.forEach(function (newGood) {
@@ -494,7 +494,7 @@ angular.module('LelongApp.services')
 		        var deffered = $q.defer();
 		        var resultObj = {};
 		        resultObj.goodsTitle = p.goodsTitle;
-		        var imageAPI = "https://1f71ef25.ngrok.io/api/image/upload?guiIdGoods=" + p.goodsGuid;
+		        var imageAPI = "http://d00dd351.ngrok.io/api/image/upload?guiIdGoods=" + p.goodsGuid;
 		        imageService.uploadImage(imageAPI, p.photoObject.PhotoUrl).then(function (resultUpload) {
 		            resultObj.result = resultUpload;
 		            deffered.resolve(resultObj);
