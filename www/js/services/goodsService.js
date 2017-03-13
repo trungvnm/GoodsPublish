@@ -63,7 +63,7 @@ angular.module('LelongApp.services')
 		function downloadPhotosOfGood(goodId, good, listPhoto, callBack) {
 			var cId = goodId;
 			var userId = good.UserId;
-			
+
 			listPhoto.forEach(function(p, index){
 				// download photo from server
 				var dirName = "ImagesUpload";
@@ -418,11 +418,16 @@ angular.module('LelongApp.services')
 
 												// clear old photos
 												deletePhotosByGood(cId, function () {
-													if (finish && callBack){
-														downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+													if (!listPhoto || listPhoto.length == 0 && callBack){
+														callBack();
 													}
 													else{
-														downloadPhotosOfGood(cId, goods[i], listPhoto);
+														if (finish && callBack){
+															downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+														}
+														else{
+															downloadPhotosOfGood(cId, goods[i], listPhoto);
+														}
 													}
 												});
 												goods[i] = newGood;
@@ -468,7 +473,12 @@ angular.module('LelongApp.services')
 										var gId = oldGood.GoodPublishId;
 										deletePhotosByGood(gId, function () {
 											if (currentCouter == response.data.length && callBack) {
-												downloadPhotosOfGood(gId, newGood, listPhoto,callBack);
+												if (listPhoto && listPhoto.length > 0){
+													downloadPhotosOfGood(gId, newGood, listPhoto,callBack);
+												}
+												else{
+													callBack();
+												}
 											}
 											else
 												downloadPhotosOfGood(gId, newGood, listPhoto);
@@ -481,7 +491,12 @@ angular.module('LelongApp.services')
 										if (res && res.insertId) {
 											var gId = res.insertId;
 											if (currentCouter == response.data.length && callBack) {
-												downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+												if (listPhoto && listPhoto.length > 0){
+													downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+												}
+												else{
+													callBack();
+												}
 											}
 											else
 												downloadPhotosOfGood(gId, newGood, listPhoto);
