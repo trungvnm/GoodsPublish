@@ -17,7 +17,7 @@
 				
 				<!-- GRID -->
 				<div ng-show="viewmode == 'grid'" ng-repeat="num in goods" class="row" ng-if="$index % 3 == 0" ng-init="group = goods.slice($index, $index + 3)">
-					<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('all')" ng-disabled="quickactions" ng-hide="g.hidden" ng-click="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
+					<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('all')" ng-disabled="quickactions" ng-hide="g.hidden" on-tap="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
 						<a class="item-grid">
 							<span class="avt">
 								<img ng-src="{{g.PhotoUrl}}"/> 
