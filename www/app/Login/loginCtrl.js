@@ -1,4 +1,4 @@
-﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($rootScope, $scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper, $state, $ionicHistory) {
+﻿angular.module('LelongApp.Login', []).controller('loginCtrl', function ($rootScope, $scope, $q, $window, $http,$location, xhttpService, tokenService, $dbHelper, $state, $ionicHistory, $ionicLoading) {
 	
     $scope.username = "";
     $scope.password = "";
@@ -9,11 +9,13 @@
         $dbHelper.select('Setting', 'SettingFieldId, Value', "SettingFieldId='Wizard" + userID + "'").then(function(result){
             if  (result.length > 0
             && result[0].Value.toLowerCase() == 'true') {
-                $rootScope.$broadcast('hideSpinner');
-                $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+                $ionicHistory.clearCache().then(function(){ 
+                    $state.go('app.completes'); 
+                    $ionicLoading.hide();
+                });
             } else {
                 $scope.updateSetting(userID);
-                $rootScope.$broadcast('hideSpinner');
+                $ionicLoading.hide();
                 if (navigator.notification) {
 					navigator.notification.confirm('This is the first time you login. Do you want to setup wizard?', function (result) {
                         if (result == 1) {
@@ -49,7 +51,9 @@
         $scope.errorMessage = "";
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
         var data = 'username=' + encodeURIComponent($scope.username.toLowerCase()) + '&password=' + encodeURIComponent($scope.password) + '&client_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=password';
-        $rootScope.$broadcast('showSpinner');
+        $ionicLoading.show({
+            template: '<p>Logging in...</p>'
+        })
         xhttpService.login(urlLogin, data).then(function (result) {            
             // save user and token to localStogate
             $window.localStorage.setItem("Lelong_UserLogined", $scope.username.toLowerCase());
@@ -90,7 +94,7 @@
                 } else {
                     $scope.errorMessage ="Account: " + $scope.username + " has been blocked!";
                 }
-                $rootScope.$broadcast('hideSpinner');
+                $ionicLoading.hide();
             });
         });
     };
