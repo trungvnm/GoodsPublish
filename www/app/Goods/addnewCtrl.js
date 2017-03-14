@@ -114,13 +114,13 @@ angular.module("LelongApp.Goods")
                 navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
                     if (result == 1) {
                      showSpinner('Syncing');
-                     goodsService.sync([$scope.goodItem],function(){
-                         $cordovaToast.showLongTop('Sync successfully!').then(function () {
-                            /*$ionicHistory.clearCache().then(function(){
+                     goodsService.sync([$scope.goodItem],function(){                      
+                        $cordovaToast.showLongTop('Sync successfully!').then(function(){
+                            $ionicHistory.clearCache().then(function(){
                                 $state.go('app.completes');
-                            });*/
+                            });
                         });
-                            $ionicLoading.hide();
+                        $ionicLoading.hide();
                     },function(err){
                         $ionicLoading.hide();
                     });
@@ -131,9 +131,9 @@ angular.module("LelongApp.Goods")
            showSpinner('Syncing');
             goodsService.sync([$scope.goodItem],function(){
                 $cordovaToast.showLongTop('Sync successfully!').then(function () {
-                        /*$ionicHistory.clearCache().then(function(){
+                        $ionicHistory.clearCache().then(function(){
                                 $state.go('app.completes');
-                            });*/
+                        });
                     });
                 $ionicLoading.hide();
             },function(err){
@@ -343,6 +343,7 @@ function saveClick (isShowToast) {
             }
         }
         if ($scope.editMode) {
+            if(isShowToast) {showSpinner('Updating')}
             /**update */
             var imgSave = [];
             if ($scope.imgURI.length > 0) {
@@ -360,7 +361,6 @@ function saveClick (isShowToast) {
                     });
                 }
             }
-            showSpinner('Updating');
             goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast).then(function(){
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Update successfully!').then(function () {
@@ -369,14 +369,14 @@ function saveClick (isShowToast) {
                         });
                     });
                 }
-             $ionicLoading.hide();
+             if(isShowToast){$ionicLoading.hide();}
             },function(err){
                 $cordovaToast.showLongTop('Update failed!');    
-                $ionicLoading.hide();
+            if(isShowToast){$ionicLoading.hide();}
             });
         } else {
             /**insert */
-            showSpinner('Inserting');
+            if(isShowToast) {showSpinner('Inserting')}
             goodsService.saveGoods($scope.goodItem, arrImage, isShowToast).then(function(res){
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Save successfully!').then(function () {
@@ -385,10 +385,10 @@ function saveClick (isShowToast) {
                         });
                     });
                 }
-                $ionicLoading.hide();
+                if(isShowToast){$ionicLoading.hide();}
             },function(err){
                 $cordovaToast.showLongTop('Save failed!');              
-                $ionicLoading.hide(); 
+                if(isShowToast){$ionicLoading.hide(); }
             });
         }
     }
@@ -413,7 +413,7 @@ function postToServer() {
         /** Save goods to local device */
         navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
             if (result == 1) {
-
+                showSpinner('Publishing');
                 saveClick(false);
                 /** post goods to server */
                 if ($scope.imgURI.length > 0) {
@@ -428,7 +428,6 @@ function postToServer() {
                 };
                 angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
                 var listGoods = []; listGoods.push(newSource);
-                showSpinner('Publishing');
                 goodsService.publish(listGoods).then(function (result) {
                     if (result.message === 'Success') {
                         $cordovaToast.showLongTop('Publish successful!');
@@ -437,6 +436,9 @@ function postToServer() {
                         });
                     }
                     $ionicLoading.hide();
+                },function(err){
+                     $cordovaToast.showLongTop('Publish failed!');
+                     $ionicLoading.hide();
                 });
             }
         });

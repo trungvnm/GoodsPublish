@@ -378,7 +378,6 @@ angular.module('LelongApp.services')
 			    return deffered.promise;
 			},
 			sync: function (goods, callBack) {
-				var promises=[];
 				var token = tokenService.getToken();
 				var userId = token.userid;
 				var params = "";//guidsArray.join(',');
@@ -387,16 +386,13 @@ angular.module('LelongApp.services')
 						if (params != "")
 							params += ",";
 						params += g.Guid;
-					});
-
-					var defer= $q.defer();
+					});							
 					// request to API
 					xhttpService.get('http://d00dd351.ngrok.io/api/goods/getlist?guids=' + params, true).
 					then(function (response) {
 						if (response.data) {
 							var couter = 0;
-							response.data.forEach(function (newGood) {
-								var deferred = $q.defer();
+							response.data.forEach(function (newGood) {								
 								couter++;
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
@@ -438,20 +434,14 @@ angular.module('LelongApp.services')
 											};
 										}
 									}
-									deferred.resolve(result);
 								})
-								promises.push(deferred.promise);
 							});
 							/*end get*/
-						} 
-						defer.resolve(response);						
+						} 										
 					},function(err){
-						console.log('GET: failed ' + JSON.stringify(err));
-						defer.reject(err);
-					});
-					promises.push(defer.promise);
-				}
-				return $q.all(promises);
+						console.log('GET: failed ' + JSON.stringify(err));						
+					});					
+				}					
 			},
 			syncAll: function (localGoods, callBack) {
 				var token = tokenService.getToken();
