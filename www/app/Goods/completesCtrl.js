@@ -233,6 +233,9 @@
 	    if (navigator.notification) {
 	        navigator.notification.confirm('Are you sure to publish selected items?', function (result) {
 	            if (result == 1) {
+	                $ionicLoading.show({
+	                    template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
+	                })
 	                var selecteds = [];
 	                $scope.unSyncedGoods.forEach(function (g) {
 	                    if (g.Checked) {
@@ -243,10 +246,12 @@
 	                    getListGoodsPublish(selecteds).then(function (listGoodsPublish) {
 	                        goodsService.publish(listGoodsPublish).then(function (result) {
 	                            if (result.message === 'Success') {
+	                                $ionicLoading.hide();
 	                                $cordovaToast.showLongTop('Post successful!');
 	                                $scope.init();
 	                                $scope.quickactions = false;
 	                            } else {
+	                                $ionicLoading.hide();
 	                                $cordovaToast.showLongTop('Post failed!');
 	                            }
 	                        });
@@ -282,6 +287,7 @@
 	    });
 	    return $q.all(promises);
 	}
+	
 	$(document).ready(function(){
 		$("#list-readmode > a.item").on("click", function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
