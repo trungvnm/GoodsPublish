@@ -195,14 +195,16 @@ angular.module('LelongApp.services')
 				});
 
 				// call API to delete from server 
-				xhttpService.put('http://d00dd351.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) { });
+				xhttpService.put('http://d00dd351.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) {
+                        
+				});
 
 				var whereClause = '';
 				if (goodIds && goodIds.length > 0) {
 					whereClause = ' GoodPublishId IN (' + goodIds.join(',') + ') ';
 
 					// get path of all photo files
-					return $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
+					 $dbHelper.select('GoodsPublishPhoto', 'PhotoUrl,PhotoDescription', whereClause).then(function (result) {
 						var photoPaths = [];
 						if (result && result.length > 0) {
 							result.forEach(function (photo) {
@@ -212,7 +214,7 @@ angular.module('LelongApp.services')
 
 						// CLient SQLite Db: delete records from GoodsPublish table before
 						var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
-						return $dbHelper.query(query).then(function (res) {
+						$dbHelper.query(query).then(function (res) {
 							if (res.rowsAffected && res.rowsAffected > 0) {
 								// for each photo file on disk 
 								photoPaths.forEach(function (p) {
@@ -238,8 +240,10 @@ angular.module('LelongApp.services')
 								});
 								//}
 								//});
-							}						
-							defer.resolve(res.rowsAffected && res.rowsAffected > 0)
+							}
+							if (res.rowsAffected && res.rowsAffected > 0) {
+							    defer.resolve(true);
+							} else defer.resolve(false);
 						},function(err){
 							defer.reject(err);
 						});
