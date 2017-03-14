@@ -1,0 +1,41 @@
+<ion-view view-title="Synced Goods">
+<ion-content class="has-header tab-content">
+				<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
+					<pre>{{filterMessage}}</pre>
+					<a class="button button-small button-icon icon ion-android-cancel" ng-click="exitSearching()"></a>
+				</span>
+				<div class="list list-readmode" ng-hide="quickactions">
+					<p class="item" ng-show="syncedGoods.length == 0">No items</p>
+					
+					<div ng-show="viewmode == 'grid'" ng-repeat="num in syncedGoods" class="row" ng-if="$index % 3 == 0" ng-init="group = syncedGoods.slice($index, $index + 3)">
+						<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden" on-tap="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
+							<a class="item-grid">
+								<span class="avt">
+									<img ng-src="{{g.PhotoUrl}}"/> </span>
+								<span class="price">RM{{g.SalePrice}}</span>
+								<span class="title">{{g.Title}}</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="list list-editmode" ng-show="quickactions">
+					<div ng-show="viewmode == 'grid'" ng-repeat="num in syncedGoods" class="row" ng-if="$index % 3 == 0" ng-init="group = syncedGoods.slice($index, $index + 3)">
+						<ion-checkbox ng-repeat="g in group"  class="col col-33" ng-model="g.Checked" ng-hide="g.hidden">
+							<a class="item-grid">
+								<span class="avt">
+									<img ng-src="{{g.PhotoUrl}}"/> </span>
+								<span class="price">RM{{g.SalePrice}}</span>
+								<span class="title">{{g.Title}}</span>
+							</a>
+						</ion-checkbox>
+					</div>
+				</div>
+				<ion-infinite-scroll ng-if="hasRemainGoods"
+					ng-show="hasRemainGoods"
+					on-infinite="getGoodsInTabs()"
+					distance="1%">
+				</ion-infinite-scroll>
+				<br/>
+			</ion-content>
+</ion-view>

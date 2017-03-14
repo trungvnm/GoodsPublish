@@ -1,0 +1,64 @@
+<ion-view view-title="Unsync Goods">
+ <ion-content class="has-header tab-content">
+				<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
+					<pre>{{filterMessage}}</pre>
+					<a class="button button-small button-icon icon ion-android-cancel" ng-click="exitSearching()"></a>
+				</span>
+				<div class="list list-readmode" ng-hide="quickactions">
+					<p class="item" ng-show="unSyncedGoods.length == 0">No items</p>
+					
+					<!-- GRID -->
+					<div ng-show="viewmode == 'grid'" ng-repeat="num in unSyncedGoods" class="row" ng-if="$index % 3 == 0" ng-init="group = unSyncedGoods.slice($index, $index + 3)">
+						<div class="col col-33" ng-repeat="g in group" on-hold="goodOnHold('unsynced')" ng-disabled="quickactions" ng-hide="g.hidden" on-tap="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
+							<a class="item-grid">
+								<span class="avt">
+									<img ng-src="{{g.PhotoUrl}}"/> </span>
+								<span class="price">RM{{g.SalePrice}}</span>
+								<span class="title">{{g.Title}}</span>
+							</a>
+						</div>
+					</div>
+					
+					<!-- LIST -->
+					<!-- a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('unsynced')" ng-disabled="quickactions" ng-hide="g.hidden">
+					  <div class="main_photo">
+							<img ng-src="{{g.PhotoUrl}}"/>
+						</div>				
+					  <h2>{{g.Title}}</h2>
+					  <p>{{g.Description}}</p>
+					  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
+					  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
+					  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)"></button>
+					</a -->
+				</div>
+				
+				<div class="list list-editmode" ng-show="quickactions">
+					<div ng-show="viewmode == 'grid'" ng-repeat="num in unSyncedGoods" class="row" ng-if="$index % 3 == 0" ng-init="group = unSyncedGoods.slice($index, $index + 3)">
+						<ion-checkbox ng-repeat="g in group"  class="col col-33" ng-model="g.Checked" ng-hide="g.hidden">
+							<a class="item-grid">
+								<span class="avt">
+									<img ng-src="{{g.PhotoUrl}}"/> </span>
+								<span class="price">RM{{g.SalePrice}}</span>
+								<span class="title">{{g.Title}}</span>
+							</a>
+						</ion-checkbox>
+					</div>
+				
+					<!-- ion-checkbox ng-repeat="g in unSyncedGoods" ng-model="g.Checked" ng-hide="g.hidden">
+						<a class="item item-thumbnail-left">
+						  <img ng-src="{{g.PhotoUrl}}"/>
+						  <h2>{{g.Title}}</h2>
+						  <p>{{g.Description}}</p>
+						  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
+						  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
+						</a>
+					</ion-checkbox -->
+				</div>
+				<ion-infinite-scroll ng-if="hasRemainGoods"
+					ng-show="hasRemainGoods"
+					on-infinite="getGoodsInTabs()"
+					distance="1%">
+				</ion-infinite-scroll>
+				<br/>
+			</ion-content>
+</ion-view>

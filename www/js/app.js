@@ -71,6 +71,30 @@
 						
                     }
                 })
+				.state('app.completes.alltab', {
+					url: '/alltab',
+					views: {
+					  'allTab': {
+						templateUrl: 'app/Goods/allTab.html'
+					  }
+					}
+				})
+				.state('app.completes.unsynctab', {
+					url: '/unsynctab',
+					views: {
+					  'unsyncTab': {
+						templateUrl: 'app/Goods/unsyncTab.html'
+					  }
+					}
+				})
+				.state('app.completes.syncedtab', {
+					url: '/syncedtab',
+					views: {
+					  'syncedTab': {
+						templateUrl: 'app/Goods/syncedTab.html'
+					  }
+					}
+				})
                 .state('app.account', {
                     url: '/account',
                     views: {
