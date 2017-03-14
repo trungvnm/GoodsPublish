@@ -185,7 +185,7 @@
 	                });
 	                if (selecteds.length > 0) {
 	                    $ionicLoading.show({
-	                        template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
+	                        template: '<p>Deleting...</p><ion-spinner></ion-spinner>'
 	                    })
 	                    goodsService.deleteGoods(selecteds).then(function (result) {
 	                        if (result) {
