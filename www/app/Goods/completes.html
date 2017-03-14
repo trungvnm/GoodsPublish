@@ -7,7 +7,7 @@
 	<ion-tabs class="tabs-positive tabs-icon-top" ng-class="tabclass">
 		
 	  <ion-tab title="All" icon-on="ion-grid" icon-off="ion-grid">
-		<ion-nav-view name="allTab">
+		<ion-view name="allTab">
 			<!-- Tab 1 content -->
 			<ion-content class="has-header tab-content">
 				<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
@@ -49,11 +49,11 @@
 				</ion-infinite-scroll>
 				<br/>
 			</ion-content>
-		</ion-nav-view>
+		</ion-view>
 	  </ion-tab>
 
 	  <ion-tab title="Unsync" icon-on="ion-iphone" icon-off="ion-iphone">
-		<ion-nav-view name="unsyncTab">
+		<ion-view name="unsyncTab">
 			<!-- Tab 2 content -->
 			<ion-content class="has-header tab-content">
 				<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
@@ -117,11 +117,11 @@
 				</ion-infinite-scroll>
 				<br/>
 			</ion-content>
-		</ion-nav-view>
+		</ion-view>
 	  </ion-tab>
 
 	  <ion-tab title="Synced" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline" on-select="onTabSelected()" on-deselect="onTabSelected()">
-		<ion-nav-view name="syncedTab">
+		<ion-view name="syncedTab">
 			<!-- Tab 3 content -->
 			<ion-content class="has-header tab-content">
 				<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
@@ -186,7 +186,7 @@
 				</ion-infinite-scroll>
 				<br/>
 			</ion-content>
-		</ion-nav-view>
+		</ion-view>
 	  </ion-tab>
 
 	</ion-tabs>
