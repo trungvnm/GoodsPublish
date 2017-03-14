@@ -52,7 +52,7 @@
         var urlLogin = "https://www.lelong.com.my/oauth2/token";
         var data = 'username=' + encodeURIComponent($scope.username.toLowerCase()) + '&password=' + encodeURIComponent($scope.password) + '&client_id=' + encodeURIComponent("47263efa407b4bdb95e04734d3fad16c") + '&grant_type=password';
         $ionicLoading.show({
-            template: '<p>Logging in...</p><ion-spinner icon="spiral" class="lelong-spinner"></ion-spinner>'
+            template: '<p>Logging in...</p><ion-spinner icon="spiral"></ion-spinner>'
         })
         xhttpService.login(urlLogin, data).then(function (result) {            
             // save user and token to localStogate
