@@ -94,13 +94,13 @@
 	// back to referrer
 	$scope.goBack = function(){
 		//$ionicHistory.goBack();
-		if ($ionicHistory.backView().url.indexOf('app/complete')) {
+		/* if ($ionicHistory.backView().url.indexOf('app/complete')) {
 			$ionicHistory.clearCache().then(function () {
 				$state.go('app.completes');
 			});
-		} else {
+		} else { */
 			$ionicHistory.backView().go();
-		}
+		//}
 	};
 	
 	// when click search button, open search box on header

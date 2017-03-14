@@ -171,6 +171,12 @@
 	                    });
 	                    goodsService.deleteGoods(selecteds).then(function (result) {
 	                        if (result) {
+								// exit quick actions mode
+								var params = {};
+								params.isQuickActions = false;
+								params.list = args.listName;
+								$rootScope.$broadcast('updateIsQuickActions', params);
+								
 	                            messageReuslt = 'Delete successful!';
 	                            $scope.quickactions = false;
 	                            $scope.$evalAsync();
@@ -210,6 +216,12 @@
 	                        template: '<p>Loading...</p><ion-spinner></ion-spinner>'
 	                    });
 	                    goodsService.sync(selecteds, function () {
+							// exit quick actions mode
+							var params = {};
+							params.isQuickActions = false;
+							params.list = args.listName;
+							$rootScope.$broadcast('updateIsQuickActions', params);
+							
 	                        messageReuslt = 'Sync successful!';
 	                        $scope.quickactions = false;
 	                        $scope.$evalAsync(
@@ -239,6 +251,12 @@
 	                    getListGoodsPublish(selecteds).then(function (listGoodsPublish) {
 	                        goodsService.publish(listGoodsPublish).then(function (result) {
 	                            if (result.message === 'Success') {
+									// exit quick actions mode
+									var params = {};
+									params.isQuickActions = false;
+									params.list = args.listName;
+									$rootScope.$broadcast('updateIsQuickActions', params);
+									
 	                                messageReuslt = 'Post successful!'
 	                                $scope.init();
 	                                $scope.quickactions = false;
