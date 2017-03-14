@@ -246,8 +246,8 @@ angular.module('LelongApp.services')
 				}
 				return false;
 			},
-			saveGoods: function (goodItemObj, arrFullPathImgs, isShowToast) {
-				$rootScope.$broadcast('showSpinner');
+			saveGoods: function (goodItemObj, arrFullPathImgs) {	
+				var deffered=$q.defer();		
 				$dbHelper.insert("GoodsPublish", goodItemObj).then(function (res) {
 					console.log("SUCCESS: " + JSON.stringify(res))
 					if (res.insertId > 0 && arrFullPathImgs.length > 0) {
@@ -260,21 +260,16 @@ angular.module('LelongApp.services')
 							});
 						};
 					}
-					if (isShowToast) {
-						$cordovaToast.showLongTop('Save successfully!').then(function () {
-							$ionicHistory.clearCache().then(function () {
-								$state.go('app.completes');
-							});
-						});
-					}
-					$rootScope.$broadcast('hideSpinner');
+					deffered.resolve(res);										
 				}, function (err) {
-					console.log("ERROR: " + JSON.stringify(err));
-					$rootScope.$broadcast('hideSpinner');
+					console.log("ERROR: " + JSON.stringify(err));		
+					deffered.reject(err);			
 				});
+				return deffered.promise;
 			},
 			/** goodsPhotoObj: object GoodsPublishPhoto	with {photoId,PhotoUrl} */
-			updateGoods: function (goodsItemObj, goodsPhotoObj, goodItemWhereClause, isShowToast) {
+			updateGoods: function (goodsItemObj, goodsPhotoObj, goodItemWhereClause) {
+				var deffered=$q.defer();
 				var where = " GoodPublishId = " + goodsItemObj.GoodPublishId;
 				if (goodItemWhereClause !== undefined && goodItemWhereClause.trim().length > 0) {
 					where += " " + goodItemWhereClause;
@@ -284,14 +279,11 @@ angular.module('LelongApp.services')
 				angular.extend(newSource, goodsItemObj, { LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss') });
 
 				$dbHelper.update("GoodsPublish", newSource, where).then(function (res) {
-					console.log("GoodsPublish UPDATED: " + JSON.stringify(res));
-					if (isShowToast) {
-						$cordovaToast.showLongTop('Update successfully!').then(function () {
-							$ionicHistory.clearCache().then(function () {
-								$state.go('app.completes');
-							});
-						});
-					}
+					console.log("GoodsPublish UPDATED: " + JSON.stringify(res));		
+					deffered.resolve(res);		
+				},function(err){
+					console.log("GoodsPublish Update Failed: " + JSON.stringify(err));		
+					deffered.reject(err);	
 				});
 				/** update GoodsPublishPhoto: if photoId>0: delete?insert */
 				if (goodsPhotoObj.length > 0) {
@@ -308,6 +300,7 @@ angular.module('LelongApp.services')
 						}
 					}
 				}
+				return deffered.promise;
 			},
 			publish: function (listGoods) {
 			    var deffered = $q.defer();

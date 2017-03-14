@@ -346,10 +346,30 @@ function saveClick (isShowToast) {
                     });
                 }
             }
-            goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast);
+            goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast).then(function(){
+                if (isShowToast) {
+                        $cordovaToast.showLongTop('Update successfully!').then(function () {
+                            $ionicHistory.clearCache().then(function () {
+                                $state.go('app.completes');
+                            });
+                        });
+                    }
+                },function(err){
+                    $cordovaToast.showLongTop('Update failed!');    
+                });
         } else {
             /**insert */
-            goodsService.saveGoods($scope.goodItem, arrImage, isShowToast);
+            goodsService.saveGoods($scope.goodItem, arrImage, isShowToast).then(function(res){
+                if (isShowToast) {
+                        $cordovaToast.showLongTop('Save successfully!').then(function () {
+                            $ionicHistory.clearCache().then(function () {
+                                $state.go('app.completes');
+                            });
+                        });
+                    }
+            },function(err){
+                $cordovaToast.showLongTop('Save failed!');               
+            });
         }
     }
 }
