@@ -29,7 +29,7 @@ a[disabled] {
     pointer-events: none;
 }
 
-#list-readmode{margin-bottom: 80px}
+.list-readmode{margin-bottom: 80px}
 a.item-grid{display: block;cursor: pointer;}
 a.item-grid .avt{display: flex;height: 110px;border: solid 1px #bfbfbf;margin-bottom: 5px;position: relative;}
 a.item-grid img{display: block;max-width: 100%;max-height: 100%;margin: auto;/* left: 0; *;;absolute; */}
@@ -37,8 +37,8 @@ a.item-grid .price{display: block;font-size: 16px;color: #ff2424;white-space: no
 a.item-grid .title{white-space: nowrap;overflow: hidden;display: block;text-overflow: ellipsis;}
 a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 
-#list-readmode > a.item{left:0}
-#list-readmode > a.item.slided{
+.list-readmode > a.item{left:0}
+.list-readmode > a.item.slided{
 	left: -100%;
 	-webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
     -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
@@ -46,28 +46,28 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
     -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
     transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
 }
-#list-readmode > a.item .price{
+.list-readmode > a.item .price{
 	color: #ff2424;
 	font-size: 16px;
 	position: absolute;
 	/* bottom: 7px; */
 }
-#list-readmode > a.item .quantity{
+.list-readmode > a.item .quantity{
 	font-size: 16px;
 }
-#list-readmode > a.item .edit-button{
+.list-readmode > a.item .edit-button{
 	position: absolute;
 	right:10px;
 	bottom: 7px;
 	padding: 0 15px;
 	font-size: 15px
 }
-#list-editmode .item-checkbox .checkbox{
+.list-editmode .item-checkbox .checkbox{
 	top: 20px !important;
 	left: 0px;
 }
 
-#list-editmode .item-checkbox{
+.list-editmode .item-checkbox{
 	border: none
 }
 

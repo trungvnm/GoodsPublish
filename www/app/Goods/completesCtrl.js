@@ -121,8 +121,8 @@
 		$scope.unSyncedGoods = [];
 		$scope.syncedGoods = []; */
 		$ionicLoading.show({
-			  template: 'Loading...'
-			});
+			template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+		});
 		goodsService.syncAll($scope.goods, function(result){
 			$cordovaToast.showLongTop('Sync all successful!');
 			$scope.init().then(function(){
@@ -205,10 +205,15 @@
 					});
 					
 					if (selecteds.length > 0){
-							goodsService.sync(selecteds, function(){
+						$ionicLoading.show({
+							template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+						});
+						goodsService.sync(selecteds, function(){
 							$cordovaToast.showLongTop('Sync successful!');
 							$scope.init();
 							$scope.quickactions = false;
+							
+							$ionicLoading.hide();
 						});
 						/*var total = 0;
 						selecteds.forEach(function(g){

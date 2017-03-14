@@ -16,7 +16,7 @@
         })
         .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle, tokenService) {
             $ionicPlatform.ready(function () {
-                tokenService.checkUserLogin();
+                //tokenService.checkUserLogin();
                 Idle.watch();
                 console.log('start watch app');
                 if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -68,6 +68,7 @@
                             templateUrl: 'app/Global/quickactionsbar.html',
                             controller: 'QuickActionsCtrl'
                         }
+						
                     }
                 })
                 .state('app.account', {
