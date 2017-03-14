@@ -184,23 +184,14 @@ angular.module('LelongApp.services')
             return result;
         }
 
-        function checkShowSpinner(showSpinner) {
-            if (showSpinner === false) {
-                $("ion-spinner").removeClass("show");
-            } else {
-                $("ion-spinner").addClass("show");
-            }
-        }
 
         function runQuery(query, params, fnSuccess, fnError, showSpinner) {
-            checkShowSpinner(showSpinner);
+            
             $cordovaSQLite.execute($rootScope.db, query, params).then(function (res) {
                 fnSuccess(res);
             }, function (err) {
-                fnError(err)
-            }).finally(function () {
-                $("ion-spinner").removeClass("show");
-            });
+                fnError(err);
+            })
         }
         function createTable(tableName, fields) {
             var command = "CREATE TABLE IF NOT EXISTS " + tableName + "(" + fields + ")"

@@ -11,16 +11,10 @@
         this.$http = $http;
         this.tokenService = tokenService;
     }
-    function checkShowSpinner(showSpinner)
-    {
-        if (showSpinner !== false) {
-			$("ion-spinner").addClass("show");
-        }
-    }
+   
     XhttpService.prototype.login = function (loginUrl, data, showSpinner) {
         var defer = this.$q.defer();
         var self = this;
-        checkShowSpinner(showSpinner);
         var header = {
             'Access-Control-Allow-Origin': 'www.lelong.com.my',
             'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
@@ -34,14 +28,11 @@
             defer.resolve(response);
         }, function (err) {
             defer.reject(err);
-        }).finally(function() {
-            $("ion-spinner").removeClass("show");
         });
         return defer.promise;
     }
 
     XhttpService.prototype.get = function (url, showSpinner) {
-        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -55,18 +46,14 @@
                     defer.resolve(response);
                 }, function (err) {
                     defer.reject(err);
-                }).finally(function () {
-					if (showSpinner) {
-						$("ion-spinner").removeClass("show");
-					}
-                });
+                })
             }
         })
         return defer.promise;
     }
 
     XhttpService.prototype.post = function (url, data, showSpinner) {
-        checkShowSpinner(showSpinner);
+        
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -77,14 +64,10 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.post(url, data, {headers: header}).then(function (response) {
+                self.$http.post(url, data, { headers: header }).then(function (response) {
                     defer.resolve(response);
                 }, function (err) {
                     defer.reject(err);
-                }).finally(function () {
-                    if (showSpinner) {
-						$("ion-spinner").removeClass("show");
-					}
                 });
             }
         })
@@ -92,7 +75,6 @@
     }
 
     XhttpService.prototype.put = function (url, data, showSpinner) {
-        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -103,14 +85,10 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.put(url, data, {headers: header}).then(function (response) {
+                self.$http.put(url, data, { headers: header }).then(function (response) {
                     defer.resolve(response);
                 }, function (err) {
                     defer.reject(err);
-                }).finally(function () {
-                    if (showSpinner) {
-						$("ion-spinner").removeClass("show");
-					}
                 });
             }
         })
@@ -118,7 +96,6 @@
     }
 
     XhttpService.prototype.delete = function (url, showSpinner) {
-        checkShowSpinner(showSpinner);
         var defer = this.$q.defer();
         var self = this;
         this.tokenService.verify().then(function (token) {
@@ -128,15 +105,11 @@
                     "X-User-Context" : token.username,
                     "Accept": "application/json"
                 }
-                self.$http.delete(url, {headers: header}).then(function (response) {
+                self.$http.delete(url, { headers: header }).then(function (response) {
                     defer.resolve(response);
                 }, function (err) {
 
                     defer.reject(err);
-                }).finally(function () {
-                    if (showSpinner) {
-						$("ion-spinner").removeClass("show");
-					}
                 });
             }
         })

@@ -25,13 +25,6 @@
 		args.totalGoods = $scope.goodCounter;
 	});
 	
-	//======= snippet control =====
-	$scope.$on("showSpinner", function(event){
-		$("ion-spinner").addClass("show");
-	});
-	$scope.$on("hideSpinner", function(event){
-		$("ion-spinner").removeClass("show");
-	});
 
 	//show search icon on each page
 	$scope.$on("showSearch", function(event){
