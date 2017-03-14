@@ -160,37 +160,20 @@
 	
     // delete any selected goods
 	$scope.$on('multiDelete', function (event, args) {
-	    if (navigator.notification) {
-	        navigator.notification.confirm('Are you sure to delete selected items?', function (result) {
-	            if (result == 1) {
-	               
-	                var selecteds = [];
-	                var currentListGoods = [];
-	                switch (args.listName) {
-	                    case 'all':
-	                        currentListGoods = $scope.goods;
-	                        break;
-	                    case 'synced':
-	                        currentListGoods = $scope.syncedGoods;
-	                        break;
-	                    case 'unsynced':
-	                        currentListGoods = $scope.unSyncedGoods;
-	                        break;
-	                    default:
-	                }
-	                currentListGoods.forEach(function (g) {
-	                    if (g.Checked) {
-	                        selecteds.push(g);
-	                    }
-	                });
-	                if (selecteds.length > 0) {
+	    var messageReuslt = '';
+	    var selecteds = getlistGoodsSeletedToDelete(args.listName);
+	    if (selecteds.length > 0) {
+	        if (navigator.notification) {
+	            navigator.notification.confirm('Are you sure to delete selected items?', function (result) {
+	                if (result == 1) {
 	                    $ionicLoading.show({
-	                        template: '<p>Deleting...</p><ion-spinner></ion-spinner>'
-	                    })
+	                        template: '<p>Processing...</p><ion-spinner></ion-spinner>'
+	                    });
 	                    goodsService.deleteGoods(selecteds).then(function (result) {
 	                        if (result) {
-	                            $cordovaToast.showLongTop('Delete successful!');
+	                            messageReuslt = 'Delete successful!';
 	                            $scope.quickactions = false;
+	                            $scope.$evalAsync();
 	                            $scope.init().then(function () {
 	                                // update new total of goods to menu
 	                                goodsService.countAll().then(function (quantity) {
@@ -202,14 +185,18 @@
 	                            });
 	                        }
 	                        else {
-	                            $ionicLoading.hide();
-	                            $cordovaToast.showLongTop('Delete failed!');
+	                            messageReuslt = 'Delete failed!';
 	                        }
+	                    }).finally(function () {
+	                        $ionicLoading.hide();
+	                        $cordovaToast.showLongTop(messageReuslt);
 	                    });
 	                }
-	            }
-	        })
+
+	            })
+	        }
 	    }
+
 	});
 
 	$scope.$on('multiSync', function(event, args){
@@ -254,39 +241,72 @@
 	});
 
 	$scope.$on('multiPublish', function (event, args) {
-	    if (navigator.notification) {
-	        navigator.notification.confirm('Are you sure to publish selected items?', function (result) {
-	            if (result == 1) {
-	               
-	                var selecteds = [];
-	                $scope.unSyncedGoods.forEach(function (g) {
-	                    if (g.Checked) {
-	                        selecteds.push(g);
-	                    }
-	                });
-	                if (selecteds.length > 0) {
+	    var selecteds = getListGoodsToProcess($scope.unSyncedGoods);
+	    var messageReuslt = '';
+	    if (selecteds.length > 0) {
+	        if (navigator.notification) {
+	            navigator.notification.confirm('Are you sure to publish selected items?', function (result) {
+	                if (result == 1) {
 	                    $ionicLoading.show({
 	                        template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
-	                    })
+	                    });
 	                    getListGoodsPublish(selecteds).then(function (listGoodsPublish) {
 	                        goodsService.publish(listGoodsPublish).then(function (result) {
 	                            if (result.message === 'Success') {
-	                                $ionicLoading.hide();
-	                                $cordovaToast.showLongTop('Post successful!');
+	                                messageReuslt = 'Post successful!'
 	                                $scope.init();
 	                                $scope.quickactions = false;
+	                                $scope.$evalAsync();
 	                            } else {
-	                                $ionicLoading.hide();
-	                                $cordovaToast.showLongTop('Post failed!');
+	                                messageReuslt = 'Post fail!'
 	                            }
+	                        }).finally(function () {
+	                            $ionicLoading.hide();
+	                            $cordovaToast.showLongTop(messageReuslt);
 	                        });
+	                    }, function () {
+	                        $ionicLoading.hide();
+	                        $cordovaToast.showLongTop('Post fail!');
 	                    })
-
 	                }
-	            }
-	        })
+	            });
+	        }
+
 	    }
 	});
+
+	function getListGoodsToProcess(listGoods) {
+	    var selecteds = [];
+	    listGoods.forEach(function (g) {
+	        if (g.Checked) {
+	            selecteds.push(g);
+	        }
+	    });
+	    return selecteds;
+	}
+
+	function getlistGoodsSeletedToDelete(listName) {
+	    var selecteds = [];
+	    var currentListGoods = [];
+	    switch (listName) {
+	        case 'all':
+	            currentListGoods = $scope.goods;
+	            break;
+	        case 'synced':
+	            currentListGoods = $scope.syncedGoods;
+	            break;
+	        case 'unsynced':
+	            currentListGoods = $scope.unSyncedGoods;
+	            break;
+	        default:
+	    }
+	    currentListGoods.forEach(function (g) {
+	        if (g.Checked) {
+	            selecteds.push(g);
+	        }
+	    });
+	    return selecteds;
+	}
 
 	function getListGoodsPublish(selecteds) {
 	    var promises = [];
