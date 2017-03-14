@@ -24,7 +24,7 @@
 .gallery-view .row .image-container{display: inline-block; overflow: inherit;padding: 0;border-right: none;}
 .gallery-view .row .image-container img{position: initial}
 
-.tab-content{top:44px}
+.tab-content{/* top:44px */}
 a[disabled] {
     pointer-events: none;
 }
