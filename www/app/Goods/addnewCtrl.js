@@ -1,27 +1,27 @@
 angular.module("LelongApp.Goods")
 .controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory,
-$cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
-$ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate) {
+    $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
+    $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate,$ionicLoading) {
 
-var goodsFolderName = generateUUID();
-$scope.goodsId = $stateParams.goodsId;
-$scope.editMode = false
-if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
-    $scope.editMode = true;    
-}
-$scope.tokenServ = tokenService.getToken();
-$rootScope.$broadcast('hideSearch');
-$scope.errors = [];
-$scope.CatesName = '';
-$scope.inputMore = { hide: false, class: 'ion-ios-arrow-down' };
+    var goodsFolderName = generateUUID();
+    $scope.goodsId = $stateParams.goodsId;
+    $scope.editMode = false
+    if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
+        $scope.editMode = true;    
+    }
+    $scope.tokenServ = tokenService.getToken();
+    $rootScope.$broadcast('hideSearch');
+    $scope.errors = [];
+    $scope.CatesName = '';
+    $scope.inputMore = { hide: false, class: 'ion-ios-arrow-down' };
 
-$scope.init = function () {
-    $scope.step = 1;
-    $scope.imgURI = [];
-    $scope.imageDeleted = [];
-    $scope.uploadDir = "";
-    $scope.viewTitle = "Add new";
-    $scope.defaultCategory = [
+    $scope.init = function () {
+        $scope.step = 1;
+        $scope.imgURI = [];
+        $scope.imageDeleted = [];
+        $scope.uploadDir = "";
+        $scope.viewTitle = "Add new";
+        $scope.defaultCategory = [
         { value: 1, name: "Phone & Tablet", isChecked: false },
         { value: 2, name: "Electronics & Appliances", isChecked: false },
         { value: 3, name: "Fasion", isChecked: false },
@@ -32,44 +32,44 @@ $scope.init = function () {
         { value: 8, name: "Home & Gardening", isChecked: false },
         { value: 9, name: "Sports & Recreation", isChecked: false },
         { value: 10, name: "Books & Comics", isChecked: false }
-    ];
+        ];
 
-    if ($scope.editMode) {  
-        $scope.viewTitle='';    
-        /** UPDATE GoodsPublish: get publishGood by id */
-        goodsService.getGoodsById($scope.goodsId).then(function (res) {
-            $scope.goodItem = res;   
-            $scope.viewTitle = res.Title;               
-            $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
-            /** get photos by goodsId */
-            var where = "GoodPublishId=" + $scope.goodsId;
-            $dbHelper.select("GoodsPublishPhoto", "*", where).then(function (result) {
-                if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
-                        $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
-                    }                    
-                    updateSlide();
+        if ($scope.editMode) {  
+            $scope.viewTitle='';    
+            /** UPDATE GoodsPublish: get publishGood by id */
+            goodsService.getGoodsById($scope.goodsId).then(function (res) {
+                $scope.goodItem = res;   
+                $scope.viewTitle = res.Title;               
+                $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
+                /** get photos by goodsId */
+                var where = "GoodPublishId=" + $scope.goodsId;
+                $dbHelper.select("GoodsPublishPhoto", "*", where).then(function (result) {
+                    if (result.length > 0) {
+                        for (var i = 0; i < result.length; i++) {
+                            $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
+                        }                    
+                        updateSlide();
+                    }
+                });  
+
+                if(res.LastSync == undefined || res.LastSync.trim().length <=0){
+                    $rootScope.$broadcast('disableSubAction','Sync')
                 }
-            });  
 
-            if(res.LastSync == undefined || res.LastSync.trim().length <=0){
-                $rootScope.$broadcast('disableSubAction','Sync')
-            }
-
-        });
-    } else {
-        requestAccessFs();
-        /**ADD NEW GoodsPublish */
-        $scope.goodItem = { Category: '', Title: '', Condition: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: goodsFolderName };
+            });
+        } else {
+            requestAccessFs();
+            /**ADD NEW GoodsPublish */
+            $scope.goodItem = { Category: '', Title: '', Condition: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: goodsFolderName };
+        }
     }
-}
 
-$scope.$on("$ionicView.leave", function (event, data) {
+    $scope.$on("$ionicView.leave", function (event, data) {
     // handle event
     $ionicHistory.clearCache();
 });
-/**Top bar actions */
-var actions = [
+    /**Top bar actions */
+    var actions = [
     {
         name: 'upload',
         action: function () {
@@ -80,23 +80,25 @@ var actions = [
         name: 'save',
         action: function () {
            saveClick(true);
-        }
-    }
-];
-var subActions = [
-{
+       }
+   }
+   ];
+   var subActions = [
+   {
     name: 'Delete', action: function () {
         if (navigator.notification) {
             navigator.notification.confirm('Are you sure to delete this item?', function (result) {
                 if (result == 1) {                                                     
                     if ($scope.goodsId  != undefined && parseInt($scope.goodsId) >0) {
+                        showSpinner('Deleting');
                         goodsService.deleteGoods([$scope.goodItem]).then(function (result) {
                             // call api to delete from server
                             $cordovaToast.showLongTop('Delete successful!').then(function () {
                                 $ionicHistory.clearCache().then(function () {
                                     $state.go('app.completes');
                                 });
-                            });								
+                            });	
+                            $ionicLoading.hide();							
                         });
                     }
                 }
@@ -104,30 +106,42 @@ var subActions = [
         }
     }
 },
- { name: 'Sync', action: function () {
+{ name: 'Sync', action: function () {
     if ($scope.goodItem){
-                if ($scope.goodItem.LastSync && $scope.goodItem.LastEdited && 
-                new Date($scope.goodItem.LastSync).getTime() < new Date($scope.goodItem.LastEdited).getTime()){
-                    if (navigator.notification) {
-                        navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
-                            if (result == 1) {
-                                goodsService.sync([$scope.goodItem],function(){
-                                    $ionicHistory.clearCache().then(function(){
-                                        $state.go('app.completes');
-                                    });
-                                });
-                            }
+        if ($scope.goodItem.LastSync && $scope.goodItem.LastEdited && 
+            new Date($scope.goodItem.LastSync).getTime() < new Date($scope.goodItem.LastEdited).getTime()){
+            if (navigator.notification) {
+                navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
+                    if (result == 1) {
+                     showSpinner('Syncing');
+                     goodsService.sync([$scope.goodItem],function(){
+                         $cordovaToast.showLongTop('Sync successfully!').then(function () {
+                            /*$ionicHistory.clearCache().then(function(){
+                                $state.go('app.completes');
+                            });*/
                         });
-                    }
-                } else {
-                    goodsService.sync([$scope.goodItem],function(){
-                        $ionicHistory.clearCache().then(function(){
-                            $state.go('app.completes');
-                        });
+                            $ionicLoading.hide();
+                    },function(err){
+                        $ionicLoading.hide();
                     });
-                }
+                 }
+             });
             }
- } 
+        } else {
+           showSpinner('Syncing');
+            goodsService.sync([$scope.goodItem],function(){
+                $cordovaToast.showLongTop('Sync successfully!').then(function () {
+                        /*$ionicHistory.clearCache().then(function(){
+                                $state.go('app.completes');
+                            });*/
+                    });
+                $ionicLoading.hide();
+            },function(err){
+                 $ionicLoading.hide();
+            });
+        }
+    }
+} 
 }]
 if ($scope.editMode) {
     $rootScope.$broadcast("setMainActions", actions);
@@ -158,10 +172,10 @@ $scope.showPopup = function () {
         title: '<b>Choose Category</b>',
         scope: $scope,
         buttons: [
-            {
-                text: 'OK',
-                type: 'button-positive'
-            }
+        {
+            text: 'OK',
+            type: 'button-positive'
+        }
         ]
     });
     myPopup.then(function () {
@@ -187,8 +201,8 @@ $scope.choosePhotoAction = function () {
     $ionicActionSheet.show({
         titleText: 'Choose an action',
         buttons: [
-            { text: '<i class="icon ion-ios-camera-outline"></i> Camera' },
-            { text: '<i class="icon ion-ios-photos"></i> Photo library' },
+        { text: '<i class="icon ion-ios-camera-outline"></i> Camera' },
+        { text: '<i class="icon ion-ios-photos"></i> Photo library' },
         ],
         cancelText: 'Cancel',
         cancel: function () {
@@ -346,29 +360,35 @@ function saveClick (isShowToast) {
                     });
                 }
             }
+            showSpinner('Updating');
             goodsService.updateGoods($scope.goodItem, imgSave, "", isShowToast).then(function(){
                 if (isShowToast) {
-                        $cordovaToast.showLongTop('Update successfully!').then(function () {
-                            $ionicHistory.clearCache().then(function () {
-                                $state.go('app.completes');
-                            });
+                    $cordovaToast.showLongTop('Update successfully!').then(function () {
+                        $ionicHistory.clearCache().then(function () {
+                            $state.go('app.completes');
                         });
-                    }
-                },function(err){
-                    $cordovaToast.showLongTop('Update failed!');    
-                });
+                    });
+                }
+             $ionicLoading.hide();
+            },function(err){
+                $cordovaToast.showLongTop('Update failed!');    
+                $ionicLoading.hide();
+            });
         } else {
             /**insert */
+            showSpinner('Inserting');
             goodsService.saveGoods($scope.goodItem, arrImage, isShowToast).then(function(res){
                 if (isShowToast) {
-                        $cordovaToast.showLongTop('Save successfully!').then(function () {
-                            $ionicHistory.clearCache().then(function () {
-                                $state.go('app.completes');
-                            });
+                    $cordovaToast.showLongTop('Save successfully!').then(function () {
+                        $ionicHistory.clearCache().then(function () {
+                            $state.go('app.completes');
                         });
-                    }
+                    });
+                }
+                $ionicLoading.hide();
             },function(err){
-                $cordovaToast.showLongTop('Save failed!');               
+                $cordovaToast.showLongTop('Save failed!');              
+                $ionicLoading.hide(); 
             });
         }
     }
@@ -393,8 +413,8 @@ function postToServer() {
         /** Save goods to local device */
         navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
             if (result == 1) {
-                
-            saveClick(false);
+
+                saveClick(false);
                 /** post goods to server */
                 if ($scope.imgURI.length > 0) {
                     for (var i = 0; i < $scope.imgURI.length; i++) {
@@ -408,7 +428,7 @@ function postToServer() {
                 };
                 angular.extend(newSource, $scope.goodItem, { listPhoto: listPhoto });
                 var listGoods = []; listGoods.push(newSource);
-
+                showSpinner('Publishing');
                 goodsService.publish(listGoods).then(function (result) {
                     if (result.message === 'Success') {
                         $cordovaToast.showLongTop('Publish successful!');
@@ -416,6 +436,7 @@ function postToServer() {
                             $state.go('app.completes');
                         });
                     }
+                    $ionicLoading.hide();
                 });
             }
         });
@@ -470,10 +491,10 @@ function updateSlide() {
         if ($scope.slider) 
         {
             try{
-                  $scope.slider.update();
-              }catch(err){};
-        }
-    });
+              $scope.slider.update();
+          }catch(err){};
+      }
+  });
 }
 function getImageFileName(fullNamePath) {
     return fullNamePath.replace(/^.*[\\\/]/, '');
@@ -515,6 +536,11 @@ function formIsValid() {
         $ionicScrollDelegate.scrollTop();
     }
     return result
+}
+function showSpinner(name){
+   $ionicLoading.show({
+    template: '<p>' + name + '...</p><ion-spinner></ion-spinner>'
+});
 }
 /**end helper method */
 

@@ -185,8 +185,8 @@ angular.module('LelongApp.services')
 					return null;
 				});
 			},
-			deleteGoods: function (goods) {
-				$rootScope.$broadcast('showSpinner');
+			deleteGoods: function (goods) {			
+				var defer=$q.defer();	
 				var goodIds = [];
 				var guids = [];
 				goods.forEach(function (g) {
@@ -212,8 +212,8 @@ angular.module('LelongApp.services')
 
 						// CLient SQLite Db: delete records from GoodsPublish table before
 						var query = 'UPDATE GoodsPublish SET Active = 0 WHERE ' + whereClause;
-						return $dbHelper.query(query).then(function (result) {
-							if (result.rowsAffected && result.rowsAffected > 0) {
+						return $dbHelper.query(query).then(function (res) {
+							if (res.rowsAffected && res.rowsAffected > 0) {
 								// for each photo file on disk 
 								photoPaths.forEach(function (p) {
 									var nameSegments = p.split('/');
@@ -238,13 +238,16 @@ angular.module('LelongApp.services')
 								});
 								//}
 								//});
-							}
-							$rootScope.$broadcast('hideSpinner');
-							return (result.rowsAffected && result.rowsAffected > 0);
+							}						
+							defer.resolve(res.rowsAffected && res.rowsAffected > 0)
+						},function(err){
+							defer.reject(err);
 						});
+					},function(putErr){
+						defer.reject(putErr);
 					});
 				}
-				return false;
+				return defer.promise;
 			},
 			saveGoods: function (goodItemObj, arrFullPathImgs) {	
 				var deffered=$q.defer();		
@@ -375,6 +378,7 @@ angular.module('LelongApp.services')
 			    return deffered.promise;
 			},
 			sync: function (goods, callBack) {
+				var promises=[];
 				var token = tokenService.getToken();
 				var userId = token.userid;
 				var params = "";//guidsArray.join(',');
@@ -385,11 +389,14 @@ angular.module('LelongApp.services')
 						params += g.Guid;
 					});
 
+					var defer= $q.defer();
 					// request to API
-					xhttpService.get('http://d00dd351.ngrok.io/api/goods/getlist?guids=' + params, true).then(function (response) {
+					xhttpService.get('http://d00dd351.ngrok.io/api/goods/getlist?guids=' + params, true).
+					then(function (response) {
 						if (response.data) {
 							var couter = 0;
 							response.data.forEach(function (newGood) {
+								var deferred = $q.defer();
 								couter++;
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
@@ -404,7 +411,8 @@ angular.module('LelongApp.services')
 
 								// update to old one
 								var finish = couter == goods.length;
-								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (result) {
+								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'")
+								.then(function (result) {
 									if (result.rowsAffected > 0) {
 										for (var i = 0; i < goods.length; i++) {
 											if (goods[i].Guid == newGood.Guid) {
@@ -428,17 +436,22 @@ angular.module('LelongApp.services')
 												goods[i] = newGood;
 												break;
 											};
-
-											
 										}
 									}
-
-
+									deferred.resolve(result);
 								})
+								promises.push(deferred.promise);
 							});
-						}
-					})
+							/*end get*/
+						} 
+						defer.resolve(response);						
+					},function(err){
+						console.log('GET: failed ' + JSON.stringify(err));
+						defer.reject(err);
+					});
+					promises.push(defer.promise);
 				}
+				return $q.all(promises);
 			},
 			syncAll: function (localGoods, callBack) {
 				var token = tokenService.getToken();
