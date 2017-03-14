@@ -199,45 +199,31 @@
 
 	});
 
-	$scope.$on('multiSync', function(event, args){
-		if (navigator.notification){
-			navigator.notification.confirm('Are you sure to download selected items?', function(result){
-				if (result == 1){
-					var selecteds = [];
-					$scope.syncedGoods.forEach(function(g){
-						if (g.Checked){
-							selecteds.push(g);
-						}
-					});
-					
-					if (selecteds.length > 0){
-						$ionicLoading.show({
-							template: '<p>Loading...</p><ion-spinner></ion-spinner>'
-						});
-						goodsService.sync(selecteds, function(){
-							$cordovaToast.showLongTop('Sync successful!');
-							$scope.init();
-							$scope.quickactions = false;
-							
-							$ionicLoading.hide();
-						});
-						/*var total = 0;
-						selecteds.forEach(function(g){
-							goodsService.sync(selecteds, function() {
-								total++;
-							});
-						});
-						if (selecteds.length = total) {
-							$cordovaToast.showLongTop('Sync successful!');
-							$scope.init();
-							$scope.quickactions = false;
-						} else {
-							$cordovaToast.showLongTop('Sync failed!');
-						}*/
-					}
-				}
-			})
-		}
+	$scope.$on('multiSync', function (event, args) {
+	    var messageReuslt = '';
+	    var selecteds = getListGoodsToProcess($scope.syncedGoods);
+	    if (selecteds.length > 0) {
+	        if (navigator.notification) {
+	            navigator.notification.confirm('Are you sure to download selected items?', function (result) {
+	                if (result == 1) {
+	                    $ionicLoading.show({
+	                        template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+	                    });
+	                    goodsService.sync(selecteds, function () {
+	                        messageReuslt = 'Sync successful!';
+	                        $scope.quickactions = false;
+	                        $scope.$evalAsync(
+                            function () {
+                                $scope.init();
+                                $ionicLoading.hide();
+                                $cordovaToast.showLongTop(messageReuslt);
+                            });
+	                    });
+	                }
+	            })
+	        }
+	    }
+
 	});
 
 	$scope.$on('multiPublish', function (event, args) {
