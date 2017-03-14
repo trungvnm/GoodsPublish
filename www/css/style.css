@@ -335,10 +335,12 @@ ion-header-bar *{color: white !important;} */
     margin: 0 auto !important;
 }
 .spinner{
-	position: fixed;
-	width: 100%;
-	height: 100%;
+	position: initial;
 	text-align: center;
+    stroke: #86dde0;
+    fill: #d3e6f7;
+    padding: 20px 0 0 20px;
+    float: left;
 }
 .spinner.show{
 	z-index: 10;
