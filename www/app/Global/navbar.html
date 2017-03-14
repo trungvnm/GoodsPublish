@@ -54,7 +54,7 @@
         <ion-content scroll="false">
           <div class="list">
           <div ng-repeat="sub in subActions">
-            <button class="button button-clear button-subactions" ng-click="exeSubAction('{{sub.name}}')">
+            <button class="button button-clear button-subactions" ng-disabled="disabled['{{sub.name}}']" ng-click="exeSubAction('{{sub.name}}')">
               {{sub.name}}
             </button>
             </div>           

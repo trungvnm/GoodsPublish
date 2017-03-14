@@ -50,7 +50,12 @@ $scope.init = function () {
                     }                    
                     updateSlide();
                 }
-            });           
+            });  
+
+            if(res.LastSync == undefined || res.LastSync.trim().length <=0){
+                $rootScope.$broadcast('disableSubAction','Sync')
+            }
+
         });
     } else {
         requestAccessFs();
