@@ -39,8 +39,10 @@
 		$scope.searchkey = '';
 	};
 	
-	$scope.multiDelete = function(){
-		$rootScope.$broadcast("multiDelete", {});
+	$scope.multiDelete = function () {
+	    var param = {};
+	    param.listName = $scope.list;
+	    $rootScope.$broadcast("multiDelete", param);
 	};
 
 	$scope.multiSync = function(){

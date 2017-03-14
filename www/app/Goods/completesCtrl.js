@@ -158,39 +158,58 @@
         $rootScope.$broadcast('updateIsSearch', params);
 	});
 	
-	// delete any selected goods
-	$scope.$on('multiDelete', function(event, args){
-		if (navigator.notification){
-			navigator.notification.confirm('Are you sure to delete selected items?', function(result){
-				if (result == 1){
-					var selecteds = [];
-					$scope.goods.forEach(function(g){
-						if (g.Checked){
-							selecteds.push(g);
-						}
-					});
-					if (selecteds.length > 0){
-						goodsService.deleteGoods(selecteds).then(function(result){
-							if (result){
-								$cordovaToast.showLongTop('Delete successful!');
-								$scope.quickactions = false;
-								$scope.init().then(function(){
-									// update new total of goods to menu
-									goodsService.countAll().then(function(quantity){
-										var menuParams = {};
-										menuParams.goodCounter = quantity;
-										$rootScope.$broadcast('update',menuParams);
-									});
-								});
-							}
-							else{
-								$cordovaToast.showLongTop('Delete failed!');
-							}
-						});
-					}
-				}
-			})
-		}
+    // delete any selected goods
+	$scope.$on('multiDelete', function (event, args) {
+	    if (navigator.notification) {
+	        navigator.notification.confirm('Are you sure to delete selected items?', function (result) {
+	            if (result == 1) {
+	               
+	                var selecteds = [];
+	                var currentListGoods = [];
+	                switch (args.listName) {
+	                    case 'all':
+	                        currentListGoods = $scope.goods;
+	                        break;
+	                    case 'synced':
+	                        currentListGoods = $scope.syncedGoods;
+	                        break;
+	                    case 'unsynced':
+	                        currentListGoods = $scope.unSyncedGoods;
+	                        break;
+	                    default:
+	                }
+	                currentListGoods.forEach(function (g) {
+	                    if (g.Checked) {
+	                        selecteds.push(g);
+	                    }
+	                });
+	                if (selecteds.length > 0) {
+	                    $ionicLoading.show({
+	                        template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
+	                    })
+	                    goodsService.deleteGoods(selecteds).then(function (result) {
+	                        if (result) {
+	                            $cordovaToast.showLongTop('Delete successful!');
+	                            $scope.quickactions = false;
+	                            $scope.init().then(function () {
+	                                // update new total of goods to menu
+	                                goodsService.countAll().then(function (quantity) {
+	                                    var menuParams = {};
+	                                    menuParams.goodCounter = quantity;
+	                                    $ionicLoading.hide();
+	                                    $rootScope.$broadcast('update', menuParams);
+	                                });
+	                            });
+	                        }
+	                        else {
+	                            $ionicLoading.hide();
+	                            $cordovaToast.showLongTop('Delete failed!');
+	                        }
+	                    });
+	                }
+	            }
+	        })
+	    }
 	});
 
 	$scope.$on('multiSync', function(event, args){
@@ -238,9 +257,7 @@
 	    if (navigator.notification) {
 	        navigator.notification.confirm('Are you sure to publish selected items?', function (result) {
 	            if (result == 1) {
-	                $ionicLoading.show({
-	                    template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
-	                })
+	               
 	                var selecteds = [];
 	                $scope.unSyncedGoods.forEach(function (g) {
 	                    if (g.Checked) {
@@ -248,6 +265,9 @@
 	                    }
 	                });
 	                if (selecteds.length > 0) {
+	                    $ionicLoading.show({
+	                        template: '<p>Publishing...</p><ion-spinner></ion-spinner>'
+	                    })
 	                    getListGoodsPublish(selecteds).then(function (listGoodsPublish) {
 	                        goodsService.publish(listGoodsPublish).then(function (result) {
 	                            if (result.message === 'Success') {
