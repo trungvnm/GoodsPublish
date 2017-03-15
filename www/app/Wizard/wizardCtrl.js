@@ -1,6 +1,11 @@
 angular.module("LelongApp.Wizard",[])
 .controller('WizardCtrl', function ($scope, $rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
     $rootScope.$broadcast('hideSearch');
+    $scope.defaultcurrency=  [
+    {code:1, name:"MYR" }, 
+    {code:2, name:"USD" }, 
+    {code:3, name:"VND" }
+    ];
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
@@ -37,6 +42,8 @@ angular.module("LelongApp.Wizard",[])
         $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
 
         $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
+        debugger;
+        $scope.objWizard.CurrencyUnit = $scope.currency;
     }
     $scope.saveObject = function () {  
         if  ($scope.isnew)
@@ -100,7 +107,7 @@ angular.module("LelongApp.Wizard",[])
     $scope.initWizardByUser = function(userId)
     {
         $scope.isnew = true;       
-        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee", "UserId="+ userId)
+        $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee,CurrencyUnit", "UserId="+ userId)
         .then(function(response){
             if  (response.length > 0)
             {
@@ -118,6 +125,10 @@ angular.module("LelongApp.Wizard",[])
                     $scope.eastmalaysia =  items[1] != "" ? items[1] * 1 : 0 * 1;
                 }
                 $scope.objWizard.ShippingFee = response[0].ShippingFee;
+                if (response[0].CurrencyUnit != undefined && response[0].CurrencyUnit != 0){
+                    $scope.currency = response[0].CurrencyUnit;
+                }
+               
                 $scope.isnew = false;
             }          
         });

@@ -21,6 +21,12 @@
             <div><span style="font-weight: 500"> Peninsular <input type="number" placeholder="[per Item / KG / FOC]" ng-model="peninsular"/></span></div>
             <div><span style="font-weight: 500"> East Malaysia <input type="number" placeholder="[per Item / KG / FOC]" ng-model="eastmalaysia"/></span></div>
          </label>
+         <label class="item item-input item-stacked-label">
+            <span class="input-label">Select currency unit</span>
+            <div>
+                <select ng-model="currency" ng-options="x.code as x.name for x in defaultcurrency"></select>
+            </div>           
+         </label>
     </div>
    <button class="button button-block button-positive" ng-click="save()">Save</button>
 </ion-content>

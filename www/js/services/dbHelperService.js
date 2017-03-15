@@ -8,7 +8,7 @@ angular.module('LelongApp.services')
             initialDB: function () {
                 var settingFields = "SettingFieldId text,Value text";
                 var userFields = "UserId integer primary key,UserName text,Password text,access_token text,refresh_token text,LoginAttempt integer,MaxPostingAllow integer,PostingAlready integer,NumberOfPhotosAllow integer";
-                var wizardFields = "WizardId  integer primary key,UserId integer, DaysOfShip integer,ItemsCategory text,ShippingFee text";
+                var wizardFields = "WizardId  integer primary key,UserId integer, DaysOfShip integer,ItemsCategory text,ShippingFee text,CurrencyUnit integer";
                 var goodsPublishPhoto = "Photoid integer primary key,GoodPublishId integer,PhotoName text,PhotoUrl text,PhotoDescription text";
                 var goodsPublish = "GoodPublishId integer primary key,UserId integer,Title text,Subtitle text,Condition text,Guid text,Price real,SalePrice real,msrp real,costprice real,SaleType text,Category text,StoreCategory text,Brand text,ShipWithin integer,ModelSkuCode text,State text,";
                 goodsPublish += "Link text,Description text,Video text,VideoAlign text,Active integer,Weight integer,Quantity integer,ShippingPrice text,WhoPay text,ShippingMethod text,ShipToLocation text,";
