@@ -117,7 +117,7 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
     right: 8px;
 }
 .action-camera-button a::before{
-    line-height: 36px !important;
+    line-height: 40px !important;
 }
 .action-camera-button a{
         color: #387ef5;
@@ -145,8 +145,11 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
     bottom: 0px !important;
 }
 
-.gallery1 .swiper-container{
-    width: 270px;
+.gallery-custom-imagecenter{
+    width: 135px;
+    position: relative;
+    padding-top: 10px;
+    display: inline-block;   
 }
 
 .swiper-container {

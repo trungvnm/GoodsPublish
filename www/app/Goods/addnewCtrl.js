@@ -229,14 +229,16 @@ $scope.choosePhotoAction = function () {
 
 $scope.takeCameraPicture = function () {
     var options = {
-        quality: 75,
+        quality: 70,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: Camera.PictureSourceType.CAMERA,
         allowEdit: false,
         encodingType: Camera.EncodingType.JPEG,
         popoverOptions: CameraPopoverOptions,
         saveToPhotoAlbum: false,
-        correctOrientation: true
+        correctOrientation: true,
+        targetWidth:600,
+        targetHeight:600
     };
 
     $cordovaCamera.getPicture(options).then(function (imagePath) {
@@ -250,7 +252,9 @@ $scope.takeCameraPicture = function () {
 $scope.getImageFromLibrary = function () {
     var options = {
         maximumImagesCount: 5,
-        quality: 75
+        quality: 70,
+        width:600,
+        height:600
     };
 
     $cordovaImagePicker.getPictures(options).then(function (results) {
@@ -318,7 +322,7 @@ function copyImgToPerFolder(originPath) {
             fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
                 fileEntry.copyTo(desFolder, newFileName, function (success) {
                     console.log("COPY FILE SUCCESS:" + JsonParse(success));
-                    $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });                   
+                    $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });                             
                     updateSlide();
                     deffered.resolve();
                 }, function (error) {
@@ -450,14 +454,6 @@ function postToServer() {
 $scope.galleryOptions = {
     pagination: '.swiper-pagination',
     slidesPerView: 3,
-    centeredSlides: false,
-    paginationClickable: true,
-    spaceBetween: 5,
-    speed: 600
-};
-$scope.galleryOptions1 = {
-    pagination: '.swiper-pagination',
-    slidesPerView: 2,
     centeredSlides: false,
     paginationClickable: true,
     spaceBetween: 5,
