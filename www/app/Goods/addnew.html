@@ -11,15 +11,14 @@
                             <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
                         </div>
                     </ion-slide-page>
-                </ion-slides>
-                <ion-slides class="gallery1" options="galleryOptions1" slider="data.slider" ng-show="imgURI.length >0 && imgURI.length <= 2">
-                    <ion-slide-page ng-repeat="image in imgURI" style="width: 130px">
-                        <div>
-                            <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
-                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
-                        </div>
-                    </ion-slide-page>
-                </ion-slides>  
+                </ion-slides>          
+                <div style="width: 100%;text-align: center;" ng-show="imgURI.length >0 && imgURI.length <= 2">
+                    <div class="gallery-custom-imagecenter" ng-repeat="image in imgURI">
+                        <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
+                        <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
+                    </div>
+                </div>
+
                 <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
             </div>
             <div class="action-camera-button">
