@@ -345,7 +345,8 @@ angular.module('LelongApp.services')
 
 						// update lastsync value to current good in Sqlite
 						var params = {
-							LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+						    LastSync: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+						    LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 						};
 						listGoods[i].LastSync = params.LastSync; // Update new status to client object
 						$dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
