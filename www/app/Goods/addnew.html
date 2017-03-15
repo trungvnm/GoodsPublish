@@ -4,7 +4,7 @@
         <div id="addnew-step2" style="width: 100%">
             <div id="addnew-photo-preview">
 
-                <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length>0">
+                <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length >2">
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
                         <div>
                             <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
@@ -12,7 +12,14 @@
                         </div>
                     </ion-slide-page>
                 </ion-slides>
-
+                <ion-slides class="gallery1" options="galleryOptions1" slider="data.slider" ng-show="imgURI.length >0 && imgURI.length <= 2">
+                    <ion-slide-page ng-repeat="image in imgURI" style="width: 130px">
+                        <div>
+                            <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
+                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
+                        </div>
+                    </ion-slide-page>
+                </ion-slides>  
                 <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
             </div>
             <div class="action-camera-button">

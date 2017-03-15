@@ -145,14 +145,15 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
     bottom: 0px !important;
 }
 
+.gallery1 .swiper-container{
+    width: 270px;
+}
+
 .swiper-container {
         width: 100%;
         height: 100%;
         margin: 5px auto;
-    }
-    #slider2 .swiper-container {
-        height: 100%
-    }
+    }    
 .swiper-slide {
         text-align: center;
         font-size: 18px;

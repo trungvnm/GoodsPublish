@@ -90,7 +90,7 @@ angular.module("LelongApp.Goods")
             navigator.notification.confirm('Are you sure to delete this item?', function (result) {
                 if (result == 1) {                                                     
                     if ($scope.goodsId  != undefined && parseInt($scope.goodsId) >0) {
-                        showSpinner('Deleting');
+                        showSpinner();
                         goodsService.deleteGoods([$scope.goodItem]).then(function (result) {
                             // call api to delete from server
                             $cordovaToast.showLongTop('Delete successful!').then(function () {
@@ -113,7 +113,7 @@ angular.module("LelongApp.Goods")
             if (navigator.notification) {
                 navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
                     if (result == 1) {
-                     showSpinner('Syncing');
+                     showSpinner();
                      goodsService.sync([$scope.goodItem],function(){                      
                         $cordovaToast.showLongTop('Sync successfully!').then(function(){
                             $ionicHistory.clearCache().then(function(){
@@ -128,7 +128,7 @@ angular.module("LelongApp.Goods")
              });
             }
         } else {
-           showSpinner('Syncing');
+           showSpinner();
             goodsService.sync([$scope.goodItem],function(){
                 $cordovaToast.showLongTop('Sync successfully!').then(function () {
                         $ionicHistory.clearCache().then(function(){
@@ -241,7 +241,7 @@ $scope.takeCameraPicture = function () {
 
     $cordovaCamera.getPicture(options).then(function (imagePath) {
         copyImgToPerFolder(imagePath);
-    }, function (err) {
+    }, function (error) {
         // An error occured. Show a message to the user
         console.log('From Camera: ' + JsonParse(error));
     });
@@ -343,7 +343,7 @@ function saveClick (isShowToast) {
             }
         }
         if ($scope.editMode) {
-            if(isShowToast) {showSpinner('Updating')}
+            if(isShowToast) {showSpinner()}
             /**update */
             var imgSave = [];
             if ($scope.imgURI.length > 0) {
@@ -376,7 +376,7 @@ function saveClick (isShowToast) {
             });
         } else {
             /**insert */
-            if(isShowToast) {showSpinner('Inserting')}
+            if(isShowToast) {showSpinner()}
             goodsService.saveGoods($scope.goodItem, arrImage, isShowToast).then(function(res){
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Save successfully!').then(function () {
@@ -413,7 +413,7 @@ function postToServer() {
         /** Save goods to local device */
         navigator.notification.confirm('Are you sure want to upload this item?', function (result) {
             if (result == 1) {
-                showSpinner('Publishing');
+                showSpinner();
                 saveClick(false);
                 /** post goods to server */
                 if ($scope.imgURI.length > 0) {
@@ -450,6 +450,14 @@ function postToServer() {
 $scope.galleryOptions = {
     pagination: '.swiper-pagination',
     slidesPerView: 3,
+    centeredSlides: false,
+    paginationClickable: true,
+    spaceBetween: 5,
+    speed: 600
+};
+$scope.galleryOptions1 = {
+    pagination: '.swiper-pagination',
+    slidesPerView: 2,
     centeredSlides: false,
     paginationClickable: true,
     spaceBetween: 5,
@@ -539,9 +547,9 @@ function formIsValid() {
     }
     return result
 }
-function showSpinner(name){
+function showSpinner(){
    $ionicLoading.show({
-    template: '<p>' + name + '...</p><ion-spinner></ion-spinner>'
+    template: '<p>Processing...</p><ion-spinner icon="spiral"></ion-spinner>'
 });
 }
 /**end helper method */
