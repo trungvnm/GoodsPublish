@@ -6,19 +6,19 @@
 	
 	<ion-tabs class="tabs-positive tabs-icon-top" ng-class="tabclass" tabs-style="tabs-icon-top" tabs-type="tabs-positive" animation="slide-left-right">
 		
-	  <ion-tab title="All" icon-on="ion-grid" icon-off="ion-grid" ui-sref="app.completes.alltab">
+	  <!-- ion-tab title="All" icon-on="ion-grid" icon-off="ion-grid" ui-sref="app.completes.alltab">
 		<ion-nav-view name="allTab">
 		</ion-nav-view>
 			<!-- Tab 1 content -->
-	  </ion-tab>
+	  <!-- /ion-tab -->
 
-	  <ion-tab title="Unsync" icon-on="ion-iphone" icon-off="ion-iphone" ui-sref="app.completes.unsynctab">
+	  <ion-tab title="Unpublished" icon-on="ion-iphone" icon-off="ion-iphone" ui-sref="app.completes.unsynctab">
 		<ion-nav-view name="unsyncTab">
 			<!-- Tab 2 content -->
 		</ion-nav-view>
 	  </ion-tab>
 
-	  <ion-tab title="Synced" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline" on-select="onTabSelected()" on-deselect="onTabSelected()"  ui-sref="app.completes.syncedtab">
+	  <ion-tab title="Published" icon-on="ion-android-cloud" icon-off="ion-android-cloud-outline" on-select="onTabSelected()" on-deselect="onTabSelected()"  ui-sref="app.completes.syncedtab">
 		<ion-nav-view name="syncedTab">
 			<!-- Tab 3 content -->
 		</ion-nav-view>

@@ -66,7 +66,7 @@
 	// when a tab has been selected
 	$scope.onTabSelected = function(){
 		var tabIndex = $ionicTabsDelegate.selectedIndex();
-		if (tabIndex == 2){
+		if (tabIndex == 1){
 			$scope.popButton = 'syncall';
 		}
 		else{
@@ -123,18 +123,26 @@
 		$ionicLoading.show({
 			template: '<p>Loading...</p><ion-spinner></ion-spinner>'
 		});
-		goodsService.syncAll($scope.goods, function(result){
-			$cordovaToast.showLongTop('Sync all successful!');
-			$scope.init().then(function(){
-				// update new total of goods to menu
-				return goodsService.countAll().then(function(quantity){
-					var menuParams = {};
-					menuParams.goodCounter = quantity;
-					$rootScope.$broadcast('update',menuParams);
-					//$rootScope.$broadcast('hideSpinner');
-					$ionicLoading.hide();
+		goodsService.syncAll().then(function(result){
+			if (result){
+				$cordovaToast.showLongTop('Sync all successful!').then(function(){
+					setTimeout(function(){
+						$scope.init().then(function(){
+							// update new total of goods to menu
+							goodsService.countAll().then(function(quantity){
+								var menuParams = {};
+								menuParams.goodCounter = quantity;
+								$rootScope.$broadcast('update',menuParams);
+								//$rootScope.$broadcast('hideSpinner');
+								$ionicLoading.hide();
+							});
+						});
+					}, 1000);
 				});
-			});
+			}
+			else{
+				$cordovaToast.showLongTop('Sync failed!');
+			}
 		});
 	}
 	$scope.$on('updateIsQuickActionFlag', function(event, args){

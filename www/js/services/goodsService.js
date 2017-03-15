@@ -60,53 +60,71 @@ angular.module('LelongApp.services')
 		}
 
 		// download photos of a good from server 
-		function downloadPhotosOfGood(goodId, good, listPhoto, callBack) {
+		function downloadPhotosOfGood(goodId, good, listPhoto) {
+			var deffered=$q.defer();
 			var cId = goodId;
 			var userId = good.UserId;
+			
+			if (!listPhoto || listPhoto.length == 0){
+				deffered.resolve(true);
+			}
+			else {
+				listPhoto.forEach(function(p, index){
+					var currentCouter = index+1;
+					// check local db whether has storing this photo
+					var filterCondition = 'GoodPublishId = \''+goodId+'\' AND PhotoName = \''+p.PhotoName+'\'';
+					$dbHelper.select('goodsPublishPhoto', 'Photoid', filterCondition).then(function(result){
+						if (!result || result.length == 0){
+							// if this photo has not stored before
+							// download photo from server
+							var dirName = "ImagesUpload";
+							var subDir = userId;
+							var goodsDir=good.Guid;
+							
+							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+								dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+									subDirEntry.getDirectory(subDir.toString(), { create: true }, function (dir) {
+										dir.getDirectory(goodsDir,{create:true},function(success){
 
-			listPhoto.forEach(function(p, index){
-				// download photo from server
-				var dirName = "ImagesUpload";
-				var subDir = userId;
-				var goodsDir=good.Guid;
-				var currentCouter = index+1;
-				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
-					dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
-						subDirEntry.getDirectory(subDir.toString(), { create: true }, function (dir) {
-							dir.getDirectory(goodsDir,{create:true},function(success){
-							var uploadDir = success.nativeURL + p.PhotoName;
-							var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
-							if (remoteImgUrl.trim() != '') {
-								imageService.downloadImage(remoteImgUrl, uploadDir, 
-									function () {
-										// save to database
-										var newPhoto = {
-											GoodPublishId: cId,
-											PhotoUrl: uploadDir,
-											PhotoName: p.PhotoName,
-											PhotoDescription: p.Description
+										var uploadDir = success.nativeURL + p.PhotoName;
+										var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+										if (remoteImgUrl.trim() != '') {
+											imageService.downloadImage(remoteImgUrl, uploadDir, 
+												function () {
+													// save to database
+													var newPhoto = {
+														GoodPublishId: cId,
+														PhotoUrl: uploadDir,
+														PhotoName: p.PhotoName,
+														PhotoDescription: p.Description
+													}
+
+													// insert record to database for new photo
+													$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+														if (currentCouter == listPhoto.length) {
+															//callBack();
+															deffered.resolve(true);
+														}
+													});
+												},
+												function () {
+												}
+											);
 										}
-
-										// insert record to database for new photo
-										$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
-											if (currentCouter == listPhoto.length && callBack) {
-												callBack();
-											}
-										});
-									},
-									function () {
-										/*if (currentCouter == listPhoto.length && callBack) {
-											callBack();
-										}*/
-									}
-								);
-							}
-							})
-		
-						})
+										})
+					
+									})
+								});
+							});
+						}
+						else if (currentCouter >= listPhoto.length){// && callBack) {
+							//callBack();
+							deffered.resolve(true);
+						}
 					});
-				});
-			})
+				})
+			}
+			return deffered.promise;
 		}
 
 		var goodService = {
@@ -449,11 +467,14 @@ angular.module('LelongApp.services')
 					});					
 				}					
 			},
-			syncAll: function (localGoods, callBack) {
+			syncAll: function (callBack) {
+				var deffered=$q.defer();
 				var token = tokenService.getToken();
 				var userId = token.userid;
 				xhttpService.get(syncAllApi, false).then(function (response) {
 					if (response.data) {
+						var dones = {};
+						dones.number = 0;
 						response.data.forEach(function(newGood, index){
 							var currentCouter = index + 1;
 							
@@ -474,19 +495,27 @@ angular.module('LelongApp.services')
 									// if good is exist, update it
 									var oldGood = result[0];
 									$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (res) {
+										// continue to photos
 										var gId = oldGood.GoodPublishId;
-										deletePhotosByGood(gId, function () {
-											if (currentCouter == response.data.length && callBack) {
+											/*if (currentCouter == response.data.length) {
 												if (listPhoto && listPhoto.length > 0){
-													downloadPhotosOfGood(gId, newGood, listPhoto,callBack);
+													downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
+														//callBack();
+														deffered.resolve(true);
+													});
 												}
 												else{
-													callBack();
+													//callBack();
+													deffered.resolve(true);
 												}
 											}
-											else
-												downloadPhotosOfGood(gId, newGood, listPhoto);
-										});
+											else*/
+												downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
+													downloadPhotoCallback(dones, response.data.length, deffered);
+													if (dones.number >= response.data.length){
+														deffered.resolve(true);
+													}
+												});
 									});
 								}
 								else{
@@ -494,16 +523,25 @@ angular.module('LelongApp.services')
 									$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
 										if (res && res.insertId) {
 											var gId = res.insertId;
-											if (currentCouter == response.data.length && callBack) {
+											/*if (currentCouter == response.data.length) {
 												if (listPhoto && listPhoto.length > 0){
-													downloadPhotosOfGood(gId, newGood, listPhoto, callBack);
+													downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
+														deffered.resolve(true);
+													});//, callBack);
 												}
 												else{
-													callBack();
+													//callBack();
+													deffered.resolve(true);
 												}
 											}
 											else
-												downloadPhotosOfGood(gId, newGood, listPhoto);
+												downloadPhotosOfGood(gId, newGood, listPhoto);*/
+											downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
+												downloadPhotoCallback(dones, response.data.length, deffered);
+												if (dones.number >= response.data.length){
+													deffered.resolve(true);
+												}
+											});
 										}
 									});
 								}
@@ -511,6 +549,7 @@ angular.module('LelongApp.services')
 						})
 					}
 				});
+				return deffered.promise;
 			}
 		};
 
@@ -546,6 +585,13 @@ angular.module('LelongApp.services')
 
 		function getImageFileName(fullNamePath) {
 			return fullNamePath.replace(/^.*[\\\/]/, '');
+		}
+		
+		function downloadPhotoCallback(dones, all, deffered){
+			dones.number++;
+			if (dones.number >= all){
+				deffered.resolve(true);
+			}
 		}
 
 		return goodService;
