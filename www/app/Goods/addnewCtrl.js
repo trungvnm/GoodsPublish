@@ -434,7 +434,7 @@ function postToServer() {
                         $ionicHistory.clearCache().then(function () {
                             $state.go('app.completes');
                         });
-                    }
+                    } else $cordovaToast.showLongTop('Publish failed!');
                     $ionicLoading.hide();
                 },function(err){
                      $cordovaToast.showLongTop('Publish failed!');

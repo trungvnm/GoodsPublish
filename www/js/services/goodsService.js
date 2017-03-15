@@ -317,6 +317,7 @@ angular.module('LelongApp.services')
 
 			        var listGoodsPublishFailed = [];
 			        var listGoodsPublishOK = listGoods;
+			        var listImageNameOnServer = response.data.listCurrentPhotoName;
 
 			        if (response.status == 200 && response.data) {
 			            if (response.data.message == "Failed") {
@@ -350,7 +351,7 @@ angular.module('LelongApp.services')
 						$dbHelper.update("GoodsPublish", params, "Guid = '" + listGoodsPublishOK[i].Guid + "'").then(function (result) {
 						});
 			        }
-                    
+			        listImageObj = getNewImagesOfGoods(listImageObj, listImageNameOnServer);
 			        // upload images
 			        if (listImageObj && listImageObj.length > 0) {
 			            uploadMultipleImages(listImageObj).then(function (result) {
@@ -511,6 +512,17 @@ angular.module('LelongApp.services')
 				});
 			}
 		};
+
+		function getNewImagesOfGoods(listImagesLocal,listImageNameOnServer)
+		{
+		    var result = []
+            
+		    for (var i = 0; i < listImagesLocal.length; i++) {
+		        var isExit = listImageNameOnServer.filter(function (x) { return x === listImagesLocal[i].photoObject.PhotoName; });
+		        if (!isExit || isExit.length===0) result.push(listImagesLocal[i]);
+		    }
+		    return result;
+		}
 
 		function uploadMultipleImages(listPhoto) {
 		    var promises = [];
