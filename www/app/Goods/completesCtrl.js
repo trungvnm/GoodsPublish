@@ -4,8 +4,8 @@
 	var offset = 0;
 	var allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
 	$scope.hasRemainGoods = false;
-	$scope.unpublishCounter = 0;
-	$scope.publishedCounter = 0;
+	$scope.unpubCounter = 0;
+	$scope.pubCounter = 0;
 	
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
@@ -38,6 +38,15 @@
 			else $scope.hasRemainGoods = false;
 		});
 	}
+
+	$scope.countGoodsInTabs = function(){
+		return goodsService.countInTab('unpublish').then(function(quantity){
+			$scope.unpubCounter = quantity;
+			goodsService.countInTab('published').then(function(qty){
+				$scope.pubCounter = qty;
+			});
+		});
+	}
 	
 	$scope.init = function(){
 		offset = 0;
@@ -49,13 +58,8 @@
 		$scope.unSyncedGoods = [];
 		$scope.syncedGoods = [];
 		
-		goodsService.countInTab('unpublish').then(function(quantity){
-			$scope.unpublishCounter = quantity;
-			goodsService.countInTab('published').then(function(qty){
-				$scope.publishedCounter = qty;
-			});
-		});
-
+		$scope.countGoodsInTabs();
+		
 		return $scope.getGoodsInTabs();
 		//selectGoods();
 	};
