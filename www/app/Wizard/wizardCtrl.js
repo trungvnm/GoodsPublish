@@ -9,7 +9,7 @@ angular.module("LelongApp.Wizard",[])
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
     {code:2, name:"Electronics & Appliances" }, 
-    {code:3, name:"Fasion" },
+    {code:3, name:"Fashion" },
     {code:4, name:"Beauty & Personal Care" },
     {code:5, name:"Toys & Games" },
     {code:6, name:"Watches, Pens & Clocks" },
