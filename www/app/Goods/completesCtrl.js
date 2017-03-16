@@ -408,14 +408,19 @@ var mapping = {"ALL":{"text":"Lek","uniDec":"76, 101, 107","uniHex":"4c, 65, 6b"
 
   return function (input, scope) {	  
 	if (scope.CurrencyUnit == undefined) return input;
+	var _symbol = mapping[scope.CurrencyUnit].text||$;
+	var _format = "%s%v";
+	var _decimal = ".";
+	var _thousand = ",";
+	var _precision = 2;
 	if (scope.CurrencyUnit == "VND"){
-		return accounting.formatMoney(input,  { symbol: mapping[scope.CurrencyUnit].text,  format: "%v %s" });
+		_format = "%v %s";
+		_precision = 0;
 	}
 	else if (scope.CurrencyUnit == "CAD" || scope.CurrencyUnit == "DKK" || scope.CurrencyUnit == "EUR"){
-		return accounting.formatMoney(input, mapping[scope.CurrencyUnit].text||$, 2, " ", ",");
-	}   
-	else{
-		return accounting.formatMoney(input, mapping[scope.CurrencyUnit].text||$, 2, ",", ".");
+		_thousand = " ";
+		_decimal = ",";
 	}
+	return accounting.formatMoney(input, { symbol: _symbol,  format: _format, decimal: _decimal, thousand: _thousand, precision: _precision});	
   };
 });
