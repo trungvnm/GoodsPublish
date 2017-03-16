@@ -128,7 +128,7 @@ angular.module('LelongApp.services')
 		}
 
 		var goodService = {
-			getAll: function (type, offset, limit) {
+			getAll: function (type, offset, limit, condition) {
 				var token = tokenService.getToken();
 				var userId = token.userid;
 
@@ -140,6 +140,11 @@ angular.module('LelongApp.services')
 				else if (type == 'synced'){
 					whereClause += " AND LastSync IS NOT NULL AND LastSync != '' ";
 				}
+				
+				if (condition && condition.trim() != ''){
+					whereClause += " AND " + condition;
+				}
+				
 				var limitClause = '';
 				if (limit){
 					if (offset){

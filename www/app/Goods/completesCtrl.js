@@ -1,42 +1,81 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading) {
+	
+	// representer of unpublished Tab
+	$scope.unsyncTabRepresenter = {
+		order:0,
+		offset: 0,
+		hasRemainGoods: false,
+		allowLoadMore: true,
+		goods: [],
+		reset: function(){
+			$scope.unsyncTabRepresenter.offset = 0;
+			$scope.unsyncTabRepresenter.hasRemainGoods = false;
+			$scope.unsyncTabRepresenter.goods = [];
+		}
+	}
+	
+	// representer of published Tab
+	$scope.syncedTabRepresenter = {
+		order: 1,
+		offset: 0,
+		hasRemainGoods: false,
+		allowLoadMore: true,
+		goods: [],
+		reset: function(){
+			$scope.syncedTabRepresenter.offset = 0;
+			$scope.syncedTabRepresenter.hasRemainGoods = false;
+			$scope.syncedTabRepresenter.goods = [];
+		}
+	}
+	
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
-	var offset = 0;
-	var allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
-	$scope.hasRemainGoods = false;
 	$scope.unpubCounter = 0;
 	$scope.pubCounter = 0;
 	
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
 	
-	$scope.getGoodsInTabs = function(){
-		if (!allowLoadMore){
-			return;
+	// Get goods from local database and push them into a tab specified by its index
+	$scope.getGoodsInTabs = function(tabIndex, condition, overwrite){
+		if (!tabIndex){
+			tabIndex =0;
 		}
-		allowLoadMore = false; // disallow other getGoodsInTabs() actions running for conflict resist
-		// get data for All Tab
-		return goodsService.getAll('all', offset, $scope.limit).then(function(result) {
-			$scope.goods.push.apply($scope.goods, result);
-			if (result && result.length > 0){
-				$scope.hasRemainGoods = true;
-				// get data for Unsync Tab
-				return goodsService.getAll('unsync', offset, $scope.limit).then(function(res) {
-					$scope.unSyncedGoods.push.apply($scope.unSyncedGoods, res);
-					return goodsService.getAll('synced', offset, $scope.limit).then(function(r) {
-						$scope.syncedGoods.push.apply($scope.syncedGoods, r);
-						
-						// increase offset for loading more
-						offset += $scope.limit;
-						
-						$scope.$broadcast('scroll.infiniteScrollComplete');
-						allowLoadMore = true;
-						return true;
-					});
-				});
+		var deffered=$q.defer();
+		var tabRepresenter = null;
+		var type = '';
+		if (tabIndex == $scope.unsyncTabRepresenter.order){
+			// work with Unpublished Tab
+			tabRepresenter = $scope.unsyncTabRepresenter;
+			type = 'unsync';
+		}
+		else if (tabIndex == $scope.syncedTabRepresenter.order){
+			// work with Published Tab
+			tabRepresenter = $scope.syncedTabRepresenter;
+			type = 'synced';
+		}
+		
+		if (tabRepresenter != null){
+			if (!tabRepresenter.allowLoadMore){
+				deffered.resolve(false);
 			}
-			else $scope.hasRemainGoods = false;
-		});
+			tabRepresenter.allowLoadMore = false; // disallow other getGoodsInTabs() actions running for conflict resist
+			
+			goodsService.getAll(type, tabRepresenter.offset, $scope.limit, condition).then(function(res) {
+				if (overwrite){
+					tabRepresenter.goods = res;
+				}
+				else {
+					tabRepresenter.goods.push.apply(tabRepresenter.goods, res);
+				}
+				tabRepresenter.offset += res.length;
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+				tabRepresenter.allowLoadMore = true;
+				tabRepresenter.hasRemainGoods = (res && res.length > 0);
+				deffered.resolve(true);
+			});
+		}
+		return deffered.promise;
 	}
 
 	$scope.countGoodsInTabs = function(){
@@ -48,32 +87,15 @@
 		});
 	}
 	
+	// Initialize first data of page
 	$scope.init = function(){
-		offset = 0;
-		allowLoadMore = true; // A flag to allow getGoodsInTabs() action running
-		$scope.hasRemainGoods = false;
-		
+		resetData();
 		$scope.filterMessage = '';
-		$scope.goods = [];
-		$scope.unSyncedGoods = [];
-		$scope.syncedGoods = [];
-		
-		$scope.countGoodsInTabs();
-		
-		return $scope.getGoodsInTabs();
+		$scope.hasRemainGoods = false;
+		$scope.getGoodsInTabs(0);
+		$scope.getGoodsInTabs(1);
 		//selectGoods();
 	};
-	
-	// Load more goods from database
-	/*$scope.loadMore=function(type){
-		if (allowLoadMore){
-			getGoodsInTabs().then(function(result){
-				if (result){
-					
-				}
-			});
-		}
-	};*/
 	
 	// when a tab has been selected
 	$scope.onTabSelected = function(){
@@ -87,14 +109,11 @@
 	};
 	
 	$scope.exitSearching = function(){
-		$scope.filterMessage = '';
-		$scope.goods.forEach(function(g){
-			g.hidden = false;
-		});
-		
 		var params = {};
 		params.issearch = false;
 		$rootScope.$broadcast('updateIsSearch', params);
+		
+		$scope.init();
 	};
 	
     $scope.goodOnHold = function(listType){
@@ -130,24 +149,25 @@
 	};
 	$scope.syncAll = function(){
 		/*$scope.goods = [];
-		$scope.unSyncedGoods = [];
-		$scope.syncedGoods = []; */
+		$scope.unsyncTabRepresenter.goods = [];
+		$scope.syncedTabRepresenter.goods = []; */
 		$ionicLoading.show({
-			template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+			template: '<p>Logging in...</p><ion-spinner icon="spiral"></ion-spinner>'
 		});
 		goodsService.syncAll().then(function(result){
 			if (result){
 				$cordovaToast.showLongTop('Sync all successful!').then(function(){
 					setTimeout(function(){
-						$scope.init().then(function(){
-							// update new total of goods to menu
-							goodsService.countAll().then(function(quantity){
-								var menuParams = {};
-								menuParams.goodCounter = quantity;
-								$rootScope.$broadcast('update',menuParams);
-								//$rootScope.$broadcast('hideSpinner');
-								$ionicLoading.hide();
-							});
+						$scope.getGoodsInTabs(0, $scope.filterMessage, true);
+						$scope.getGoodsInTabs(1, $scope.filterMessage, true);
+						
+						// update new total of goods to menu
+						goodsService.countAll().then(function(quantity){
+							var menuParams = {};
+							menuParams.goodCounter = quantity;
+							$rootScope.$broadcast('update',menuParams);
+							//$rootScope.$broadcast('hideSpinner');
+							$ionicLoading.hide();
 							$scope.countGoodsInTabs();
 						});
 					}, 1000);
@@ -165,15 +185,16 @@
 		}
 	});
 	$scope.$on('search', function(event, args){
-		if ($scope.goods){
-			var key = args.searchkey;
-			$scope.filterMessage = 'Filtered by \''+key+'\':';
-			$scope.goods.forEach(function(g){
-				if (g.Title.toLowerCase().indexOf(key.toLowerCase()) == -1){
-					g.hidden = true;
-				}
-			})
-		}
+		resetData();
+		
+		var key = args.searchkey;
+		var condition = 'Title LIKE \'%'+ key +'%\'';
+		$scope.filterMessage = 'Filtered by \''+key+'\':';
+		//var tabIndex = $ionicTabsDelegate.selectedIndex();
+		$scope.getGoodsInTabs(0, condition);
+		$scope.getGoodsInTabs(1, condition);
+		
+		// hide search panel
 		var params = {};
 		params.issearch = false;
         $rootScope.$broadcast('updateIsSearch', params);
@@ -229,7 +250,7 @@
 
 	$scope.$on('multiSync', function (event, args) {
 	    var messageReuslt = '';
-	    var selecteds = getListGoodsToProcess($scope.syncedGoods);
+	    var selecteds = getListGoodsToProcess($scope.syncedTabRepresenter.goods);
 	    if (selecteds.length > 0) {
 	        if (navigator.notification) {
 	            navigator.notification.confirm('Are you sure to download selected items?', function (result) {
@@ -261,7 +282,7 @@
 	});
 
 	$scope.$on('multiPublish', function (event, args) {
-	    var selecteds = getListGoodsToProcess($scope.unSyncedGoods);
+	    var selecteds = getListGoodsToProcess($scope.unsyncTabRepresenter.goods);
 	    var messageReuslt = '';
 	    if (selecteds.length > 0) {
 	        if (navigator.notification) {
@@ -315,14 +336,11 @@
 	    var selecteds = [];
 	    var currentListGoods = [];
 	    switch (listName) {
-	        case 'all':
-	            currentListGoods = $scope.goods;
-	            break;
 	        case 'synced':
-	            currentListGoods = $scope.syncedGoods;
+	            currentListGoods = $scope.syncedTabRepresenter.goods;
 	            break;
 	        case 'unsynced':
-	            currentListGoods = $scope.unSyncedGoods;
+	            currentListGoods = $scope.unsyncTabRepresenter.goods;
 	            break;
 	        default:
 	    }
@@ -359,6 +377,12 @@
 	    return $q.all(promises);
 	}
 	
+	// reset and clear all data and status params to initialized state
+	function resetData(){
+		$scope.syncedTabRepresenter.reset();
+		$scope.unsyncTabRepresenter.reset();
+		allowLoadMore = true;
+	}
 	$(document).ready(function(){
 		$("#list-readmode > a.item").on("click", function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
