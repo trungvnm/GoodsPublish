@@ -90,6 +90,7 @@
 	$scope.initCurrency = function(){
 		return goodsService.getCurrencyUnit().then(function(res){
 			$scope.CurrencyUnit = res;
+			$window.localStorage.setItem("Lelong_CurrencyUnit", $scope.CurrencyUnit);
 		});
 	}
 	
