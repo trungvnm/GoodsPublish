@@ -95,6 +95,7 @@
 		$scope.getGoodsInTabs(0);
 		$scope.getGoodsInTabs(1);
 		//selectGoods();
+		$scope.countGoodsInTabs();
 	};
 	
 	// when a tab has been selected
