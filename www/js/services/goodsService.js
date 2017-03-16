@@ -215,21 +215,30 @@ angular.module('LelongApp.services')
 				});
 			},
 			getGoodsById: function (goodId) {
-				// Condition for filter
-				var whereClause = ' WHERE GoodPublishId=\'' + goodId + '\'';
-
-				// Query to extract data
-				var query = 'SELECT	* FROM	GoodsPublish ' + whereClause;
+				var whereClause = ' WHERE a.GoodPublishId=' + goodId;
+				var query = 'SELECT	a.*,b.PhotoUrl,b.Photoid,b.PhotoName,b.PhotoUrl,b.PhotoDescription FROM GoodsPublish a INNER JOIN GoodsPublishPhoto b on a.GoodPublishId=b.GoodPublishId ' + whereClause;
 				var deffered=$q.defer();
-				return $dbHelper.selectCustom(query).then(function (result) {
-					if (result && result.length > 0) {
-						$timeout(function() {
-							deffered.resolve(result[0]);
-						}, 200);
-						return deffered.promise;
+				$dbHelper.selectCustom(query).then(function (res) {
+					var lstPhoto=[]
+					var obj={};
+					var newSource={};
+					if(res.length>0){
+						for (var i = res.length - 1; i >= 0; i--) {
+							var item=res[i];
+							obj = angular.copy(res[0]);
+							lstPhoto.push(
+								{
+									Photoid:item.Photoid,
+									PhotoUrl:item.PhotoUrl,
+									PhotoName:item.PhotoName,
+									PhotoDescription:item.PhotoDescription
+								});
+						}
+						angular.extend(newSource,obj,{listPhoto:lstPhoto});
 					}
-					return null;
+					deffered.resolve(newSource);
 				});
+				return deffered.promise;
 			},
 			deleteGoods: function (goods) {			
 				var defer=$q.defer();	
@@ -341,13 +350,13 @@ angular.module('LelongApp.services')
 				/** update GoodsPublishPhoto: if photoId>0: delete?insert */
 				if (goodsPhotoObj.length > 0) {
 					for (var i = 0; i < goodsPhotoObj.length; i++) {
-						if (goodsPhotoObj[i].photoId > 0) {
-							var wherePhoto = " Photoid=" + goodsPhotoObj[i].photoId;
+						if (goodsPhotoObj[i].Photoid > 0) {
+							var wherePhoto = " Photoid=" + goodsPhotoObj[i].Photoid;
 							$dbHelper.delete("GoodsPublishPhoto", wherePhoto).then(function (res) {
 								console.log("GoodsPublishPhoto DELETED:" + JSON.stringify(res));
 							});
 						} else {
-							$dbHelper.insert("GoodsPublishPhoto", { PhotoUrl: goodsPhotoObj[i].photoUrl, GoodPublishId: goodsPhotoObj[i].GoodPublishId }).then(function (res) {
+							$dbHelper.insert("GoodsPublishPhoto", { PhotoUrl: goodsPhotoObj[i].PhotoUrl, GoodPublishId: goodsPhotoObj[i].GoodPublishId }).then(function (res) {
 								console.log("GoodsPublishPhoto INSERTED:" + JSON.stringify(res));
 							});
 						}

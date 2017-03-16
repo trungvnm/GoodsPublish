@@ -48,17 +48,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 $scope.goodItem = res;   
                 $scope.viewTitle = res.Title;               
                 $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
-                /** get photos by goodsId */
-                var where = "GoodPublishId=" + $scope.goodsId;
-                $dbHelper.select("GoodsPublishPhoto", "*", where).then(function (result) {
-                    if (result.length > 0) {
-                        for (var i = 0; i < result.length; i++) {
-                            $scope.imgURI.push({ photoId: result[i].Photoid, photoUrl: result[i].PhotoUrl });
-                        }                    
-                        updateSlide();
-                    }
-                });  
-
+                $scope.imgURI= res.listPhoto;
+                updateSlide();               
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
                     $rootScope.$broadcast('disableSubAction','Sync')
                 }
@@ -249,7 +240,9 @@ $scope.takeCameraPicture = function () {
     };
 
     $cordovaCamera.getPicture(options).then(function (imagePath) {
-        copyImgToPerFolder(imagePath);
+        copyImgToPerFolder(imagePath).then(function(res){
+            imageService.removeFileFromPersitentFolder(imagePath);
+        });
     }, function (error) {
         // An error occured. Show a message to the user
         console.log('From Camera: ' + JsonParse(error));
@@ -266,21 +259,24 @@ $scope.getImageFromLibrary = function () {
 
     $cordovaImagePicker.getPictures(options).then(function (results) {
         for (var i = 0; i < results.length; i++) {
-            copyImgToPerFolder(results[i]);
+            var img=results[i];
+            copyImgToPerFolder(img).then(function(res){
+                imageService.removeFileFromPersitentFolder(img);
+            });            
         }
     }, function (error) {
         console.log('From Library Photo: ' + JsonParse(error));
     });
 };
 
-$scope.deleteImg = function (fullNamePath, photoId) {
+$scope.deleteImg = function (fullNamePath, Photoid) {
     for (var i = 0; i < $scope.imgURI.length; i++) {
-        var file = getImageFileName($scope.imgURI[i].photoUrl);
+        var file = getImageFileName($scope.imgURI[i].PhotoUrl);
         var fileDel = getImageFileName(fullNamePath);
         if (file === fileDel) {
             $scope.imgURI.splice(i, 1);
-            if (photoId > 0) {
-                $scope.imageDeleted.push({ photoId: photoId, photoUrl: fullNamePath });
+            if (Photoid > 0) {
+                $scope.imageDeleted.push({ Photoid: Photoid, PhotoUrl: fullNamePath });
             } else {
                 // delete the img that isn't save into db
                 imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
@@ -329,7 +325,10 @@ function copyImgToPerFolder(originPath) {
             fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
                 fileEntry.copyTo(desFolder, newFileName, function (success) {
                     console.log("COPY FILE SUCCESS:" + JsonParse(success));
-                    $scope.imgURI.push({ photoId: 0, GoodPublishId: $scope.goodsId, photoUrl: success.nativeURL });                             
+                    $scope.imgURI.push({ 
+                                    Photoid: 0, GoodPublishId: $scope.goodsId, 
+                                    PhotoUrl: success.nativeURL 
+                                });                             
                     updateSlide();
                     deffered.resolve();
                 }, function (error) {
@@ -350,7 +349,7 @@ function saveClick (isShowToast) {
         var arrImage = [];
         if ($scope.imgURI.length > 0) {
             for (var i = 0; i < $scope.imgURI.length; i++) {
-                arrImage.push($scope.imgURI[i].photoUrl);
+                arrImage.push($scope.imgURI[i].PhotoUrl);
             }
         }
         if ($scope.editMode) {
@@ -359,7 +358,7 @@ function saveClick (isShowToast) {
             var imgSave = [];
             if ($scope.imgURI.length > 0) {
                 for (var i = 0; i < $scope.imgURI.length; i++) {
-                    if ($scope.imgURI[i].photoId == 0) {
+                    if ($scope.imgURI[i].Photoid == 0) {
                         imgSave.push($scope.imgURI[i]);
                     }
                 }
@@ -368,7 +367,7 @@ function saveClick (isShowToast) {
                 for (var i = 0; i < $scope.imageDeleted.length; i++) {
                     imgSave.push($scope.imageDeleted[i]);
                     //delete the image saved into db
-                    imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].photoUrl).then(function (res) {
+                    imageService.removeFileFromPersitentFolder($scope.imageDeleted[i].PhotoUrl).then(function (res) {
                     });
                 }
             }
@@ -429,10 +428,10 @@ function postToServer() {
                 /** post goods to server */
                 if ($scope.imgURI.length > 0) {
                     for (var i = 0; i < $scope.imgURI.length; i++) {
-                        var pName = getImageFileName($scope.imgURI[i].photoUrl);
+                        var pName = getImageFileName($scope.imgURI[i].PhotoUrl);
                         listPhoto.push({
                             PhotoName: pName,
-                            PhotoUrl: $scope.imgURI[i].photoUrl,
+                            PhotoUrl: $scope.imgURI[i].PhotoUrl,
                             PhotoDescription: ""
                         })
                     }

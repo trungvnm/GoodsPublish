@@ -366,20 +366,7 @@
 	    selecteds.forEach(function (g) {
 	        var deffered = $q.defer();
 	        goodsService.getGoodsById(g.GoodPublishId).then(function (goodsObj) {
-	            $dbHelper.select('GoodsPublishPhoto', 'PhotoName,PhotoUrl,PhotoDescription', 'GoodPublishId = \'' + g.GoodPublishId + '\'').then(function (result) {
-	                if (result && result.length > 0) {
-	                    result.forEach(function (photo) {
-	                        if (!goodsObj.listPhoto)
-	                            goodsObj.listPhoto = [];
-	                        goodsObj.listPhoto.push({
-	                            PhotoName: photo.PhotoName,
-	                            PhotoUrl: photo.PhotoUrl,
-	                            PhotoDescription: photo.PhotoDescription
-	                        });
-	                    });
-	                }
-	                deffered.resolve(goodsObj);
-	            });
+	            deffered.resolve(goodsObj);
 	        });
 	        promises.push(deffered.promise);
 	    });

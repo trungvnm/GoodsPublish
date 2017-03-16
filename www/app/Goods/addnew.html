@@ -7,15 +7,15 @@
                 <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length >2">
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
                         <div>
-                            <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
-                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
+                            <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
+                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
                         </div>
                     </ion-slide-page>
                 </ion-slides>          
                 <div style="width: 100%;text-align: center;" ng-show="imgURI.length >0 && imgURI.length <= 2">
                     <div class="gallery-custom-imagecenter" ng-repeat="image in imgURI">
-                        <div class="ion-slides-delete" ng-click="deleteImg(image.photoUrl,image.photoId)"></div>
-                        <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.photoUrl}}" zoom-view>
+                        <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
+                        <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
                     </div>
                 </div>
 

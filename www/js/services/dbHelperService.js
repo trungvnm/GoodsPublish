@@ -142,6 +142,10 @@ angular.module('LelongApp.services')
                 if(isUpdate && tableName.toLowerCase() === 'goodspublish'){
                     arrKeys.push("CreatedDate");
                     arrKeys.push("Guid");
+                    arrKeys.push("PhotoName");
+                    arrKeys.push("PhotoUrl");
+                    arrKeys.push("PhotoDescription");
+                    arrKeys.push("listPhoto");
                 }
             } else if (tableName.toLowerCase() === 'goodspublishphoto') {
                 fIndex = arrKeys.indexOf('GoodPublishId');
