@@ -71,7 +71,7 @@
 				tabRepresenter.offset += res.length;
 				$scope.$broadcast('scroll.infiniteScrollComplete');
 				tabRepresenter.allowLoadMore = true;
-				tabRepresenter.hasRemainGoods = (res && res.length > 0);
+				tabRepresenter.hasRemainGoods = (res && res.length == $scope.limit);
 				deffered.resolve(true);
 			});
 		}
@@ -384,6 +384,7 @@
 		$scope.unsyncTabRepresenter.reset();
 		allowLoadMore = true;
 	}
+	
 	$(document).ready(function(){
 		$("#list-readmode > a.item").on("click", function(e){
 			if (e.target.className.indexOf("edit-button") != -1)
