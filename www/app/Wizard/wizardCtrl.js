@@ -42,7 +42,6 @@ angular.module("LelongApp.Wizard",[])
         $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
 
         $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
-        debugger;
         $scope.objWizard.CurrencyUnit = $scope.currency;
     }
     $scope.saveObject = function () {  
