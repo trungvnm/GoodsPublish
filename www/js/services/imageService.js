@@ -66,8 +66,8 @@ angular.module('LelongApp.services')
             return fileTransfer.download(
                 uri,
                 saveUrl,
-                finishCallback(),
-                erorCallback(),
+                finishCallback,
+                erorCallback,
                 false,
                 {
                     headers: {

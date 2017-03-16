@@ -167,6 +167,8 @@
 			if (result){
 				$cordovaToast.showLongTop('Sync all successful!').then(function(){
 					setTimeout(function(){
+						$scope.unsyncTabRepresenter.offset = 0;
+						$scope.syncedTabRepresenter.offset = 0;
 						$scope.getGoodsInTabs(0, $scope.filterMessage, true);
 						$scope.getGoodsInTabs(1, $scope.filterMessage, true);
 						

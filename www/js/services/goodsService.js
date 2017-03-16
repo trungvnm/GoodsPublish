@@ -90,7 +90,30 @@ angular.module('LelongApp.services')
 										var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
 										if (remoteImgUrl.trim() != '') {
 											imageService.downloadImage(remoteImgUrl, uploadDir, 
-												function () {
+												function (fileEntry) {
+													// ---------- DEMO --------
+													fileEntry.file(function (file) {
+														var reader = new FileReader();
+
+														reader.onloadend = function() {
+
+															console.log("Successful file read: " + this.result);
+															// displayFileData(fileEntry.fullPath + ": " + this.result);
+
+															var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+															
+															// Display 
+															// Note: Use window.URL.revokeObjectURL when finished with image.
+															var objURL = window.URL.createObjectURL(blob);
+														};
+
+														reader.readAsArrayBuffer(file);
+
+													}, function(error){
+														console.dir(error);
+													});
+													// ---------- END DEMO --------
+													
 													// save to database
 													var newPhoto = {
 														GoodPublishId: cId,

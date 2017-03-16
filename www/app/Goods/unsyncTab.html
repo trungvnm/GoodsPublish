@@ -21,18 +21,6 @@
 							</a>
 						</div>
 					</div>
-					
-					<!-- LIST -->
-					<!-- a ng-repeat="g in unSyncedGoods" ng-show="!g.LastSync || g.LastSync == ''" class="item item-thumbnail-left" ng-click="goodClick($event, g.GoodPublishId)" ng-class="g.goodSlided" on-swipe-left="editButtonClick(g.GoodPublishId)" on-hold="goodOnHold('unsynced')" ng-disabled="quickactions" ng-hide="g.hidden">
-					  <div class="main_photo">
-							<img ng-src="{{g.PhotoUrl}}"/>
-						</div>				
-					  <h2>{{g.Title}}</h2>
-					  <p>{{g.Description}}</p>
-					  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
-					  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
-					  <button class="button button-small button-icon edit-button ion-edit" ng-click="editButtonClick(g.GoodPublishId)"></button>
-					</a -->
 				</div>
 				
 				<div class="list list-editmode" ng-show="quickactions">
@@ -46,16 +34,6 @@
 							</a>
 						</ion-checkbox>
 					</div>
-				
-					<!-- ion-checkbox ng-repeat="g in unsyncTabRepresenter.goods" ng-model="g.Checked" ng-hide="g.hidden">
-						<a class="item item-thumbnail-left">
-						  <img ng-src="{{g.PhotoUrl}}"/>
-						  <h2>{{g.Title}}</h2>
-						  <p>{{g.Description}}</p>
-						  <span class="quantity"><span class="small">QTY</span> {{g.Quantity}}</span>
-						  <p class="price"><span class="small">RM</span> {{g.SalePrice}}</p>
-						</a>
-					</ion-checkbox -->
 				</div>
 				<ion-infinite-scroll ng-if="unsyncTabRepresenter.hasRemainGoods"
 					ng-show="unsyncTabRepresenter.hasRemainGoods"
