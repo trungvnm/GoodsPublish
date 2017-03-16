@@ -514,7 +514,7 @@ function getImageFileName(fullNamePath) {
 
 function convertCateIdToName(catesId) {
     var lstName = [];
-    if (catesId.length > 0) {
+    if (catesId != undefined && catesId.length > 0) {
         var lstId = catesId.split(';');
         for (var i = 0; i < lstId.length; i++) {
             for (var j = 0; j < $scope.defaultCategory.length; j++) {

@@ -75,7 +75,7 @@ angular.module("LelongApp.Wizard",[])
         if ($scope.checkItems != null)
         {
             for (i in $scope.checkItems){
-                if ($scope.checkItems[i])
+                if (i != "" && $scope.checkItems[i])
                 {
                     count+=1;
                 }
@@ -105,6 +105,7 @@ angular.module("LelongApp.Wizard",[])
                    
     $scope.initWizardByUser = function(userId)
     {
+        $scope.currency = $scope.defaultcurrency[0].code;
         $scope.isnew = true;       
         $dbHelper.select("Wizard", "WizardId,UserId,DaysOfShip,ItemsCategory,ShippingFee,CurrencyUnit", "UserId="+ userId)
         .then(function(response){

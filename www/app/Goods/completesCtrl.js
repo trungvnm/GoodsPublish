@@ -88,8 +88,8 @@
 	}
 
 	$scope.initCurrency = function(){
-		return goodsService.getCurrencyUnit().then(function(res){
-			$scope.CurrencyUnit = res;
+		return goodsService.getCurrencyUnit().then(function(currencyunit){
+			$scope.CurrencyUnit = currencyunit == null ? "MYR": currencyunit;
 			$window.localStorage.setItem("Lelong_CurrencyUnit", $scope.CurrencyUnit);
 		});
 	}
@@ -99,11 +99,14 @@
 		resetData();
 		$scope.filterMessage = '';
 		$scope.hasRemainGoods = false;
+
+		$scope.initCurrency();
+
 		$scope.getGoodsInTabs(0);
 		$scope.getGoodsInTabs(1);
 		//selectGoods();
 		$scope.countGoodsInTabs();
-		$scope.initCurrency();
+		
 	};
 	
 	// when a tab has been selected
@@ -397,7 +400,9 @@ var mapping = {"ALL":{"text":"Lek","uniDec":"76, 101, 107","uniHex":"4c, 65, 6b"
 
   return function (input, scope) {	  
 	if (scope.CurrencyUnit == undefined) return input;
-	var _symbol = mapping[scope.CurrencyUnit].text||$;
+	
+	
+	var _symbol = mapping[scope.CurrencyUnit].text || "$";
 	var _format = "%s%v";
 	var _decimal = ".";
 	var _thousand = ",";
