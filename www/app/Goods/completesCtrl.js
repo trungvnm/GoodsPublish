@@ -148,6 +148,7 @@
 								//$rootScope.$broadcast('hideSpinner');
 								$ionicLoading.hide();
 							});
+							$scope.countGoodsInTabs();
 						});
 					}, 1000);
 				});
@@ -208,6 +209,7 @@
 	                                    $ionicLoading.hide();
 	                                    $rootScope.$broadcast('update', menuParams);
 	                                });
+									$scope.countGoodsInTabs();
 	                            });
 	                        }
 	                        else {
