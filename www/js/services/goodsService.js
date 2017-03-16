@@ -175,11 +175,34 @@ angular.module('LelongApp.services')
 
 				// Condition for filter
 				var whereClause = ' WHERE UserId=\'' + userId + '\' AND Active = 1 ';
-
+				
 				// Query to extract data
 				var query = 'SELECT	COUNT(GoodPublishId) AS Counter FROM	GoodsPublish ' + whereClause;
 
 				return $dbHelper.selectCustom(query).then(function (result) {
+					if (result && result.length > 0) {
+						return result[0].Counter;
+					}
+					return 0;
+				});
+			},
+			countInTab: function (type) {
+				var token = tokenService.getToken();
+				var userId = token.userid;
+
+				// Condition for filter
+				var whereClause = ' WHERE UserId=\'' + userId + '\' AND Active = 1 ';
+				if (type == 'unpublish'){
+					whereClause += " AND (LastSync = '' OR LastSync IS NULL) ";
+				}
+				else if (type == 'published'){
+					whereClause += " AND LastSync IS NOT NULL AND LastSync <> '' ";
+				}
+
+				// Query to extract data
+				var query = 'SELECT	COUNT(GoodPublishId) AS Counter FROM GoodsPublish ' + whereClause;
+
+				return $dbHelper.selectCustom(query).then(function(result) {
 					if (result && result.length > 0) {
 						return result[0].Counter;
 					}
