@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
+.controller('WizardCtrl', function ($scope, $window, $rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
     $rootScope.$broadcast('hideSearch');
     $scope.defaultcurrency=  [
     {code:1, name:"MYR" }, 
@@ -42,9 +42,16 @@ angular.module("LelongApp.Wizard",[])
         $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
 
         $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
-        $scope.objWizard.CurrencyUnit = $scope.currency;
+        $scope.objWizard.CurrencyUnit = $scope.currency;        
     }
     $scope.saveObject = function () {  
+                     
+        for (var i = 0; i<= $scope.defaultcurrency.length-1;i++){
+            if  ($scope.defaultcurrency[i].code == $scope.currency){
+                $window.localStorage.setItem("Lelong_CurrencyUnit", $scope.defaultcurrency[i].name);
+                break;
+            }
+        }
         if  ($scope.isnew)
         {
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {

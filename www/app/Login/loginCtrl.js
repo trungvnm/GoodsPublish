@@ -61,7 +61,14 @@
             
 			// get user from User table
 			$dbHelper.select('User', 'UserId', 'UserName==\''+$scope.username.toLowerCase()+'\'').then(function(result){
-				if (result.length > 0){
+				if  ($window.localStorage.getItem("Lelong_CurrencyUnit") == undefined 
+                || $window.localStorage.getItem("Lelong_CurrencyUnit") == null
+                || $window.localStorage.getItem("Lelong_CurrencyUnit").length <= 0)
+                {
+                    $window.localStorage.setItem("Lelong_CurrencyUnit", "MYR");
+                }  
+                
+                if (result.length > 0){
 					//$window.localStorage.setItem("userid", result[0].UserId);
 					token.userid = result[0].UserId;
 					tokenService.saveToken(token);

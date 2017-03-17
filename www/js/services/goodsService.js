@@ -613,25 +613,6 @@ angular.module('LelongApp.services')
 					}
 				});
 				return deffered.promise;
-			},
-			getCurrencyUnit: function(){
-				// Condition for filter
-				var token = tokenService.getToken();
-				var userId = token.userid;
-
-				var defaultcurrency=  [
-				{code:1, name:"MYR" }, 
-				{code:2, name:"USD" }, 
-				{code:3, name:"VND" }
-				];
-
-				return $dbHelper.select("Wizard", "UserId,CurrencyUnit", "UserId="+ userId).then(function (result) {
-					if (result != null && result != undefined  && result.length > 0) {
-						var result = $.grep(defaultcurrency, function(e){ return e.code == result[0].CurrencyUnit; });
-						return result[0].name;
-					}
-					return null;
-				});	
 			}
 		};
 
