@@ -45,9 +45,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
             /** UPDATE GoodsPublish: get publishGood by id */
             goodsService.getGoodsById($scope.goodsId).then(function (res) {
                 $scope.goodItem = res;   
-                $scope.viewTitle = res.Title;               
-                $scope.CatesName = convertCateIdToName($scope.goodItem.Category);
-                $scope.imgURI= res.listPhoto;
+                $scope.viewTitle = res.Title;
+                getFolderUploadImg(res.Guid);               
+                $scope.CatesName = convertCateIdToName(res.Category);
+                $scope.imgURI= res.listPhoto;                
                 updateSlide();               
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
                     $rootScope.$broadcast('disableSubAction','Sync')
@@ -287,15 +288,27 @@ $scope.deleteImg = function (fullNamePath, Photoid) {
 /**End camera */
 /**Cordova file */
 /** create folder with name 'ImagesUpload / userid */
-$scope.dirName = "ImagesUpload";
-$scope.subDir = "" + $scope.tokenServ.userid + ""
-$scope.goodsFolder = "" + goodsFolderName + ""
+
+ $scope.dirName = "ImagesUpload";
+ $scope.subDir = "" + $scope.tokenServ.userid + "";
+ $scope.goodsFolder= "" + goodsFolderName + "";
+function getFolderUploadImg(goodGuid){
+    var gDir="";
+    if(goodGuid !==undefined && goodGuid.trim().length>0){
+        gDir=goodGuid;
+    }else{
+        gDir="" + goodsFolderName + "";
+    }
+    $scope.goodsFolder = gDir;
+    $scope.uploadDir= $scope.dirName + "/" + $scope.subDir + "/" + $scope.goodsFolder + "/";
+}
+
 function requestAccessFs() {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
         dirEntry.root.getDirectory($scope.dirName, { create: true }, function (subDirEntry) {
             subDirEntry.getDirectory($scope.subDir, { create: true }, function (dir) {
                 dir.getDirectory($scope.goodsFolder, { create: true }, function (success) {
-                    $scope.uploadDir = $scope.dirName + "/" + $scope.subDir + "/" + $scope.goodsFolder + "/";
+                    getFolderUploadImg($scope.goodsFolder);
                     console.log("CREATE SUBDIR SUCCESS!!!" + $scope.uploadDir);
                 }, fnFailed)
             }, fnFailed)
