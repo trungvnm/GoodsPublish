@@ -623,7 +623,7 @@ angular.module('LelongApp.services')
 				];
 
 				return $dbHelper.select("Wizard", "UserId,CurrencyUnit", "UserId="+ userId).then(function (result) {
-					if (result && result.length > 0) {
+					if (result != null && result != undefined  && result.length > 0) {
 						var result = $.grep(defaultcurrency, function(e){ return e.code == result[0].CurrencyUnit; });
 						return result[0].name;
 					}
