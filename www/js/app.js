@@ -12,7 +12,6 @@
                 tokenService.removeToken();
                 $location.path('/login');
             });
-
         })
         .run(function ($ionicPlatform, $dbHelper, $rootScope, Idle, tokenService) {
             $ionicPlatform.ready(function () {
@@ -71,14 +70,6 @@
 						
                     }
                 })
-				.state('app.completes.alltab', {
-					url: '/alltab',
-					views: {
-					  'allTab': {
-						templateUrl: 'app/Goods/allTab.html'
-					  }
-					}
-				})
 				.state('app.completes.unsynctab', {
 					url: '/unsynctab',
 					views: {
@@ -115,15 +106,6 @@
                         'menuContent': {
                             templateUrl: 'app/Goods/addnew.html',
                             controller: 'addnewCtrl'
-                        }
-                    }
-                })
-                .state('navbar.detail', {
-                    url: '/detail/{id}',
-                    views: {
-                        'menuContent': {
-                            templateUrl: 'app/Goods/detail.html',
-                            controller: 'DetailCtrl'
                         }
                     }
                 })

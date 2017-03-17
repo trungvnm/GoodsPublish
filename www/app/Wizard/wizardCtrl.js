@@ -1,5 +1,5 @@
 angular.module("LelongApp.Wizard",[])
-.controller('WizardCtrl', function ($scope, $rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
+.controller('WizardCtrl', function ($scope, $window, $ionicScrollDelegate,$rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
     $rootScope.$broadcast('hideSearch');
     $scope.defaultcurrency=  [
     {code:1, name:"MYR" }, 
@@ -42,9 +42,16 @@ angular.module("LelongApp.Wizard",[])
         $scope.objWizard.ItemsCategory = $scope.objWizard.ItemsCategory.substr(0,$scope.objWizard.ItemsCategory.length - 1);
 
         $scope.objWizard.ShippingFee = $scope.peninsular + "," + $scope.eastmalaysia;
-        $scope.objWizard.CurrencyUnit = $scope.currency;
+        $scope.objWizard.CurrencyUnit = $scope.currency;        
     }
     $scope.saveObject = function () {  
+                     
+        for (var i = 0; i<= $scope.defaultcurrency.length-1;i++){
+            if  ($scope.defaultcurrency[i].code == $scope.currency){
+                $window.localStorage.setItem("Lelong_CurrencyUnit", $scope.defaultcurrency[i].name);
+                break;
+            }
+        }
         if  ($scope.isnew)
         {
             $dbHelper.insert('Wizard',$scope.objWizard).then(function (res) {
@@ -71,22 +78,24 @@ angular.module("LelongApp.Wizard",[])
 
     $scope.isValid = function()
     {
+        var _isValid = true;
         var count = 0;
         if ($scope.checkItems != null)
         {
             for (i in $scope.checkItems){
-                if (i != "" && $scope.checkItems[i])
-                {
+                if (i != "" && $scope.checkItems[i]){
                     count+=1;
                 }
             }
         }        
-        if (count >  0 && count < 3)
-        {
+        if (count >  0 && count < 3){
             $scope.errorMessage = "You select least 3 of your items category";
-            return false;
+            _isValid = false;
         }
-        return true;
+        if (!_isValid){
+            $ionicScrollDelegate.scrollTop();
+        }
+        return _isValid;
     }
     
     $scope.initWizard = function()
