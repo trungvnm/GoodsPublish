@@ -118,15 +118,6 @@
                         }
                     }
                 })
-                .state('navbar.detail', {
-                    url: '/detail/{id}',
-                    views: {
-                        'menuContent': {
-                            templateUrl: 'app/Goods/detail.html',
-                            controller: 'DetailCtrl'
-                        }
-                    }
-                })
                 .state('app.wizard', {
                     cache: false,
                     url: '/wizard',
