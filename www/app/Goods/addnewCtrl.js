@@ -112,14 +112,12 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
                     if (result == 1) {
                      showSpinner();
-                     goodsService.sync([$scope.goodItem],function(){                      
+                     goodsService.sync([$scope.goodItem]).then(function(){
                         $cordovaToast.showLongTop('Sync successfully!').then(function(){
                             $ionicHistory.clearCache().then(function(){
                                 $state.go('app.completes');
                             });
                         });
-                        $ionicLoading.hide();
-                    },function(err){
                         $ionicLoading.hide();
                     });
                  }

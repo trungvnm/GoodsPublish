@@ -18,20 +18,8 @@ angular.module('LelongApp.services')
 					});
 
 					$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
-						try{
-							photoPaths.forEach(function (p) {
-								var nameSegments = p.split('/');
-								var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
-								var filename = nameSegments[nameSegments.length - 1];
-							})
-							if (callBack) {
-								callBack();
-							}
-						}
-						catch(err){
-							if (callBack) {
-								callBack(err);
-							}
+						if (callBack) {
+							callBack();
 						}
 					});
 					//}
@@ -485,7 +473,7 @@ angular.module('LelongApp.services')
 								delete newGood.GoodPublishId;
 
 								// update to old one
-								var finish = index == goods.length - 1;
+								var finish = index >= goods.length - 1;
 								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'")
 								.then(function (result) {
 									if (result.rowsAffected > 0) {
@@ -495,7 +483,8 @@ angular.module('LelongApp.services')
 												var cId = goods[i].GoodPublishId;
 
 												// clear old photos
-												deletePhotosByGood(cId, function () {
+												//deletePhotosByGood(cId, function () {
+												// download photos
 													if ((!listPhoto || listPhoto.length == 0) && finish){
 														deffered.resolve(true);
 													}
@@ -509,7 +498,7 @@ angular.module('LelongApp.services')
 															downloadPhotosOfGood(cId, goods[i], listPhoto);
 														}
 													}
-												});
+												//});
 												goods[i] = newGood;
 												break;
 											};
