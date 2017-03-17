@@ -124,7 +124,7 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
             }
         } else {
            showSpinner();
-            goodsService.sync([$scope.goodItem],function(){
+            goodsService.sync([$scope.goodItem]).then(function(){
                 $cordovaToast.showLongTop('Sync successfully!').then(function () {
                         $ionicHistory.clearCache().then(function(){
                                 $state.go('app.completes');

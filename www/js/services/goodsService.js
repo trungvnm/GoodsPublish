@@ -159,7 +159,7 @@ angular.module('LelongApp.services')
 				}
 
 				// Query to extract data
-				var query = 'SELECT	GoodPublishId, Title, Guid, SalePrice, Description, Quantity, LastSync, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
+				var query = 'SELECT	*, (	SELECT PhotoUrl FROM	GoodsPublishPhoto WHERE	GoodPublishId = GoodsPublish.GoodPublishId LIMIT 1) AS PhotoUrl ';
 				query += ' FROM	GoodsPublish';
 				query += whereClause;
 				query += ' ORDER BY datetime(LastEdited) DESC ';
