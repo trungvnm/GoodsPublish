@@ -46,7 +46,7 @@
                                 <ion-slide ng-repeat="image in imgURI">
                                   <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
                                   zooming="true" min-zoom="1" style="width: 100%; height: 100%">
-                                  <div class="image" style="background-image: url( {{image.photoUrl}} )"></div>
+                                  <div class="image" style="background-image: url( {{image.PhotoUrl}} )"></div>
                                 </ion-scroll>
                               </ion-slide>
                             </ion-slide-box>
