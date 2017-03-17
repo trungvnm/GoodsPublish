@@ -23,21 +23,6 @@ angular.module('LelongApp.services')
 								var nameSegments = p.split('/');
 								var path = nameSegments.slice(0, nameSegments.length - 1).join('/');
 								var filename = nameSegments[nameSegments.length - 1];
-								// delete file
-								/*window.resolveLocalFileSystemURL(path, function (dir) {
-									dir.getFile(filename, { create: false }, function (fileEntry) {
-										fileEntry.remove(function (result) {
-											console.log("The file has been removed succesfully");
-											// The file has been removed succesfully
-										}, function (error) {
-											// Error deleting the file
-											console.dir(error);
-										}, function () {
-											// The file doesn't exist
-											console.console("The file doesn't exist");
-										});
-									});
-								});*/
 							})
 							if (callBack) {
 								callBack();
@@ -86,54 +71,61 @@ angular.module('LelongApp.services')
 									subDirEntry.getDirectory(subDir.toString(), { create: true }, function (dir) {
 										dir.getDirectory(goodsDir,{create:true},function(success){
 
-										var uploadDir = success.nativeURL + p.PhotoName;
-										var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
-										if (remoteImgUrl.trim() != '') {
-											imageService.downloadImage(remoteImgUrl, uploadDir, 
-												function (fileEntry) {
-													// ---------- DEMO --------
-													fileEntry.file(function (file) {
-														var reader = new FileReader();
+											var uploadDir = success.nativeURL + p.PhotoName;
+											var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
+											if (remoteImgUrl.trim() != '') {
+												imageService.downloadImage(remoteImgUrl, uploadDir, 
+													function (fileEntry) {
+														// ---------- DEMO --------
+														fileEntry.file(function (file) {
+															var reader = new FileReader();
 
-														reader.onloadend = function() {
+															reader.onloadend = function() {
 
-															console.log("Successful file read: " + this.result);
-															// displayFileData(fileEntry.fullPath + ": " + this.result);
+																console.log("Successful file read: " + this.result);
+																// displayFileData(fileEntry.fullPath + ": " + this.result);
 
-															var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
-															
-															// Display 
-															// Note: Use window.URL.revokeObjectURL when finished with image.
-															var objURL = window.URL.createObjectURL(blob);
-														};
+																var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
 
-														reader.readAsArrayBuffer(file);
+																// Display 
+																// Note: Use window.URL.revokeObjectURL when finished with image.
+																var objURL = window.URL.createObjectURL(blob);
+															};
 
-													}, function(error){
-														console.dir(error);
-													});
-													// ---------- END DEMO --------
-													
-													// save to database
-													var newPhoto = {
-														GoodPublishId: cId,
-														PhotoUrl: uploadDir,
-														PhotoName: p.PhotoName,
-														PhotoDescription: p.Description
-													}
+															reader.readAsArrayBuffer(file);
 
-													// insert record to database for new photo
-													$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
-														if (currentCouter == listPhoto.length) {
+														}, function(error){
+															console.dir(error);
+														});
+														// ---------- END DEMO --------
+
+														// save to database
+														var newPhoto = {
+															GoodPublishId: cId,
+															PhotoUrl: uploadDir,
+															PhotoName: p.PhotoName,
+															PhotoDescription: p.Description
+														}
+
+														// insert record to database for new photo
+														$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+															if (currentCouter >= listPhoto.length) {
+																//callBack();
+																deffered.resolve(true);
+															}
+														});
+													},
+													function (error) {
+														if (currentCouter >= listPhoto.length) {
 															//callBack();
 															deffered.resolve(true);
 														}
-													});
-												},
-												function () {
-												}
-											);
-										}
+													}
+												);
+											}
+											else{
+												deffered.resolve(true);
+											}
 										})
 					
 									})
@@ -464,7 +456,9 @@ angular.module('LelongApp.services')
 			    });
 			    return deffered.promise;
 			},
-			sync: function (goods, callBack) {
+			sync: function (goods) {
+				var deffered = $q.defer();
+				
 				var token = tokenService.getToken();
 				var userId = token.userid;
 				var params = "";//guidsArray.join(',');
@@ -478,9 +472,7 @@ angular.module('LelongApp.services')
 					xhttpService.get('http://d00dd351.ngrok.io/api/goods/getlist?guids=' + params, true).
 					then(function (response) {
 						if (response.data) {
-							var couter = 0;
-							response.data.forEach(function (newGood) {								
-								couter++;
+							response.data.forEach(function (newGood, index) {								
 								// update new goods to app database
 								var listPhoto = newGood.listPhoto;
 								newGood.Active = 1;
@@ -493,7 +485,7 @@ angular.module('LelongApp.services')
 								delete newGood.GoodPublishId;
 
 								// update to old one
-								var finish = couter == goods.length;
+								var finish = index == goods.length - 1;
 								$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'")
 								.then(function (result) {
 									if (result.rowsAffected > 0) {
@@ -504,12 +496,14 @@ angular.module('LelongApp.services')
 
 												// clear old photos
 												deletePhotosByGood(cId, function () {
-													if (!listPhoto || listPhoto.length == 0 && callBack){
-														callBack();
+													if (!listPhoto || listPhoto.length == 0){
+														deffered.resolve(true);
 													}
 													else{
-														if (finish && callBack){
-															downloadPhotosOfGood(cId, goods[i], listPhoto, callBack);
+														if (finish){
+															downloadPhotosOfGood(cId, goods[i], listPhoto).then(function(){
+																deffered.resolve(true);
+															});
 														}
 														else{
 															downloadPhotosOfGood(cId, goods[i], listPhoto);
@@ -521,14 +515,22 @@ angular.module('LelongApp.services')
 											};
 										}
 									}
+									else{
+										if (finish){
+											deffered.resolve(true);
+										}
+									}
+										
 								})
 							});
 							/*end get*/
-						} 										
+						} 
+						
 					},function(err){
 						console.log('GET: failed ' + JSON.stringify(err));						
 					});					
-				}					
+				}
+				return deffered.promise;
 			},
 			syncAll: function (callBack) {
 				var deffered=$q.defer();
@@ -560,25 +562,12 @@ angular.module('LelongApp.services')
 									$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (res) {
 										// continue to photos
 										var gId = oldGood.GoodPublishId;
-											/*if (currentCouter == response.data.length) {
-												if (listPhoto && listPhoto.length > 0){
-													downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
-														//callBack();
-														deffered.resolve(true);
-													});
-												}
-												else{
-													//callBack();
-													deffered.resolve(true);
-												}
+										downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
+											downloadPhotoCallback(dones, response.data.length, deffered);
+											if (dones.number >= response.data.length){
+												deffered.resolve(true);
 											}
-											else*/
-												downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
-													downloadPhotoCallback(dones, response.data.length, deffered);
-													if (dones.number >= response.data.length){
-														deffered.resolve(true);
-													}
-												});
+										});
 									});
 								}
 								else{
@@ -586,19 +575,6 @@ angular.module('LelongApp.services')
 									$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
 										if (res && res.insertId) {
 											var gId = res.insertId;
-											/*if (currentCouter == response.data.length) {
-												if (listPhoto && listPhoto.length > 0){
-													downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
-														deffered.resolve(true);
-													});//, callBack);
-												}
-												else{
-													//callBack();
-													deffered.resolve(true);
-												}
-											}
-											else
-												downloadPhotosOfGood(gId, newGood, listPhoto);*/
 											downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
 												downloadPhotoCallback(dones, response.data.length, deffered);
 												if (dones.number >= response.data.length){

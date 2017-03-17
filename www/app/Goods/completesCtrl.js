@@ -158,7 +158,7 @@
 		$scope.unsyncTabRepresenter.goods = [];
 		$scope.syncedTabRepresenter.goods = []; */
 		$ionicLoading.show({
-			template: '<p>Logging in...</p><ion-spinner icon="spiral"></ion-spinner>'
+			template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
 		});
 		goodsService.syncAll().then(function(result){
 			if (result){
@@ -256,6 +256,7 @@
 
 	});
 
+	// sync any selected goods from Lelong server
 	$scope.$on('multiSync', function (event, args) {
 	    var messageReuslt = '';
 	    var selecteds = getListGoodsToProcess($scope.syncedTabRepresenter.goods);
@@ -264,9 +265,9 @@
 	            navigator.notification.confirm('Are you sure to download selected items?', function (result) {
 	                if (result == 1) {
 	                    $ionicLoading.show({
-	                        template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+	                        template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
 	                    });
-	                    goodsService.sync(selecteds, function () {
+	                    goodsService.sync(selecteds).then(function (result) {
 							// exit quick actions mode
 							var params = {};
 							params.isQuickActions = false;
