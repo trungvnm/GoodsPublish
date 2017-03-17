@@ -3,7 +3,7 @@
     <ion-header-bar class="add-new-headerbar" align-title="center">
         <div id="addnew-step2" style="width: 100%">
             <div id="addnew-photo-preview">
-
+                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
                 <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length >2">
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 130px !important">
                         <div>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
+               
             </div>
             <div class="action-camera-button">
                 <a class="button button-icon icon ion-ios-camera" ng-click="choosePhotoAction()"></a>
