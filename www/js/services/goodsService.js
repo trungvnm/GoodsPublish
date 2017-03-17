@@ -496,7 +496,7 @@ angular.module('LelongApp.services')
 
 												// clear old photos
 												deletePhotosByGood(cId, function () {
-													if (!listPhoto || listPhoto.length == 0){
+													if ((!listPhoto || listPhoto.length == 0) && finish){
 														deffered.resolve(true);
 													}
 													else{
