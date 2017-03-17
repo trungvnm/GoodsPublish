@@ -24,7 +24,11 @@
 .gallery-view .row .image-container{display: inline-block; overflow: inherit;padding: 0;border-right: none;}
 .gallery-view .row .image-container img{position: initial}
 
-.tabs-fullwidth .tab-item { max-width: 100%; }
+.tabs-fullwidth .tab-item { max-width: 100%; } /*#28A54C*/
+.badge-background .badge {z-index: 1; display: inline-block; padding: 3px 8px; background-color: #387EF5; border: 2px solid #CB2431; color: #CB2431; font-size: 20px; min-height: 10px; min-width: 10px; border-radius: 10px; vertical-align: baseline; text-align: center; white-space: nowrap; font-weight: bold; line-height: 16px;}
+.badge-background {z-index: 1; display: inline-block; padding: 2px 8px 2px 8px; background-color: #387EF5; border: 2px solid #CB2431; color: #CB2431; font-size: 20px; min-height: 10px; min-width: 10px; border-radius: 10px; vertical-align: baseline; text-align: center; white-space: nowrap; font-weight: bold; line-height: 16px;}
+.badge-background0 {z-index: 1; display: inline-block; padding: 2px 8px 2px 8px; background-color: #387EF5; border: 2px solid #FFF; color: #FFF; font-size: 20px; min-height: 10px; min-width: 10px; border-radius: 10px; vertical-align: baseline; text-align: center; white-space: nowrap; font-weight: bold; line-height: 16px;}
+.badge-background1 {z-index: 1; display: inline-block; padding: 2px 8px 2px 8px; background-color: #F9D932; border: 2px solid #CB2431; color: #CB2431; font-size: 20px; min-height: 10px; min-width: 10px; border-radius: 10px; vertical-align: baseline; text-align: center; white-space: nowrap; font-weight: bold; line-height: 16px;}
 
 .tab-content{/* top:44px */}
 a[disabled] {
