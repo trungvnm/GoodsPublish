@@ -65,7 +65,7 @@
                 || $window.localStorage.getItem("Lelong_CurrencyUnit") == null
                 || $window.localStorage.getItem("Lelong_CurrencyUnit").length <= 0)
                 {
-                    $window.localStorage.setItem("Lelong_CurrencyUnit", "MYR");
+                    $window.localStorage.setItem("Lelong_CurrencyUnit", "RM");
                 }  
                 
                 if (result.length > 0){
