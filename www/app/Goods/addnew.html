@@ -5,7 +5,7 @@
             <div id="addnew-photo-preview">
 
                 <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length >2">
-                    <ion-slide-page ng-repeat="image in imgURI" style="width: 160px">
+                    <ion-slide-page ng-repeat="image in imgURI" style="width: 130px !important">
                         <div>
                             <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
                             <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
