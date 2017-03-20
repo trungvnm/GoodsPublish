@@ -1,4 +1,7 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate) {
+	if ($ionicSideMenuDelegate.isOpen()) {
+		$ionicSideMenuDelegate.toggleLeft();
+	}
 	
 	// representer of unpublished Tab
 	$scope.unsyncTabRepresenter = {
