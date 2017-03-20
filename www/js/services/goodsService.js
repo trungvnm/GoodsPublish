@@ -261,6 +261,9 @@ angular.module('LelongApp.services')
 						angular.extend(newSource,obj,{listPhoto:lstPhoto});
 					}
 					deffered.resolve(newSource);
+				},function(err){
+					console.log("GETGOODSBYID FAILED " + JSON.stringify(err));
+					deffered.reject(err);
 				});
 				return deffered.promise;
 			},
@@ -276,6 +279,9 @@ angular.module('LelongApp.services')
 				// call API to delete from server 
 				xhttpService.put('http://d00dd351.ngrok.io/api/goods/delete', guids, false).then(function (apiResponse) {
                         
+				},function(err){
+					console.log("Delete from server failed " + JSON.stringify(err));
+					defer.reject(err);
 				});
 
 				var whereClause = '';
@@ -343,7 +349,7 @@ angular.module('LelongApp.services')
 							promises.push($dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: arrFullPathImgs[i], PhotoName: getImageFileName(arrFullPathImgs[i]) }));
 						};
 					}
-					$q.all(promises).then(function(){
+					$q.all(promises).then(function(obj){						
 						deffered.resolve(res);
 					});
 				}, function (err) {
@@ -458,7 +464,7 @@ angular.module('LelongApp.services')
 			        }
 			    }, function (err) {
 			        console.log("Publish Failed: " + JSON.stringify(err));
-			        objectResult.message = "Failed when call api publish goods: " + err;
+			        objectResult.message = "Failed when call api publish goods: " + JSON.stringify(err);
 			        deffered.resolve(objectResult);
 			    });
 			    return deffered.promise;
@@ -535,7 +541,8 @@ angular.module('LelongApp.services')
 						} 
 						
 					},function(err){
-						console.log('GET: failed ' + JSON.stringify(err));						
+						console.log('GET: failed ' + JSON.stringify(err));
+						deffered.reject(err);						
 					});					
 				}
 				return deffered.promise;
@@ -595,6 +602,9 @@ angular.module('LelongApp.services')
 							})
 						})
 					}
+				},function(err){
+					console.log("SYNCALL FAILED" + JSON.stringify(err));
+					deffered.reject(err);
 				});
 				return deffered.promise;
 			}

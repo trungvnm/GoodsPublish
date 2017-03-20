@@ -97,6 +97,9 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                                 });
                             });	
                             $ionicLoading.hide();							
+                        },function(err){
+                             $cordovaToast.showLongTop('Delete failed!');
+                             $ionicLoading.hide();
                         });
                     }
                 }
@@ -119,6 +122,11 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                             });
                         });
                         $ionicLoading.hide();
+                    },function(err){
+                        console.log("SYNC FAILED: " + JsonParse(err));
+                        $cordovaToast.showLongTop('Sync failed!').then(function(){
+                             $ionicLoading.hide();
+                        })
                     });
                  }
              });
@@ -133,7 +141,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                     });
                 $ionicLoading.hide();
             },function(err){
-                 $ionicLoading.hide();
+                 console.log("SYNC FAILED: " + JsonParse(err));
+                  $cordovaToast.showLongTop('Sync failed!').then(function(){
+                             $ionicLoading.hide();
+                  })
             });
         }
     }
@@ -453,9 +464,12 @@ function postToServer() {
                         $cordovaToast.showLongTop('Publish successful!');
                         $ionicHistory.clearCache().then(function () {
                             $state.go('app.completes');
+                            $ionicLoading.hide();
                         });
-                    } else $cordovaToast.showLongTop('Publish failed!');
-                    $ionicLoading.hide();
+                    } else {
+                        $cordovaToast.showLongTop('Publish failed!');
+                        $ionicLoading.hide();
+                    }
                 },function(err){
                      $cordovaToast.showLongTop('Publish failed!');
                      $ionicLoading.hide();

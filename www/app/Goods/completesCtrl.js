@@ -185,8 +185,12 @@
 				});
 			}
 			else{
-				$cordovaToast.showLongTop('Sync failed!');
+				$cordovaToast.showLongTop('Sync all failed!');
+				$ionicLoading.hide();
 			}
+		},function(err){
+			$cordovaToast.showLongTop('Sync all failed!');
+			$ionicLoading.hide();
 		});
 	}
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
@@ -285,6 +289,9 @@
                                 $ionicLoading.hide();
                                 $cordovaToast.showLongTop(messageReuslt);
                             });
+	                    },function(err){
+	                    	 $cordovaToast.showLongTop("Sync failed");
+	                    	 $ionicLoading.hide();
 	                    });
 	                }
 	            })
