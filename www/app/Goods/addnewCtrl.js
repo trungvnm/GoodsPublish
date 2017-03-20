@@ -108,9 +108,9 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
     }
 },
 { name: 'Sync', action: function () {
-    if ($scope.goodItem){
-        if ($scope.goodItem.LastSync && $scope.goodItem.LastEdited && 
-            new Date($scope.goodItem.LastSync).getTime() < new Date($scope.goodItem.LastEdited).getTime()){
+    if ($scope.goodItem) {
+        var inputGoods = []; inputGoods.push($scope.goodItem);
+        if (goodsService.checkOveriderGoodsInfo(inputGoods)) {
             if (navigator.notification) {
                 navigator.notification.confirm('Are you sure to sync and override this item?', function (result) {
                     if (result == 1) {

@@ -607,7 +607,14 @@ angular.module('LelongApp.services')
 					deffered.reject(err);
 				});
 				return deffered.promise;
-			}
+			},
+			checkOveriderGoodsInfo: function (listGoodsInput)
+			{
+			    var isOverider = false;
+			    var listItemEdited = listGoodsInput.filter(function (goodsItem) { return goodsItem.LastSync && goodsItem.LastEdited && new Date(goodsItem.LastSync).getTime() < new Date(goodsItem.LastEdited).getTime(); });
+			    if (listItemEdited.length > 0) isOverider = true;
+			    return isOverider;
+	        }
 		};
 
 		function getNewImagesOfGoods(listImagesLocal,listImageNameOnServer){

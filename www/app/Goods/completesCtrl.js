@@ -160,38 +160,46 @@
 		/*$scope.goods = [];
 		$scope.unsyncTabRepresenter.goods = [];
 		$scope.syncedTabRepresenter.goods = []; */
-		$ionicLoading.show({
-			template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
-		});
-		goodsService.syncAll().then(function(result){
-			if (result){
-				$cordovaToast.showLongTop('Sync all successful!').then(function(){
-					setTimeout(function(){
-						$scope.unsyncTabRepresenter.offset = 0;
-						$scope.syncedTabRepresenter.offset = 0;
-						$scope.getGoodsInTabs(0, $scope.filterMessage, true);
-						$scope.getGoodsInTabs(1, $scope.filterMessage, true);
-						
-						// update new total of goods to menu
-						goodsService.countAll().then(function(quantity){
-							var menuParams = {};
-							menuParams.goodCounter = quantity;
-							$rootScope.$broadcast('update',menuParams);
-							//$rootScope.$broadcast('hideSpinner');
-							$ionicLoading.hide();
-							$scope.countGoodsInTabs();
-						});
-					}, 1000);
-				});
-			}
-			else{
-				$cordovaToast.showLongTop('Sync all failed!');
-				$ionicLoading.hide();
-			}
-		},function(err){
-			$cordovaToast.showLongTop('Sync all failed!');
-			$ionicLoading.hide();
-		});
+
+	    if (navigator.notification) {
+	        navigator.notification.confirm('Are you sure to get all data from server?', function (result) {
+	            if (result == 1) {
+	                $ionicLoading.show({
+	                    template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
+	                });
+	                goodsService.syncAll().then(function (result) {
+	                    if (result) {
+	                        $cordovaToast.showLongTop('Sync all successful!').then(function () {
+	                            setTimeout(function () {
+	                                $scope.unsyncTabRepresenter.offset = 0;
+	                                $scope.syncedTabRepresenter.offset = 0;
+	                                $scope.getGoodsInTabs(0, $scope.filterMessage, true);
+	                                $scope.getGoodsInTabs(1, $scope.filterMessage, true);
+
+	                                // update new total of goods to menu
+	                                goodsService.countAll().then(function (quantity) {
+	                                    var menuParams = {};
+	                                    menuParams.goodCounter = quantity;
+	                                    $rootScope.$broadcast('update', menuParams);
+	                                    //$rootScope.$broadcast('hideSpinner');
+	                                    $ionicLoading.hide();
+	                                    $scope.countGoodsInTabs();
+	                                });
+	                            }, 1000);
+	                        });
+	                    }
+	                    else {
+	                        $cordovaToast.showLongTop('Sync all failed!');
+	                        $ionicLoading.hide();
+	                    }
+	                }, function (err) {
+	                    $cordovaToast.showLongTop('Sync all failed!');
+	                    $ionicLoading.hide();
+	                });
+	            }
+	        })
+	    }
+	
 	}
 	$scope.$on('updateIsQuickActionFlag', function(event, args){
 		$scope.quickactions = args.quickactions;
@@ -267,9 +275,15 @@
 	$scope.$on('multiSync', function (event, args) {
 	    var messageReuslt = '';
 	    var selecteds = getListGoodsToProcess($scope.syncedTabRepresenter.goods);
+	    var messageNotification = ''
+	    if (goodsService.checkOveriderGoodsInfo(selecteds))
+	    {
+	        messageNotification = 'Are you sure to download selected items from server and override your local data?';
+	    } else messageNotification = 'Are you sure to download selected items?';
+
 	    if (selecteds.length > 0) {
 	        if (navigator.notification) {
-	            navigator.notification.confirm('Are you sure to download selected items?', function (result) {
+	            navigator.notification.confirm(messageNotification, function (result) {
 	                if (result == 1) {
 	                    $ionicLoading.show({
 	                        template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
