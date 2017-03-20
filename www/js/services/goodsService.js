@@ -88,7 +88,7 @@ angular.module('LelongApp.services')
 																	var imgEl = $("[id=\'g"+cId+"\'] img");
 																	if (imgEl.length > 0){
 																		var curSrc = imgEl.attr("src");
-																		if (curSrc.indexOf("nophoto") == -1 || curSrc.trim() == "" || curSrc == uploadDir){
+																		if (/*curSrc.indexOf("nophoto") == -1 || curSrc.trim() == "" || curSrc == uploadDir*/ index == 0){
 																			imgEl.attr("ng-src", uploadDir);
 																			imgEl.attr("src", uploadDir);
 																		}
