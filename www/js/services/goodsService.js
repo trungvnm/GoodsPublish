@@ -62,54 +62,73 @@ angular.module('LelongApp.services')
 											var uploadDir = success.nativeURL + p.PhotoName;
 											var remoteImgUrl = p.PhotoUrl;// getPhotoApiUrl(p.PhotoName);
 											if (remoteImgUrl.trim() != '') {
-												imageService.downloadImage(remoteImgUrl, uploadDir, 
-													function (fileEntry) {
-														// ---------- DEMO --------
-														fileEntry.file(function (file) {
-															var reader = new FileReader();
+												// save to database
+												var newPhoto = {
+													GoodPublishId: cId,
+													PhotoUrl: uploadDir,
+													PhotoName: p.PhotoName,
+													PhotoDescription: p.Description
+												}
+												// insert record to database for new photo
+												$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+													imageService.downloadImage(remoteImgUrl, uploadDir, 
+														function (fileEntry) {
+															// ---------- DEMO --------
+															fileEntry.file(function (file) {
+																var reader = new FileReader();
+																reader.onloadend = function() {
+																	console.log("Successful file read: " + this.result);
+																	// displayFileData(fileEntry.fullPath + ": " + this.result);
+																	var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+																	// Note: Use window.URL.revokeObjectURL when finished with image.
+																	var objURL = window.URL.createObjectURL(blob);
+																	
+																	
+																	//find img element and set src value
+																	var imgEl = $("[id=\'g"+cId+"\'] img");
+																	if (imgEl.length > 0){
+																		var curSrc = imgEl.attr("src");
+																		if (curSrc.indexOf("nophoto") == -1 || curSrc.trim() == "" || curSrc == uploadDir){
+																			imgEl.attr("ng-src", uploadDir);
+																			imgEl.attr("src", uploadDir);
+																		}
+																	}
+																};
 
-															reader.onloadend = function() {
+																reader.readAsArrayBuffer(file);
+															}, function(error){
+																console.dir(error);
+															});
+															// ---------- END DEMO --------
 
-																console.log("Successful file read: " + this.result);
-																// displayFileData(fileEntry.fullPath + ": " + this.result);
+															// // save to database
+															// var newPhoto = {
+																// GoodPublishId: cId,
+																// PhotoUrl: uploadDir,
+																// PhotoName: p.PhotoName,
+																// PhotoDescription: p.Description
+															// }
 
-																var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
-
-																// Display 
-																// Note: Use window.URL.revokeObjectURL when finished with image.
-																var objURL = window.URL.createObjectURL(blob);
-															};
-
-															reader.readAsArrayBuffer(file);
-
-														}, function(error){
-															console.dir(error);
-														});
-														// ---------- END DEMO --------
-
-														// save to database
-														var newPhoto = {
-															GoodPublishId: cId,
-															PhotoUrl: uploadDir,
-															PhotoName: p.PhotoName,
-															PhotoDescription: p.Description
-														}
-
-														// insert record to database for new photo
-														$dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+															// // insert record to database for new photo
+															// $dbHelper.insert("GoodsPublishPhoto", newPhoto).then(function (r) {
+																// if (currentCouter >= listPhoto.length) {
+																	// //callBack();
+																	// deffered.resolve(true);
+																// }
+															// });
+														},
+														function (error) {
 															if (currentCouter >= listPhoto.length) {
 																//callBack();
 																deffered.resolve(true);
 															}
-														});
-													},
-													function (error) {
-														if (currentCouter >= listPhoto.length) {
-															//callBack();
-															deffered.resolve(true);
 														}
-													}
 												);
+													if (currentCouter >= listPhoto.length) {
+														//callBack();
+														deffered.resolve(true);
+													}
+												});
 											}
 											else{
 												deffered.resolve(true);
@@ -581,8 +600,7 @@ angular.module('LelongApp.services')
 			}
 		};
 
-		function getNewImagesOfGoods(listImagesLocal,listImageNameOnServer)
-		{
+		function getNewImagesOfGoods(listImagesLocal,listImageNameOnServer){
 		    var result = []
             
 		    for (var i = 0; i < listImagesLocal.length; i++) {
