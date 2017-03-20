@@ -59,11 +59,11 @@
                 </label>
                     <label class="item item-input">
                     <span class="input-label">SalePrice ({{CurrencyUnit}})<span class="input-required"> * </span></span>
-                    <input type="number" placeholder="SalePrice" ng-model="goodItem.SalePrice" required>
+                    <input type="text" ng-trim="false" placeholder="SalePrice" ng-model="goodItem.SalePrice" awnum='{{strategy}}'/>
                 </label>
                     <label class="item item-input">
                     <span class="input-label">Price ({{CurrencyUnit}})</span>
-                    <input type="number" placeholder="Price" ng-model="goodItem.Price">                     
+                    <input type="text" placeholder="Price" ng-model="goodItem.Price" awnum='{{strategy}}'>                     
                 </label>
                   <label class="item item-input">
                     <span class="input-label">Brand</span>

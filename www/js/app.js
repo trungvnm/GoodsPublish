@@ -128,7 +128,7 @@
         });
 
     angular.module('LelongApp.Wizard', []);
-    angular.module('LelongApp.Goods', []);
+    angular.module('LelongApp.Goods', ['dynamicNumber']);
     angular.module('LelongApp.Home', []);
     angular.module('LelongApp.Login', []);
     angular.module('LelongApp.Global', []);

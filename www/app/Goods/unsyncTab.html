@@ -16,7 +16,7 @@
 					<a class="item-grid">
 						<span class="avt">
 							<img ng-src="{{g.PhotoUrl}}"/> </span>
-						<span class="price">{{g.SalePrice | customCurrency:this}}</span>
+						<span class="price">{{g.SalePrice | awnum:strategy}}</span>
 						<span class="title">{{g.Title}}</span>
 					</a>
 				</div>
@@ -29,7 +29,7 @@
 					<a class="item-grid">
 						<span class="avt">
 							<img ng-src="{{g.PhotoUrl}}"/> </span>
-						<span class="price">{{g.SalePrice | customCurrency:this}}</span>
+						<span class="price">{{g.SalePrice | awnum:strategy}}</span>
 						<span class="title">{{g.Title}}</span>
 					</a>
 				</ion-checkbox>

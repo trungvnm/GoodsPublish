@@ -14,12 +14,23 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
     $scope.CatesName = '';
     $scope.CurrencyUnit = '';
     $scope.inputMore = { hide: false, class: 'ion-ios-arrow-down' };
-
+    $scope.strategy = '';
     $scope.init = function () {
 
         if ($window.localStorage.getItem("Lelong_CurrencyUnit") != undefined)
         {
             $scope.CurrencyUnit = $window.localStorage.getItem("Lelong_CurrencyUnit")||"$";
+            switch ($scope.CurrencyUnit){
+                case "₫":
+                    $scope.strategy = 'priceVND_NoSymbol';
+                    break;
+                case "$":
+                    $scope.strategy = 'priceUSD_NoSymbol';
+                    break;
+                case "RM":
+                    $scope.strategy = 'priceMYR_NoSymbol';
+                    break;
+		    }
         }        
 
         $scope.step = 1;

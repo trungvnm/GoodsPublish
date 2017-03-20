@@ -90,6 +90,7 @@
 		});
 	}
 
+	$scope.strategy = '';
 	
 	// Initialize first data of page
 	$scope.init = function(){
@@ -98,7 +99,18 @@
 		$scope.hasRemainGoods = false;
 		
 		$scope.CurrencyUnit = $window.localStorage.getItem("Lelong_CurrencyUnit");
-
+		switch ($scope.CurrencyUnit){
+			case "₫":
+				$scope.strategy = 'priceVND';
+				break;
+			case "$":
+				$scope.strategy = 'priceUSD';
+				break;
+			case "RM":
+				$scope.strategy = 'priceMYR';
+				break;
+		}
+		
 		$scope.getGoodsInTabs(0);
 		$scope.getGoodsInTabs(1);
 		//selectGoods();
