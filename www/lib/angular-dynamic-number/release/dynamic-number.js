@@ -17,8 +17,12 @@
   var wasPasted = false;
 
   function convModelToView(modelValue, viewSeparator, prepend, append){
-    if(modelValue === undefined || modelValue === null || modelValue === "") {
-      return 0;
+    // if(modelValue === undefined || modelValue === null || modelValue === "") {
+    //   return 0;
+    // }
+    // VoiCoi fixed
+    if(modelValue === undefined || modelValue === null || modelValue === "" || modelValue === 0) {
+      return "";
     }
     var newViewValue = '';
     if(viewSeparator === ',') {
@@ -192,6 +196,7 @@
   function addThousandSeparator(value, fractionSeparator, thousandSeparator){
     value = String(value).split(fractionSeparator);
     value[0] = value[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+    //VoiCoi fixed
     if (value[0].indexOf(thousandSeparator) > 0){      
       var temp = value[0];
       var res = temp.substr(temp.indexOf(",")-1,temp.length - 1);
