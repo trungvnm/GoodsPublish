@@ -21,7 +21,7 @@
 			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button -->
 			
 			<i class="button global-action button-icon icon fa fa-search ng-hide" aria-hidden="true" ng-click="openSearch()" ng-show="isHasAction('search')"></i>
-			<i class="button global-action button-icon icon fa fa-upload ng-hide" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
+			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
 			<i class="button global-action button-icon icon fa fa-refresh ng-hide" aria-hidden="true" ng-click="exeMainAction('sync')" ng-show="isHasAction('sync')"></i>
 			<i class="button global-action button-icon icon fa fa-floppy-o ng-hide" aria-hidden="true" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></i>
 			<i class="button button-icon global-action icon fa fa-trash-o ng-hide" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></i>

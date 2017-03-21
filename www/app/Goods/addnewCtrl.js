@@ -4,7 +4,9 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
 
     var goodsFolderName = generateUUID();
     $scope.goodsId = $stateParams.goodsId;
-    $scope.editMode = false
+    $scope.editMode = false;
+    $scope.hasChange=false;
+    $scope.initialGoods={};
     if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
         $scope.editMode = true;    
     }
@@ -46,7 +48,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
             /** UPDATE GoodsPublish: get publishGood by id */
             goodsService.getGoodsById($scope.goodsId).then(function (res) {
                 $scope.goodItem = res;   
-                $scope.viewTitle = res.Title;
+                $scope.viewTitle = res.Title;     
+                $scope.initialGoods= angular.copy($scope.goodItem);          
                 getFolderUploadImg(res.Guid);               
                 $scope.CatesName = convertCateIdToName(res.Category);
                 $scope.imgURI= res.listPhoto;                
@@ -54,13 +57,15 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
                     $rootScope.$broadcast('disableSubAction','Sync')
                 }
-
+                watchGoodsObject(2000);         
             });
         } else {
             requestAccessFs();
-            /**ADD NEW GoodsPublish */
-            $scope.goodItem = { Category: '', Title: '', Condition: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: goodsFolderName };
-        }
+            /**ADD NEW GoodsPublish */            
+            $scope.goodItem = { Category: '', Title: '', Condition: '', UserId: $scope.tokenServ.userid, Active: 1, CreatedDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), LastEdited: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), Guid: goodsFolderName };;
+            $scope.initialGoods= angular.copy($scope.goodItem);
+            watchGoodsObject(3000);
+        }             
     }
 
     $scope.$on("$ionicView.leave", function (event, data) {
@@ -154,8 +159,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
 if ($scope.editMode) {
     $rootScope.$broadcast("setMainActions", actions);
     $rootScope.$broadcast("setSubActions", subActions);
+    $rootScope.$broadcast('disableMainAction','upload')
 } else {
     $rootScope.$broadcast("setMainActions", actions);
+    $rootScope.$broadcast('disableMainAction','upload')
 }
 /**End Top bar actions */
 /** Choose Category */
@@ -284,10 +291,16 @@ $scope.deleteImg = function (fullNamePath, Photoid) {
         var file = getImageFileName($scope.imgURI[i].PhotoUrl);
         var fileDel = getImageFileName(fullNamePath);
         if (file === fileDel) {
+            if(!$scope.hasChange){
+                 $rootScope.$broadcast('enableMainAction','upload');
+                 $scope.hasChange=true;
+            }
             $scope.imgURI.splice(i, 1);
             if (Photoid > 0) {
+                $scope.hasChange=true;
                 $scope.imageDeleted.push({ Photoid: Photoid, PhotoUrl: fullNamePath });
             } else {
+                $scope.hasChange=false;
                 // delete the img that isn't save into db
                 imageService.removeFileFromPersitentFolder(fullNamePath).then(function (res) {
                 });
@@ -336,7 +349,7 @@ function fnFailed(err) {
 }
 
 /** copy img from temp folder to PERSISTENT folder */
-function copyImgToPerFolder(originPath) {
+function copyImgToPerFolder(originPath) {   
     var newFileName = generateUUID() + ".jpg";
     if ($scope.uploadDir.length <= 0) {
         $scope.uploadDir = $scope.dirName;
@@ -347,6 +360,10 @@ function copyImgToPerFolder(originPath) {
             fileSystem.root.getDirectory($scope.uploadDir, { create: true }, function (desFolder) {
                 fileEntry.copyTo(desFolder, newFileName, function (success) {
                     console.log("COPY FILE SUCCESS:" + JsonParse(success));
+                    if(!$scope.hasChange){
+                         $rootScope.$broadcast('enableMainAction','upload');
+                         $scope.hasChange=true;
+                    }
                     $scope.imgURI.push({ 
                                     Photoid: 0, GoodPublishId: $scope.goodsId, 
                                     PhotoUrl: success.nativeURL 
@@ -578,6 +595,22 @@ function showSpinner(){
    $ionicLoading.show({
     template: '<p>Processing...</p><ion-spinner icon="spiral"></ion-spinner>'
 });
+}
+
+function watchGoodsObject(times){
+ setTimeout(function(){
+          $scope.$watch('goodItem',function(newval,oldval){   
+          //console.log('G: ' + JsonParse($scope.initialGoods));
+             if(!$scope.hasChange && (!angular.equals(newval,oldval))){
+                $rootScope.$broadcast('enableMainAction','upload');
+                $scope.hasChange=true;
+             }
+             if($scope.hasChange && (angular.equals(newval,$scope.initialGoods))){
+                 $rootScope.$broadcast('disableMainAction','upload');
+                 $scope.hasChange=false;
+             }
+          },true);
+    },times);
 }
 /**end helper method */
 
