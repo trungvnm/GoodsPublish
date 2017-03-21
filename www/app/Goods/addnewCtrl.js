@@ -9,7 +9,7 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
         $scope.editMode = true;    
     }
     $scope.tokenServ = tokenService.getToken();
-    $rootScope.$broadcast('hideSearch');
+    // $rootScope.$broadcast('hideSearch');
     $scope.errors = [];
     $scope.CatesName = '';
     $scope.CurrencyUnit = '';
