@@ -75,7 +75,6 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
           console.log("Back to list goods by press BACK button home.");
           if ($scope.hasChange) {
                 popupConfirm();
-                $scope.hasChange = false;
            } 
           else {
               $ionicHistory.goBack();
@@ -660,6 +659,7 @@ function popupConfirm(){
         navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
             if (result == 1) {
                 $state.go('app.completes.syncedtab');
+                $scope.hasChange = false;
             }
         })
     }
