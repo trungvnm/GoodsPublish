@@ -2,9 +2,9 @@ angular.module("LelongApp.Wizard",[])
 .controller('WizardCtrl', function ($scope, $window, $ionicScrollDelegate,$rootScope, $dbHelper, xhttpService, tokenService,$ionicSideMenuDelegate,$q, $cordovaToast, $state, $ionicHistory)  {
     $rootScope.$broadcast('hideSearch');
     $scope.defaultcurrency=  [
-    {code:1, name:"MYR", unit:"RM" }, 
-    {code:2, name:"USD", unit:"$" }, 
-    {code:3, name:"VND", unit:"₫" }
+    {code:1, name:"MYR" }, 
+    {code:2, name:"USD" }, 
+    {code:3, name:"VND" }
     ];
     $scope.defaultvalue=  [
     {code:1, name:"Phone & Tablet" }, 
@@ -48,7 +48,7 @@ angular.module("LelongApp.Wizard",[])
                      
         for (var i = 0; i<= $scope.defaultcurrency.length-1;i++){
             if  ($scope.defaultcurrency[i].code == $scope.currency){
-                $window.localStorage.setItem("Lelong_CurrencyUnit", $scope.defaultcurrency[i].unit);
+                $window.localStorage.setItem("Lelong_CurrencyUnit", $scope.defaultcurrency[i].name);
                 break;
             }
         }

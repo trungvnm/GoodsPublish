@@ -19,18 +19,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
 
         if ($window.localStorage.getItem("Lelong_CurrencyUnit") != undefined)
         {
-            $scope.CurrencyUnit = $window.localStorage.getItem("Lelong_CurrencyUnit")||"$";
-            switch ($scope.CurrencyUnit){
-                case "₫":
-                    $scope.strategy = 'priceVND_NoSymbol';
-                    break;
-                case "$":
-                    $scope.strategy = 'priceUSD_NoSymbol';
-                    break;
-                case "RM":
-                    $scope.strategy = 'priceMYR_NoSymbol';
-                    break;
-		    }
+            $scope.CurrencyUnit = goodsService.getCurrencyUnit($window.localStorage.getItem("Lelong_CurrencyUnit"));
+            $scope.strategy = goodsService.getFormatCurrency($window.localStorage.getItem("Lelong_CurrencyUnit"), false);
         }        
 
         $scope.step = 1;
