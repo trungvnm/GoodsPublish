@@ -5,7 +5,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
     var goodsFolderName = generateUUID();
     $scope.goodsId = $stateParams.goodsId;
     $scope.editMode = false;
-    $scope.hasChange=false;
+    $scope.hasChange = false;
+    $rootScope.hasChanged = false;
     $scope.initialGoods={};
     if ($scope.goodsId.length > 0 && parseInt($scope.goodsId) > 0) {
         $scope.editMode = true;    
@@ -67,9 +68,17 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
             watchGoodsObject(3000);
         }             
     }
-    $ionicPlatform.registerBackButtonAction(
+
+    /** Orverride BACK button action only this view */
+    var deregister = $ionicPlatform.registerBackButtonAction(
       function () {
+          console.log("Back to list goods by press BACK button home.");
           if ($scope.hasChange) {
+<<<<<<< HEAD
+                popupConfirm();
+           } else {
+               $state.go('app.completes.syncedtab');
+=======
               if (navigator.notification) {
                   navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
                       if (result == 1) {
@@ -79,9 +88,13 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
               }
           } else {
               $ionicHistory.goBack();
+>>>>>>> dc8af96fdbb3e189df025eb74de212cc5240a474
           }
+        
       }, 100
     );
+    //Then when this scope is destroyed, remove the function
+    $scope.$on('$destroy', deregister)
 
     $scope.$on("$ionicView.leave", function (event, data) {
         // handle event
@@ -622,16 +635,54 @@ function watchGoodsObject(times){
               }
              if(!$scope.hasChange && (!angular.equals(newval,oldval))){
                 $rootScope.$broadcast('enableMainAction','upload');
-                $scope.hasChange=true;
+                $scope.hasChange = true;
                 counter++;
              }
              if($scope.hasChange && (angular.equals(newval,$scope.initialGoods))){
                  $rootScope.$broadcast('disableMainAction','upload');
-                 $scope.hasChange=false;
+                 $scope.hasChange = false;
                  counter++;
              }
+              $rootScope.hasChanged = $scope.hasChange;
           },true);
     },times);
+}
+
+function popupShow() {
+  var confirmPopup = $ionicPopup.show({
+   title : 'Leave detail',
+   template : 'You have unsaved changes, are you sure that you want to leave?',
+   buttons : [{
+    text : 'Cancel',
+    type : 'button button-stable button-outline',
+   }, {
+        text : 'Ok',
+        type : 'button button-balanced button-outline',
+        onTap : function() {
+            $state.go('app.completes');
+        }
+   }]
+  });
+}
+
+function popupConfirm(){
+    if (navigator.notification) {
+        navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
+            if (result == 1) {
+                $state.go('app.completes.syncedtab');
+            }
+        })
+    }
+//     var confirmPopup = $ionicPopup.confirm({
+//      title: 'Confirm',
+//      template: 'You have unsaved changes, are you sure that you want to leave?'
+//    });
+
+//    confirmPopup.then(function(res) {
+//      if(res) {
+//        $state.go('app.completes');
+//      }
+//    });
 }
 /**end helper method */
 
