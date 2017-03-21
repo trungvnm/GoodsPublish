@@ -101,6 +101,7 @@
 					}
 				})
 			}
+			$rootScope.hasChanged = false;
 		} else {
 			$state.go('app.completes');
 		}

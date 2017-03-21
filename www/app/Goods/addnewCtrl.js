@@ -74,21 +74,11 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
       function () {
           console.log("Back to list goods by press BACK button home.");
           if ($scope.hasChange) {
-<<<<<<< HEAD
                 popupConfirm();
-           } else {
-               $state.go('app.completes.syncedtab');
-=======
-              if (navigator.notification) {
-                  navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
-                      if (result == 1) {
-                          $ionicHistory.goBack();
-                      }
-                  })
-              }
-          } else {
+                $scope.hasChange = false;
+           } 
+          else {
               $ionicHistory.goBack();
->>>>>>> dc8af96fdbb3e189df025eb74de212cc5240a474
           }
         
       }, 100
