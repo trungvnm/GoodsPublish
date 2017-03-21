@@ -93,13 +93,25 @@
 	
 	// back to referrer
 	$scope.goBack = function(){
+		if ($rootScope.hasChanged) {
+			if (navigator.notification) {
+				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
+					if (result == 1) {
+						$state.go('app.completes');
+					}
+				})
+			}
+		} else {
+			$state.go('app.completes');
+		}
+
 		//$ionicHistory.goBack();
 		/* if ($ionicHistory.backView().url.indexOf('app/complete')) {
 			$ionicHistory.clearCache().then(function () {
 				$state.go('app.completes');
 			});
 		} else { */
-			$ionicHistory.backView().go();
+		//	$ionicHistory.backView().go();
 		//}
 	};
 	
