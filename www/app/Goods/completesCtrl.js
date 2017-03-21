@@ -111,8 +111,9 @@
 				break;
 		}
 		
-		$scope.getGoodsInTabs(0);
-		$scope.getGoodsInTabs(1);
+		//$scope.getGoodsInTabs(0);
+		var tabIndex = $scope.syncedTabRepresenter.order;
+		$scope.getGoodsInTabs(tabIndex);
 		//selectGoods();
 		$scope.countGoodsInTabs();
 		

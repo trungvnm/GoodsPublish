@@ -1,4 +1,4 @@
-<ion-view>
+<ion-view ng-init="init()">
 	<ion-nav-title>
 		<span>Published Goods  ({{pubCounter}})</span>
 	</ion-nav-title>
@@ -40,6 +40,7 @@
 			distance="1%">
 		</ion-infinite-scroll>
 		<br/>
-		<fab-menu></fab-menu>
+		
 	</ion-content>
+	<fab-menu></fab-menu>
 </ion-view>
