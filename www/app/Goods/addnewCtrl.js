@@ -597,17 +597,23 @@ function showSpinner(){
 });
 }
 
+var counter=0;
 function watchGoodsObject(times){
  setTimeout(function(){
-          $scope.$watch('goodItem',function(newval,oldval){   
+          $scope.$watch('goodItem',function(newval,oldval){               
           //console.log('G: ' + JsonParse($scope.initialGoods));
+             if(counter==0){
+                oldval=$scope.initialGoods;
+              }
              if(!$scope.hasChange && (!angular.equals(newval,oldval))){
                 $rootScope.$broadcast('enableMainAction','upload');
                 $scope.hasChange=true;
+                counter++;
              }
              if($scope.hasChange && (angular.equals(newval,$scope.initialGoods))){
                  $rootScope.$broadcast('disableMainAction','upload');
                  $scope.hasChange=false;
+                 counter++;
              }
           },true);
     },times);
