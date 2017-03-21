@@ -1,6 +1,6 @@
 angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory,
     $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
-    $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate,$ionicLoading) {
+    $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate, $ionicLoading, $ionicPlatform) {
 
     var goodsFolderName = generateUUID();
     $scope.goodsId = $stateParams.goodsId;
