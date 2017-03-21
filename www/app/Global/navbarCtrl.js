@@ -97,14 +97,14 @@
 			if (navigator.notification) {
 				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
 					if (result == 1) {
-						$state.go('app.completes');
+						$ionicHistory.backView().go();
 						$rootScope.hasChanged = false;
 					}
 				})
 			}
 			
 		} else {
-			$state.go('app.completes');
+			$ionicHistory.backView().go();
 		}
 
 		//$ionicHistory.goBack();
