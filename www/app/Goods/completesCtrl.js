@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate) {
 	if ($ionicSideMenuDelegate.isOpen()) {
 		$ionicSideMenuDelegate.toggleLeft();
 	}
@@ -97,7 +97,7 @@
 		$scope.filterMessage = '';
 		$scope.hasRemainGoods = false;
 		
-		$scope.strategy = goodsService.getFormatCurrency($window.localStorage.getItem("Lelong_CurrencyUnit"), true);
+		$scope.strategy = utilService.getFormatCurrency(true);
 		
 		//$scope.getGoodsInTabs(0);
 		var tabIndex = $scope.syncedTabRepresenter.order;
@@ -163,7 +163,7 @@
 		$scope.syncedTabRepresenter.goods = []; */
 
 	    if (navigator.notification) {
-	        navigator.notification.confirm('Are you sure to get all data from server?', function (result) {
+	        navigator.notification.confirm('Are you sure to get all goods from server (this action will overwrite all local goods and maybe take some time for the big data) ?', function (result) {
 	            if (result == 1) {
 	                $ionicLoading.show({
 	                    template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
