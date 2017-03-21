@@ -163,7 +163,7 @@
 		$scope.syncedTabRepresenter.goods = []; */
 
 	    if (navigator.notification) {
-	        navigator.notification.confirm('Are you sure to get all data from server?', function (result) {
+	        navigator.notification.confirm('Are you sure to get all goods from server (this action will overwrite all local goods and maybe take some time for the big data) ?', function (result) {
 	            if (result == 1) {
 	                $ionicLoading.show({
 	                    template: '<p>Loading ...</p><ion-spinner icon="spiral"></ion-spinner>'
