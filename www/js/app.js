@@ -60,14 +60,18 @@
                     url: '/completes',
                     views: {
                         'menuContent': {
-                            templateUrl: 'app/Goods/completes.html',
-                            controller: 'GoodsCtrl'
+                            templateUrl: 'app/Goods/syncedTab.html',//'app/Goods/completes.html',
+                            controller: 'GoodsCtrl',
+							views: {
+								'syncedTab':{
+									templateUrl: 'app/Goods/syncedTab.html',
+								}
+							}
                         },
                         'quickActionsContent': {
                             templateUrl: 'app/Global/quickactionsbar.html',
                             controller: 'QuickActionsCtrl'
                         }
-						
                     }
                 })
 				.state('app.completes.unsynctab', {

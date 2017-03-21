@@ -35,7 +35,6 @@
 	$scope.limit = 12;
 	$scope.unpubCounter = 0;
 	$scope.pubCounter = 0;
-	$scope.CurrencyUnit = '';
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
 	
@@ -98,21 +97,11 @@
 		$scope.filterMessage = '';
 		$scope.hasRemainGoods = false;
 		
-		$scope.CurrencyUnit = $window.localStorage.getItem("Lelong_CurrencyUnit");
-		switch ($scope.CurrencyUnit){
-			case "₫":
-				$scope.strategy = 'priceVND';
-				break;
-			case "$":
-				$scope.strategy = 'priceUSD';
-				break;
-			case "RM":
-				$scope.strategy = 'priceMYR';
-				break;
-		}
+		$scope.strategy = goodsService.getFormatCurrency($window.localStorage.getItem("Lelong_CurrencyUnit"), true);
 		
-		$scope.getGoodsInTabs(0);
-		$scope.getGoodsInTabs(1);
+		//$scope.getGoodsInTabs(0);
+		var tabIndex = $scope.syncedTabRepresenter.order;
+		$scope.getGoodsInTabs(tabIndex);
 		//selectGoods();
 		$scope.countGoodsInTabs();
 		

@@ -743,7 +743,38 @@ angular.module('LelongApp.services')
 			    var listItemEdited = listGoodsInput.filter(function (goodsItem) { return goodsItem.LastSync && goodsItem.LastEdited && new Date(goodsItem.LastSync).getTime() < new Date(goodsItem.LastEdited).getTime(); });
 			    if (listItemEdited.length > 0) isOverider = true;
 			    return isOverider;
-	        }
+	        },
+			getCurrencyUnit:function(currency){
+				var currencyunit = "";				
+				switch (currency){
+					case "VND":
+						currencyunit = '₫';
+						break;
+					case "USD":
+						currencyunit = '$';
+						break;
+					case "MYR":
+						currencyunit= 'RM';
+						break;
+				}				 
+				return currencyunit;
+			},
+			getFormatCurrency:function(currency, isSymbol){
+				var strategy = "";
+				var tail = isSymbol ? "" : "_NoSymbol";			
+				switch (currency){
+					case "VND":
+						strategy = 'priceVND';
+						break;
+					case "USD":
+						strategy = 'priceUSD';
+						break;
+					case "MYR":
+						strategy= 'priceMYR';
+						break;
+				}				 
+				return strategy + tail;      
+			}
 		};
 
 		function getNewImagesOfGoods(listImagesLocal,listImageNameOnServer){

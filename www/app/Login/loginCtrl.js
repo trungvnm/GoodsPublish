@@ -23,7 +23,7 @@
                         } else {
                             $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
                         }
-                    });
+                    } , 'Setup Wizard', ['Yes','No']);
                 } else {
                     $ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
                 }
@@ -65,7 +65,7 @@
                 || $window.localStorage.getItem("Lelong_CurrencyUnit") == null
                 || $window.localStorage.getItem("Lelong_CurrencyUnit").length <= 0)
                 {
-                    $window.localStorage.setItem("Lelong_CurrencyUnit", "RM");
+                    $window.localStorage.setItem("Lelong_CurrencyUnit", "MYR");
                 }  
                 
                 if (result.length > 0){
