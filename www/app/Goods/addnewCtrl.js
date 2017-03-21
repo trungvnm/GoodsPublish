@@ -73,12 +73,12 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
               if (navigator.notification) {
                   navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
                       if (result == 1) {
-                          $state.go('app.completes.syncedtab');
+                          $ionicHistory.goBack();
                       }
                   })
               }
           } else {
-              $state.go('app.completes.syncedtab');
+              $ionicHistory.goBack();
           }
       }, 100
     );
