@@ -149,6 +149,169 @@ angular.module('LelongApp.services')
 			return deffered.promise;
 		}
 
+		function upsertPhotoOfGoods (goodId, good, listPhoto) {
+			var deffered=$q.defer();
+			var cId = goodId;
+			var userId = good.UserId;
+			
+			if (!listPhoto || listPhoto.length == 0){
+				deffered.resolve([]);
+			}
+			else {
+				var listPhotoString = '';
+				listPhoto.forEach(function(p, index){
+					listPhotoString += '\'' + p.PhotoName + '\',';
+				});
+				var deleteCondition = 'GoodPublishId = \''+goodId+'\' AND PhotoName NOT IN (' + listPhotoString.substring(0, listPhotoString.length - 1) + ')';
+				$dbHelper.delete('goodsPublishPhoto', deleteCondition).then(function (res) {
+					var filterCondition = 'GoodPublishId = \''+goodId+'\'';
+					$dbHelper.select('goodsPublishPhoto', 'Photoid,PhotoName', filterCondition).then(function(result){
+						var listUpsertPhoto = [];
+						if (!result || result.length == 0){
+							listUpsertPhoto = listPhoto;
+						} else {
+							listPhoto.forEach(function(p, index){
+								var exist = false;
+								result.forEach(function(r, index){
+									if (p.PhotoName == r.PhotoName) {
+										exist = true;
+									}
+								});
+								if (!exist) {
+									listUpsertPhoto.push(p);
+								}
+							});
+						}
+						var dirName = "ImagesUpload";
+						var subDir = userId;
+						var goodsDir = good.Guid;
+						
+						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+							var uploadDir = dirEntry.root.nativeURL + dirName + '/' + subDir + '/' + goodsDir + '/';
+							var insertPros = []
+							listUpsertPhoto.forEach(function(p, index){
+								var newPhoto = {
+									GoodPublishId: cId,
+									PhotoUrl: uploadDir + p.PhotoName,
+									PhotoName: p.PhotoName,
+									PhotoDescription: p.Description
+								};
+								insertPros.push($dbHelper.insert("GoodsPublishPhoto", newPhoto));
+							});
+							$q.all(insertPros).then(function(){
+								deffered.resolve(listUpsertPhoto);
+							},function(err){
+								deffered.reject(err);
+							});
+						},function(err){
+							deffered.reject(err);
+						});
+					});
+				});
+			}
+
+			return deffered.promise;
+		}
+
+		function upsertGoods(newGood) {
+			var listPhoto = newGood.listPhoto;
+			newGood.Active = 1;
+			
+			var lastMoment = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+			newGood.LastSync = lastMoment;
+			newGood.LastEdited = lastMoment;
+			delete newGood.listPhoto;
+			delete newGood.GoodPublishId;
+			var deffered=$q.defer();
+
+			// check local goods for exist good
+			$dbHelper.select("GoodsPublish", "*", "Guid = '"+newGood.Guid+"'").then(function(result){
+				if (result.length > 0){
+					// if good is exist, update it
+					var oldGood = result[0];
+					$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (res) {
+						// continue to photos
+						var gId = oldGood.GoodPublishId;
+						upsertPhotoOfGoods(gId, newGood, listPhoto).then(function (photoResult) {
+							newGood.listPhoto = photoResult;
+							newGood.GoodPublishId = gId;
+							deffered.resolve(newGood);
+						});
+					},function(err){
+						deffered.reject(err);
+					});
+				}
+				else{
+					// if new good is not exist on local, insert new one
+					$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
+						if (res && res.insertId) {
+							var gId = res.insertId;
+							upsertPhotoOfGoods(gId, newGood, listPhoto).then(function (photoResult) {
+								newGood.listPhoto = photoResult;
+								newGood.GoodPublishId = gId;
+								deffered.resolve(newGood);
+							});
+						}
+					},function(err){
+						deffered.reject(err);
+					});
+				}
+			},function(err){
+				deffered.reject(err);
+			});
+			
+			return deffered.promise;
+		}
+
+		function downloadPhotos(listGoods) {
+			var dirName = "ImagesUpload";
+			listGoods.forEach(function(g, index){
+				var subDir = g.UserId;
+				var goodsDir = g.Guid;
+				var cId = g.GoodPublishId;
+				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (dirEntry) {
+					dirEntry.root.getDirectory(dirName, { create: true }, function (subDirEntry) {
+						subDirEntry.getDirectory(subDir.toString(), { create: true }, function (dir) {
+							dir.getDirectory(goodsDir,{create:true},function(success){
+								g.listPhoto.forEach(function(p, index){
+									var uploadDir = success.nativeURL + p.PhotoName;
+									imageService.downloadImage(p.PhotoUrl, uploadDir, 
+										function (fileEntry) {
+											fileEntry.file(function (file) {
+												var reader = new FileReader();
+												reader.onloadend = function() {
+													console.log("Successful file read: " + this.result);
+													// displayFileData(fileEntry.fullPath + ": " + this.result);
+													var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+													// Note: Use window.URL.revokeObjectURL when finished with image.
+													var objURL = window.URL.createObjectURL(blob);
+													//find img element and set src value
+													var imgEl = $("[id=\'g"+cId+"\'] img");
+													if (imgEl.length > 0){
+														if (index == 0){
+															imgEl.attr("ng-src", uploadDir);
+															imgEl.attr("src", uploadDir);
+														}
+													}
+												};
+
+												reader.readAsArrayBuffer(file);
+											}, function(error){
+												console.dir(error);
+											});
+										},
+										function (error) {
+											console.dir(error);
+										}
+									);
+								});
+							});
+						});
+					});
+				});
+			});
+		}
+
 		var goodService = {
 			getAll: function (type, offset, limit, condition) {
 				var token = tokenService.getToken();
@@ -553,57 +716,23 @@ angular.module('LelongApp.services')
 				var userId = token.userid;
 				xhttpService.get(syncAllApi, false).then(function (response) {
 					if (response.data) {
-						var dones = {};
-						dones.number = 0;
+						//update data of all goods and photo
+						var goodPros = [];
 						response.data.forEach(function(newGood, index){
-							var currentCouter = index + 1;
-							
-							// update new goods to app database
-							var listPhoto = newGood.listPhoto;
-							newGood.Active = 1;
 							newGood.UserId = userId;
+							goodPros.push(upsertGoods(newGood));
+						});
+						$q.all(goodPros).then(function (result) {
+							deffered.resolve(result);
 
-							var lastMoment = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-							newGood.LastSync = lastMoment;
-							newGood.LastEdited = lastMoment;
-							delete newGood.listPhoto;
-							delete newGood.GoodPublishId;
-
-							// check local goods for exist good
-							$dbHelper.select("GoodsPublish", "*", "Guid = '"+newGood.Guid+"'").then(function(result){
-								if (result.length > 0){
-									// if good is exist, update it
-									var oldGood = result[0];
-									$dbHelper.update("GoodsPublish", newGood, "Guid = '" + newGood.Guid + "'").then(function (res) {
-										// continue to photos
-										var gId = oldGood.GoodPublishId;
-										downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
-											downloadPhotoCallback(dones, response.data.length, deffered);
-											if (dones.number >= response.data.length){
-												deffered.resolve(true);
-											}
-										});
-									});
-								}
-								else{
-									// if new good is not exist on local, insert new one
-									$dbHelper.insert("GoodsPublish", newGood).then(function (res) {
-										if (res && res.insertId) {
-											var gId = res.insertId;
-											downloadPhotosOfGood(gId, newGood, listPhoto).then(function(){
-												downloadPhotoCallback(dones, response.data.length, deffered);
-												if (dones.number >= response.data.length){
-													deffered.resolve(true);
-												}
-											});
-										}
-									});
-								}
-							})
-						})
+							//download all image that not exist in local
+							downloadPhotos(result);
+						},function(err){
+							deffered.reject(err);
+						});
 					}
 				},function(err){
-					console.log("SYNCALL FAILED" + JSON.stringify(err));
+					console.log("SYNCALL FAILED: " + JSON.stringify(err));
 					deffered.reject(err);
 				});
 				return deffered.promise;

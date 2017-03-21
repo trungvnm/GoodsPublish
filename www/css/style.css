@@ -358,3 +358,9 @@ ion-header-bar *{color: white !important;} */
 	top: 50%;
 	position: absolute
 }
+
+span.avt > div > .spinner svg{
+	top: 40%;
+    left: 40%;
+	position: absolute
+}
