@@ -67,11 +67,26 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
             watchGoodsObject(3000);
         }             
     }
+    $ionicPlatform.registerBackButtonAction(
+      function () {
+          if ($scope.hasChange) {
+              if (navigator.notification) {
+                  navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
+                      if (result == 1) {
+                          $state.go('app.completes.syncedtab');
+                      }
+                  })
+              }
+          } else {
+              $state.go('app.completes.syncedtab');
+          }
+      }, 100
+    );
 
     $scope.$on("$ionicView.leave", function (event, data) {
-    // handle event
-    $ionicHistory.clearCache();
-});
+        // handle event
+        $ionicHistory.clearCache();
+    });
     /**Top bar actions */
     var actions = [
     {
