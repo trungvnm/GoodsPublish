@@ -1,6 +1,6 @@
 angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $window, $dbHelper, $rootScope, $ionicActionSheet, $ionicHistory,
     $cordovaCamera, $cordovaImagePicker, $cordovaToast, $cordovaFile, tokenService, $state, $q, $timeout,
-    $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService, $stateParams, $location, $ionicScrollDelegate, $ionicLoading, $ionicPlatform) {
+    $ionicSlideBoxDelegate, $ionicPopup, imageService, goodsService,utilService, $stateParams, $location, $ionicScrollDelegate, $ionicLoading, $ionicPlatform) {
 
     var goodsFolderName = generateUUID();
     $scope.goodsId = $stateParams.goodsId;
@@ -21,8 +21,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
 
         if ($window.localStorage.getItem("Lelong_CurrencyUnit") != undefined)
         {
-            $scope.CurrencyUnit = goodsService.getCurrencyUnit($window.localStorage.getItem("Lelong_CurrencyUnit"));
-            $scope.strategy = goodsService.getFormatCurrency($window.localStorage.getItem("Lelong_CurrencyUnit"), false);
+            $scope.CurrencyUnit = utilService.getCurrencyUnit();
+            $scope.strategy = utilService.getFormatCurrency(false);
         }        
 
         $scope.step = 1;

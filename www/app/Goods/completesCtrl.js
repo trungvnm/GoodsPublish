@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate) {
 	if ($ionicSideMenuDelegate.isOpen()) {
 		$ionicSideMenuDelegate.toggleLeft();
 	}
@@ -97,7 +97,7 @@
 		$scope.filterMessage = '';
 		$scope.hasRemainGoods = false;
 		
-		$scope.strategy = goodsService.getFormatCurrency($window.localStorage.getItem("Lelong_CurrencyUnit"), true);
+		$scope.strategy = utilService.getFormatCurrency(true);
 		
 		//$scope.getGoodsInTabs(0);
 		var tabIndex = $scope.syncedTabRepresenter.order;
