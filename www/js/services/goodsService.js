@@ -509,7 +509,7 @@ angular.module('LelongApp.services')
 					if (res.insertId > 0 && arrFullPathImgs.length > 0) {
 						//insert photo for GoodsPublishPhoto
 						for (var i = 0; i < arrFullPathImgs.length; i++) {							
-							promises.push($dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: arrFullPathImgs[i], PhotoName: getImageFileName(arrFullPathImgs[i]) }));
+							promises.push($dbHelper.insert("GoodsPublishPhoto", { GoodPublishId: res.insertId, PhotoUrl: arrFullPathImgs[i], PhotoName: getImageFileName(arrFullPathImgs[i])}));
 						};
 					}
 					$q.all(promises).then(function(obj){						
@@ -547,7 +547,7 @@ angular.module('LelongApp.services')
 							var wherePhoto = " Photoid=" + goodsPhotoObj[i].Photoid;
 							promises.push($dbHelper.delete("GoodsPublishPhoto", wherePhoto));
 						} else {
-							promises.push($dbHelper.insert("GoodsPublishPhoto", { PhotoUrl: goodsPhotoObj[i].PhotoUrl, GoodPublishId: goodsPhotoObj[i].GoodPublishId }));
+							promises.push($dbHelper.insert("GoodsPublishPhoto", { PhotoUrl: goodsPhotoObj[i].PhotoUrl, GoodPublishId: goodsPhotoObj[i].GoodPublishId,PhotoName:getImageFileName(goodsPhotoObj[i].PhotoUrl) }));
 						}
 					}
 					$q.all(promises).then(function(){
