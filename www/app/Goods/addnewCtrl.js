@@ -658,7 +658,8 @@ function popupConfirm(){
     if (navigator.notification) {
         navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
             if (result == 1) {
-                $state.go('app.completes.syncedtab');
+                /** $state.go('app.completes.syncedtab'); */
+                $ionicHistory.goBack();
                 $scope.hasChange = false;
             }
         })
