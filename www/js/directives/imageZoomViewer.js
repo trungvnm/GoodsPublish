@@ -1,38 +1,40 @@
-    (function () {
+"use strict";
 
-        'use strict';
+(function () {
 
-        var zoomView = function ($compile, $ionicModal, $ionicPlatform) {
-            return {
+    "use strict";
 
-                restrict: 'A',
+    var zoomView = function ($compile, $ionicModal, $ionicPlatform) {
+        return {
 
-                link(scope, elem, attr) {
+            restrict: 'A',
 
-                    $ionicPlatform.ready(function () {
+            link(scope, elem, attr) {
 
-                        elem.attr('ng-click', 'showZoomView()');
-                        elem.removeAttr('zoom-view');
-                        $compile(elem)(scope);
+                $ionicPlatform.ready(function () {
 
-                        var zoomViewTemplate = `
-                            <style>                               
+                    elem.attr('ng-click', 'showZoomView()');
+                    elem.removeAttr('zoom-view');
+                    $compile(elem)(scope);
+
+                    var zoomViewTemplate = `
+                            <style>
                                 .image-modal {
                                     width: 100% !important;
                                     height: 100%;
                                     top: 0 !important;
                                     left: 0 !important;
                                 }
-                                 
+
                                 .transparent {
                                   background: rgba(0,0,0,0.7);
                                 }
-                                 
+
                                 .slider {
                                     width: 100%;
                                     height: 100%;
                                 }
-                                 
+
                                 .image {
                                     width: 100%;
                                     height: 600px;
@@ -53,25 +55,26 @@
                             </div>
                         `;
 
-                        scope.zoomViewModal = $ionicModal.fromTemplate(zoomViewTemplate, {
-                            scope,
-                            animation: 'slide-in-up',
-                        });
-                      
-                        scope.showZoomView = function () {
-                            scope.zoomViewModal.show();
-                            scope.ngSrc = attr.zoomSrc;                           
-                        };
-
-                        scope.closeZoomView = function () {
-                            scope.zoomViewModal.hide();
-                        };
-
+                    scope.zoomViewModal = $ionicModal.fromTemplate(zoomViewTemplate, {
+                        scope,
+                        animation: 'slide-in-up',
                     });
 
-                },
+                    scope.showZoomView = function () {
+                        scope.zoomViewModal.show();
+                        scope.ngSrc = attr.zoomSrc;
+                    };
 
-            };
+                    scope.closeZoomView = function () {
+                        scope.zoomViewModal.hide();
+                    };
+
+                });
+
+            },
+
         };
-        angular.module('LelongApp.Goods', []).directive('zoomView', zoomView);
-    }());
+    };
+
+    angular.module("ionic-zoom-view", []).directive("zoomView", zoomView);
+})();
