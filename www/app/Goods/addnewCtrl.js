@@ -599,7 +599,7 @@ function formIsValid() {
     else if (item.Quantity === undefined) {
         $scope.errors.push({ type: 'quantity', message: 'Quantity is required.' })
     }
-    else if (item.SalePrice === undefined) {
+    else if (item.SalePrice === undefined || item.SalePrice == 0 || item.SalePrice == "") {
         $scope.errors.push({ type: 'saleprice', message: 'SalePrice is required.' })
     }
     var result = $scope.errors.length == 0;

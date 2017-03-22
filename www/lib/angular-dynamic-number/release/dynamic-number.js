@@ -448,6 +448,10 @@
     var cursorPosition = getCaretPosition(element[0]);
     if(prepend) {
       cursorPosition--;
+      //VoiCoi fixed
+      if  (prepend.length > 1){
+        cursorPosition += prepend.length - 1;
+      }
     }
     var valBeforeCursor = parsedValue.slice(0,cursorPosition);
     valBeforeCursor = removeThousandSeparators(valBeforeCursor, thousandSeparator);
@@ -517,7 +521,8 @@
         }
       }
       changeViewValue(ngModelController, parsedValue, parameters, state);
-      setCaretPosition(element[0], currentPosition + dots);
+      //VoiCoi fixed
+      setCaretPosition(element[0], currentPosition + dots + 1);
       return convViewToModel(parsedValue, fractionSeparator, thousandSeparator);
     }
   }
