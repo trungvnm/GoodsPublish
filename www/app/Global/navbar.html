@@ -20,7 +20,6 @@
 			<button class="button global-action button-icon icon ion-ios-arrow-right" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></button>
 			<button class="button button-icon icon ion-android-more-vertical" ng-click="openSearch()" ng-show="subActions.length > 0"></button -->
 			
-			<i class="button global-action button-icon icon fa fa-search ng-hide" aria-hidden="true" ng-click="openSearch()" ng-show="isHasAction('search')"></i>
 			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
 			<i class="button global-action button-icon icon fa fa-refresh ng-hide" aria-hidden="true" ng-click="exeMainAction('sync')" ng-show="isHasAction('sync')"></i>
 			<i class="button global-action button-icon icon fa fa-floppy-o ng-hide" aria-hidden="true" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></i>
@@ -29,6 +28,7 @@
 			<button class="button global-action button-icon icon ion-android-cancel ng-hide" ng-click="exeMainAction('discard')" ng-show="mainActions.indexOf('discard') != -1"></button>
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
+			<button class="button icon button-icon ion-ios-search-strong ng-hide" ng-click="exeMainAction('search')" ng-show="isHasAction('search')"></button>
 			<button class="button button-icon icon ion-android-more-vertical ng-hide" ng-click="popover.show($event)" ng-show="subActions.length > 0"></button>
 			
 			<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
@@ -41,6 +41,7 @@
 	</ion-nav-bar>
     <ion-nav-view name="menuContent">
 	</ion-nav-view>
+	<ion-nav-view name="quickActionsContent"></ion-nav-view>
 	
 	<ion-nav-view name="searchContent">
 		<div class="button-bar" id="quick-actions-bar" ng-show="isSearchEnabled">

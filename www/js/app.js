@@ -63,6 +63,10 @@
                         'menuContent': {
                             templateUrl: 'app/Goods/goods.html',
                             controller: 'GoodsCtrl'
+                        },
+						'quickActionsContent': {
+                            templateUrl: 'app/Global/quickactionsbar.html',
+                            controller: 'QuickActionsCtrl'
                         }
                     }
                 })

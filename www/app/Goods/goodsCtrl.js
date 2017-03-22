@@ -1,4 +1,20 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate,$stateParams) {
+	function openSearch(){
+		var params = {};
+		params.issearch = true;
+		$scope.issearch = true;
+        $rootScope.$broadcast('updateIsSearch', params);
+	};
+	
+	//set up quick actions bar
+	var actions = [{
+        name: 'search',
+        action: function () {
+            openSearch();
+        }
+    }];
+	$rootScope.$broadcast("setMainActions", actions);
+	
 	if ($ionicSideMenuDelegate.isOpen()) {
 		$ionicSideMenuDelegate.toggleLeft();
 	}
@@ -16,7 +32,7 @@
 		},
 		// representer of unpublished Tab
 		{
-			title: 'Unsynced',// text will be display in header bar
+			title: 'New',// text will be display in header bar
 			type: 'unsync', // a flag to determine filter condition of database fetching data
 			order:0,
 			offset: 0,
@@ -26,7 +42,7 @@
 		},
 		// representer of recent modification Tab
 		{
-			title: 'Changed',// text will be display in header bar
+			title: 'Modified',// text will be display in header bar
 			type: 'modified', // a flag to determine filter condition of database fetching data
 			order:2,
 			offset: 0,
@@ -63,6 +79,9 @@
 					curRepresenter.goods = res;
 				}
 				else {
+					if (!curRepresenter.goods){
+						curRepresenter.goods = [];
+					}
 					curRepresenter.goods.push.apply(curRepresenter.goods, res);
 				}
 				curRepresenter.offset += res.length;
@@ -228,8 +247,7 @@
 		var condition = 'Title LIKE \'%'+ key +'%\'';
 		$scope.filterMessage = 'Filtered by \''+key+'\':';
 		//var tabIndex = $ionicTabsDelegate.selectedIndex();
-		$scope.getGoodsInTabs(0, condition);
-		$scope.getGoodsInTabs(1, condition);
+		$scope.getGoodsInTabs($scope.representer, condition);
 		
 		// hide search panel
 		var params = {};
@@ -329,7 +347,7 @@
 	});
 
 	$scope.$on('multiPublish', function (event, args) {
-	    var selecteds = getListGoodsToProcess($scope.unsyncTabRepresenter.goods);
+	    var selecteds = getListGoodsToProcess($scope.representer.goods);
 	    var messageReuslt = '';
 	    if (selecteds.length > 0) {
 	        if (navigator.notification) {
@@ -404,6 +422,7 @@
 	
 	// reset and clear all data and status params to initialized state
 	function resetData(){
+		$scope.representer.goods = [];
 		$scope.representer.offset = 0;
 		$scope.representer.allowLoadMore = false;
 	}

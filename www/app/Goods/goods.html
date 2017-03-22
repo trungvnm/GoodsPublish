@@ -2,7 +2,7 @@
 	<ion-nav-title>
 		<span>{{representer.title}}  ({{pubCounter}})</span>
 	</ion-nav-title>
-	<ion-content class="has-header tab-content">
+	<ion-content class="has-header tab-content" lazy-scroll>
 		<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
 			<pre>{{filterMessage}}</pre>
 			<a class="button button-small button-icon icon ion-android-cancel" ng-click="exitSearching()"></a>
@@ -11,10 +11,12 @@
 			<p class="item" ng-show="representer.goods.length == 0">No items</p>
 			
 			<div ng-show="viewmode == 'grid'" ng-repeat="num in representer.goods" class="row" ng-if="$index % 3 == 0" ng-init="group = representer.goods.slice($index, $index + 3)">
-				<div class="col col-33" ng-repeat="g in group"  id="g{{g.GoodPublishId}}" on-hold="goodOnHold('synced')" ng-disabled="quickactions" ng-hide="g.hidden" on-tap="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
+				<div class="col col-33" ng-repeat="g in group"  id="g{{g.GoodPublishId}}" on-hold="goodOnHold(representer.type)" ng-disabled="quickactions" ng-hide="g.hidden" on-tap="goodClick($event, g.GoodPublishId)" ng-hide="g.hidden">
 					<a class="item-grid">
 						<span class="avt">
-							<img ng-src="{{g.PhotoUrl}}"/> </span>
+							<!-- img ng-src="{{g.PhotoUrl}}"/ --> 
+							<img image-lazy-src="{{g.PhotoUrl}}" image-lazy-loader="spiral" image-lazy-distance-from-bottom-to-load="0">
+						</span>
 						<span class="price">{{g.SalePrice | awnum:strategy}}</span>
 						<span class="title">{{g.Title}}</span>
 					</a>
@@ -36,7 +38,7 @@
 		</div>
 		<ion-infinite-scroll ng-if="representer.hasRemainGoods"
 			ng-show="representer.hasRemainGoods"
-			on-infinite="getGoodsInTabs(1, '{{filterMessage}}')"
+			on-infinite="getGoodsInTabs(representer, '{{filterMessage}}')"
 			distance="1%">
 		</ion-infinite-scroll>
 		<br/>
