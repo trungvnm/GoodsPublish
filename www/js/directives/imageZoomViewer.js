@@ -4,7 +4,7 @@
 
     "use strict";
 
-    var zoomView = function ($compile, $ionicModal, $ionicPlatform) {
+    var zoomView = function ($compile, $ionicModal, $ionicPlatform,$ionicScrollDelegate,$ionicSlideBoxDelegate) {
         return {
 
             restrict: 'A',
@@ -43,11 +43,12 @@
                                     background-position: center, center;
                                 }
                             </style>
-                            <div class="modal image-modal transparent" ng-click='closeZoomView()' on-swipe-down="closeZoomView()">
+                            <div class="modal image-modal transparent" on-swipe-down="closeZoomView()">
                               <ion-slide-box active-slide="ngSrc">
                                 <ion-slide ng-repeat="image in imgURI">
                                   <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
-                                  zooming="true" min-zoom="1" style="width: 100%; height: 100%">
+                                  zooming="true" delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(ngSrc)" on-release="updateSlideStatus(ngSrc)" 
+                                  min-zoom="1" style="width: 100%; height: 100%">
                                   <div class="image" style="background-image: url( {{image.PhotoUrl}} )"></div>
                                 </ion-scroll>
                               </ion-slide>
@@ -67,6 +68,14 @@
 
                     scope.closeZoomView = function () {
                         scope.zoomViewModal.hide();
+                    };                   
+                    scope.updateSlideStatus = function(slide) {
+                      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+                      if (zoomFactor == 1) {
+                        $ionicSlideBoxDelegate.enableSlide(true);
+                      } else {
+                        $ionicSlideBoxDelegate.enableSlide(false);
+                      }
                     };
 
                 });
