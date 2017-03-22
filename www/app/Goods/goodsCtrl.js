@@ -1,4 +1,5 @@
 ﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate,$stateParams) {
+	
 	function openSearch(){
 		var params = {};
 		params.issearch = true;
@@ -12,8 +13,11 @@
         action: function () {
             openSearch();
         }
+    },
+	{
+        name: 'home'
     }];
-	$rootScope.$broadcast("setMainActions", actions);
+	
 	
 	if ($ionicSideMenuDelegate.isOpen()) {
 		$ionicSideMenuDelegate.toggleLeft();
@@ -112,6 +116,14 @@
 		if (!$scope.type || $scope.type == null){
 			$scope.type = $scope.contextRepresenters[0].order; // set value as default type
 		}
+		if ($scope.type != 0){
+			actions.push({name: 'news'});
+		}
+		if ($scope.type != 2){
+			actions.push({name: 'modifications'});
+		}
+		$rootScope.$broadcast("setMainActions", actions);
+		
 		//get representer object of current context
 		$scope.representer = null;
 		for (var i = 0; i < $scope.contextRepresenters.length; i++){
@@ -192,19 +204,13 @@
 	                            setTimeout(function () {
 									$scope.representer.offset = 0;
 	                                $scope.getGoodsInTabs($scope.representer, $scope.filterMessage, true);
-
-	                                // update new total of goods to menu
-	                                goodsService.countAll().then(function (quantity) {
-	                                    var menuParams = {};
-	                                    menuParams.goodCounter = quantity;
-	                                    $rootScope.$broadcast('update', menuParams);
-	                                    //$rootScope.$broadcast('hideSpinner');
-	                                    $ionicLoading.hide();
-	                                    $scope.countGoodsInTabs($scope.representer);
-										
+									
+									$ionicLoading.hide();
+									resetCounter();
+	                                
 										// goto default page
-										$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
-	                                });
+									$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+	                                
 	                            }, 1000);
 	                        });
 	                    }
@@ -266,12 +272,7 @@
 	                            $scope.$evalAsync();
 	                            $scope.init().then(function () {
 	                                // update new total of goods to menu
-	                                goodsService.countAll().then(function (quantity) {
-	                                    var menuParams = {};
-	                                    menuParams.goodCounter = quantity;
-	                                    $ionicLoading.hide();
-	                                    $rootScope.$broadcast('update', menuParams);
-	                                });
+	                                resetCounter();
 									$scope.countGoodsInTabs($scope.representer);
 	                            });
 	                        }
@@ -412,6 +413,12 @@
 		$scope.representer.goods = [];
 		$scope.representer.offset = 0;
 		$scope.representer.allowLoadMore = false;
+	}
+	
+	// reset all counter numbers
+	function resetCounter(){
+		$ionicLoading.hide();
+		$rootScope.$broadcast('reset');
 	}
 	
 	

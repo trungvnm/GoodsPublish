@@ -62,6 +62,10 @@
 		}
 	});
 	
+	$scope.$on("reset", function(event){
+		$scope.init();
+	});
+	
 	$scope.goodMenuClick = function(){
 		$ionicHistory.clearCache().then(function(){
 			$state.go('app.completes');

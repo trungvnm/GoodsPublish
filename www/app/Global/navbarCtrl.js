@@ -1,5 +1,5 @@
-﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, 
-	$ionicSideMenuDelegate, tokenService, utilService, $state,$ionicPopover){
+angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService,utilService, $state,$ionicPopover, goodsService, $stateParams){
+
 	$scope.disabled = {};
 	$scope.mainActions = [];
 	$scope.subActions = [];
@@ -9,6 +9,12 @@
 	$scope.$on("setSubActions", function(event, actionsList){
 		$scope.subActions = actionsList;
 	});
+	
+	$scope.init = function(){
+		$scope.type = $stateParams.type;
+		$scope.countNews();
+		$scope.countModified();
+	}
 	
 	// when button back clicked
 	$scope.onbacked = function(){
@@ -51,6 +57,10 @@
 				return;
 			}
 		}
+	});
+	
+	$scope.$on("reset", function(event){
+		$scope.init();
 	});
 	
 	//======= snippet control =====
@@ -146,8 +156,13 @@
 	
 	$scope.goModificationPage = function(){
 		$ionicHistory.clearCache().then(function () {
-			$state.reload();
 			$state.go('navbar.goods', { type: 2 });
+		});
+	}
+	
+	$scope.goHome = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.go('app.completes');
 		});
 	}
 })
