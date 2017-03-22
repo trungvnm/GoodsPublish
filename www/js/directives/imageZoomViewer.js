@@ -68,7 +68,9 @@
 
                     scope.closeZoomView = function () {
                         scope.zoomViewModal.hide();
-                    };                   
+                        $ionicScrollDelegate.zoomTo(1, false, 0, 0);
+                    };     
+                        
                     scope.updateSlideStatus = function(slide) {
                       var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
                       if (zoomFactor == 1) {
