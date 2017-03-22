@@ -47,7 +47,7 @@
                               <ion-slide-box active-slide="ngSrc">
                                 <ion-slide ng-repeat="image in imgURI">
                                   <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
-                                  zooming="true" delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(ngSrc)" on-release="updateSlideStatus(ngSrc)" 
+                                  zooming="true" overflow-scroll="false" delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(ngSrc)" on-release="updateSlideStatus(ngSrc)" 
                                   min-zoom="1" style="width: 100%; height: 100%">
                                   <div class="image" style="background-image: url( {{image.PhotoUrl}} )"></div>
                                 </ion-scroll>

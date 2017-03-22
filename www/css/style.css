@@ -150,14 +150,10 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 
 .gallery-custom-imagecenter{
     width: 135px;
-    position: relative;   
+    position: relative;
+    padding-top: 10px;
     display: inline-block;   
 }
-.gallery-custom-imagecenter .scroll-view 
-{
-   margin-top: -10px;
-}
-
 
 .swiper-container {
         width: 100%;
