@@ -47,8 +47,7 @@
                               <ion-slide-box active-slide="ngSrc">
                                 <ion-slide ng-repeat="image in imgURI">
                                   <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
-                                  zooming="true" overflow-scroll="false" delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(ngSrc)" on-release="updateSlideStatus(ngSrc)" 
-                                  min-zoom="1" style="width: 100%; height: 100%">
+                                  zooming="true" overflow-scroll="false" min-zoom="1" style="width: 100%; height: 100%">
                                   <div class="image" style="background-image: url( {{image.PhotoUrl}} )"></div>
                                 </ion-scroll>
                               </ion-slide>
@@ -70,15 +69,6 @@
                         scope.zoomViewModal.hide();
                         $ionicScrollDelegate.zoomTo(1, false, 0, 0);
                     };     
-                        
-                    scope.updateSlideStatus = function(slide) {
-                      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
-                      if (zoomFactor == 1) {
-                        $ionicSlideBoxDelegate.enableSlide(true);
-                      } else {
-                        $ionicSlideBoxDelegate.enableSlide(false);
-                      }
-                    };
 
                 });
 
