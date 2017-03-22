@@ -150,10 +150,14 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 
 .gallery-custom-imagecenter{
     width: 135px;
-    position: relative;
-    padding-top: 10px;
+    position: relative;   
     display: inline-block;   
 }
+.gallery-custom-imagecenter .scroll-view 
+{
+   margin-top: -10px;
+}
+
 
 .swiper-container {
         width: 100%;
@@ -204,6 +208,7 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
         cursor: pointer;
         margin-top: 8px;
         margin-right: 0px;
+        z-index: 9999;
     }
     #category-ellipsis{
             height: 34px;

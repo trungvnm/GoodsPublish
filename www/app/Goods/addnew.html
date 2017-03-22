@@ -8,14 +8,28 @@
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 130px !important">
                         <div>
                             <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
-                            <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
+                            <ion-scroll zooming="true"
+                                direction="xy"                                                               
+                                min-zoom="1" 
+                                scrollbar-x="false" 
+                                scrollbar-y="false" 
+                                overflow-scroll="false">
+                                 <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
+                            </ion-scroll>
                         </div>
                     </ion-slide-page>
                 </ion-slides>          
                 <div style="width: 100%;text-align: center;" ng-show="imgURI.length >0 && imgURI.length <= 2">
                     <div class="gallery-custom-imagecenter" ng-repeat="image in imgURI">
                         <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
-                        <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
+                         <ion-scroll zooming="true"
+                                direction="xy"                                                               
+                                min-zoom="1" 
+                                scrollbar-x="false" 
+                                scrollbar-y="false" 
+                                overflow-scroll="false">
+                                    <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>
+                        </ion-scroll>
                     </div>
                 </div>
 
