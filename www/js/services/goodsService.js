@@ -325,6 +325,9 @@ angular.module('LelongApp.services')
 				else if (type == 'synced'){
 					whereClause += " AND LastSync IS NOT NULL AND LastSync != '' ";
 				}
+				else if (type == 'modified'){
+					whereClause += " AND LastSync IS NOT NULL AND LastSync <> '' AND LastEdited <> LastSync";
+				}
 				
 				if (condition && condition.trim() != ''){
 					whereClause += " AND " + condition;
@@ -382,11 +385,14 @@ angular.module('LelongApp.services')
 
 				// Condition for filter
 				var whereClause = ' WHERE UserId=\'' + userId + '\' AND Active = 1 ';
-				if (type == 'unpublish'){
+				if (type == 'unsync'){
 					whereClause += " AND (LastSync = '' OR LastSync IS NULL) ";
 				}
-				else if (type == 'published'){
+				else if (type == 'synced'){
 					whereClause += " AND LastSync IS NOT NULL AND LastSync <> '' ";
+				}
+				else if (type == 'modified'){
+					whereClause += " AND LastSync IS NOT NULL AND LastSync <> '' AND LastEdited <> LastSync";
 				}
 
 				// Query to extract data

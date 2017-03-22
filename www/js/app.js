@@ -56,17 +56,22 @@
                     templateUrl: 'app/Global/navbar.html',
                     controller: 'NavbarCtrl'
                 })
+				.state('navbar.goods', {
+                    url: '/goods/{type}',
+					cache: false,
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'app/Goods/goods.html',
+                            controller: 'GoodsCtrl'
+                        }
+                    }
+                })
                 .state('app.completes', {
                     url: '/completes',
                     views: {
                         'menuContent': {
-                            templateUrl: 'app/Goods/syncedTab.html',//'app/Goods/completes.html',
-                            controller: 'GoodsCtrl',
-							views: {
-								'syncedTab':{
-									templateUrl: 'app/Goods/syncedTab.html',
-								}
-							}
+                            templateUrl: 'app/Goods/goods.html',//'app/Goods/completes.html',
+                            controller: 'GoodsCtrl'
                         },
                         'quickActionsContent': {
                             templateUrl: 'app/Global/quickactionsbar.html',
@@ -74,22 +79,22 @@
                         }
                     }
                 })
-				.state('app.completes.unsynctab', {
-					url: '/unsynctab',
-					views: {
-					  'unsyncTab': {
-						templateUrl: 'app/Goods/unsyncTab.html'
-					  }
-					}
-				})
-				.state('app.completes.syncedtab', {
-					url: '/syncedtab',
-					views: {
-					  'syncedTab': {
-						templateUrl: 'app/Goods/syncedTab.html'
-					  }
-					}
-				})
+				// .state('app.completes.unsynctab', {
+					// url: '/unsynctab',
+					// views: {
+					  // 'unsyncTab': {
+						// templateUrl: 'app/Goods/unsyncTab.html'
+					  // }
+					// }
+				// })
+				// .state('app.completes.syncedtab', {
+					// url: '/syncedtab',
+					// views: {
+					  // 'syncedTab': {
+						// templateUrl: 'app/Goods/syncedTab.html'
+					  // }
+					// }
+				// })
                 .state('app.account', {
                     url: '/account',
                     views: {

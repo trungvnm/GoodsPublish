@@ -27,17 +27,26 @@ angular.module('LelongApp.Goods')
       currentX = 0,
       currentY = 0,
       previousSpeed     = 15,
+	  range = 2;
 
       init = function() {
 
-        buttons = document.getElementsByClassName('fab-menu-button-item');
+        //buttons = document.getElementsByClassName('fab-menu-button-item');
+		//buttons = buttons.slice(0,1);
+		
+		var menuItemList = document.querySelectorAll('.fab-menu-items');
+		if (menuItemList.length > 0){
+			range = menuItemList[0].querySelectorAll('li').length;
+		}
+		
+		buttons = document.getElementsByClassName('fab-menu-button-item');
         buttonContainers = document.querySelectorAll('.fab-menu-items > li');
         buttonsContainer = document.getElementsByClassName('fab-menu-items');
-
+		
         for (var i = 0; i < buttonContainers.length; i++) {
-
+			var iRange = (i < range) ? i : i % range;
           var button = buttonContainers.item(i);
-          var angle = (options.baseAngle + (options.rotationAngle * i));
+          var angle = (options.baseAngle + (options.rotationAngle * iRange));
 		  angle = 180 - angle;
 		  if (angle < 0){
 			angle = 360 + angle;
@@ -51,7 +60,6 @@ angular.module('LelongApp.Goods')
 
       animateButtonsIn = function() {
         for (var i = 0; i < buttonContainers.length; i++) {
-
           var button = buttonContainers.item(i);
           var angle = button.getAttribute('angle');
           button.style.transform = "rotate(" + angle + "deg) translate(" + options.distance + "px) rotate(-0deg) scale(1)";
@@ -60,9 +68,9 @@ angular.module('LelongApp.Goods')
       },
       animateButtonsOut = function() {
         for (var i = 0; i < buttonContainers.length; i++) {
-
+			var iRange = (i < range) ? i : i % range;
           var button = buttonContainers.item(i);
-          var angle = (options.baseAngle + (options.rotationAngle * i));
+          var angle = (options.baseAngle + (options.rotationAngle * iRange));
 		  angle = 180 - angle;
 		  if (angle < 0){
 			angle = 360 + angle;
@@ -108,7 +116,6 @@ angular.module('LelongApp.Goods')
       },
 
       endRotateButtons = function() {
-
         for (var i = 0; i < buttonContainers.length; i++) {
 
           var button = buttonContainers.item(i),
@@ -149,7 +156,7 @@ angular.module('LelongApp.Goods')
 
         $ionicGesture.on('release', function(event) {
           console.log('drag ends');
-          endRotateButtons();
+          //endRotateButtons();
         }, menuItems);
 
         $ionicGesture.on('drag', function(event) {

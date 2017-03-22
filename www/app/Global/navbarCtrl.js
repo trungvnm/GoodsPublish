@@ -132,4 +132,30 @@
 	  }).then(function(popover) {
 	    $scope.popover = popover;
 	  });
+	  
+	  $scope.countNews = function(){
+		goodsService.countInTab('unsync').then(function(result){
+			$scope.news = result;
+		});
+	}
+	
+	$scope.countModified = function(){
+		goodsService.countInTab('modified').then(function(result){
+			$scope.modified = result;
+		});
+	}
+	
+	$scope.goNewsPage = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.go('navbar.goods', { type: 0 });
+		});
+	}
+	
+	$scope.goModificationPage = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.reload();
+			$state.go('navbar.goods', { type: 2 });
+		});
+	}
 })
+

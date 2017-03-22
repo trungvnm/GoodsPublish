@@ -30,6 +30,13 @@
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			<button class="button button-icon icon ion-android-more-vertical ng-hide" ng-click="popover.show($event)" ng-show="subActions.length > 0"></button>
+			
+			<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
+				<span class="counter">{{news}}</span>
+			</i>
+			<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="modified > 0 && type != 2" ng-click="goModificationPage()">
+				<span class="counter">{{modified}}</span>
+			</i>
 		</ion-nav-buttons>
 	</ion-nav-bar>
     <ion-nav-view name="menuContent">

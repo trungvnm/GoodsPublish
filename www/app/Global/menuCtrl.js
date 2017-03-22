@@ -1,5 +1,7 @@
-﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService, $state, $ionicHistory) {
+﻿angular.module("LelongApp.Goods").controller('MenuCtrl', function ($scope, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $window,goodsService, $state, $ionicHistory, $stateParams) {
 	$scope.goodCounter = 0;
+	$scope.news = 0;
+	$scope.modified = 0;
     $scope.account = {};
     $scope.account.name = $window.localStorage.getItem("Lelong_UserLogined");
 	$scope.showSearch = false;
@@ -40,10 +42,14 @@
 	};
 	
 	$scope.init = function(){
+		$scope.type = $stateParams.type;
 		// count quantity of goods 
 		goodsService.countAll().then(function(quantity){
 			$scope.goodCounter = quantity;
 		});
+		
+		$scope.countNews();
+		$scope.countModified();
 	};
 	
 	// update total number of goods
@@ -59,6 +65,37 @@
 	$scope.goodMenuClick = function(){
 		$ionicHistory.clearCache().then(function(){
 			$state.go('app.completes');
+		});
+	}
+
+	$scope.countNews = function(){
+		goodsService.countInTab('unsync').then(function(result){
+			$scope.news = result;
+		});
+	}
+	
+	$scope.countModified = function(){
+		goodsService.countInTab('modified').then(function(result){
+			$scope.modified = result;
+		});
+	}
+	
+	$scope.goNewsPage = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.go('navbar.goods', { type: 0 });
+		});
+	}
+	
+	$scope.goModificationPage = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.reload();
+			$state.go('navbar.goods', { type: 2 });
+		});
+	}
+	
+	$scope.goPublishedPage = function(){
+		$ionicHistory.clearCache().then(function () {
+			$state.go('app.completes', { type: 1 });
 		});
 	}
 })

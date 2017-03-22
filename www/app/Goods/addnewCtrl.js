@@ -431,7 +431,7 @@ function saveClick (isShowToast) {
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Update successfully!').then(function () {
                         $ionicHistory.clearCache().then(function () {
-                            $state.go('app.completes');
+                            $state.go('navbar.goods', {type: '2'});
                         });
                     });
                 }
@@ -447,7 +447,7 @@ function saveClick (isShowToast) {
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Save successfully!').then(function () {
                         $ionicHistory.clearCache().then(function () {
-                            $state.go('app.completes');
+							$state.go('navbar.goods', {type: '0'});
                         });
                     });
                 }

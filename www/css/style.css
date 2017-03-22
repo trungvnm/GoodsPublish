@@ -294,6 +294,19 @@ ion-popover-view.fit ion-content {
 .tabhide .tab-nav a{pointer-events: none; opacity: 0.3}
 .global-action{margin-left: 10px; }
 .global-action:before{font-size: 25px !important;}
+.global-action .counter{
+	position: absolute;
+	top: -4px;
+	background: #e65100;
+	padding: 0 5px 0 4px;
+	font-size: 13px;
+	line-height: 20px;
+	border-radius: 5px 5px 0 5px;
+	left: 0px;
+	font-weight: bold;
+	box-shadow: -1px 1px 1px 0px #5f5f5f;
+	font-family: -apple-system, "Helvetica Neue", Roboto, "Segoe UI", sans-serif;
+}
 
 #gallery{position: fixed; top: 45px}
 .detail-form{top:160px}

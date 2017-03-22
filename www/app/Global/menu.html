@@ -9,7 +9,14 @@
         </button>
       </ion-nav-buttons>
 	  <ion-nav-buttons side="right">
+		<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
+			<span class="counter">{{news}}</span>
+		</i>
+		<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="modified > 0 && type != 2" ng-click="goModificationPage()">
+			<span class="counter">{{modified}}</span>
+		</i>
         <button class="button icon button-icon ion-ios-search-strong"  ng-show="showSearch" ng-click="openSearch()"></button>
+		
       </ion-nav-buttons>
 	  
     </ion-nav-bar>
