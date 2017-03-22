@@ -195,16 +195,7 @@
   }
   function addThousandSeparator(value, fractionSeparator, thousandSeparator){
     value = String(value).split(fractionSeparator);
-    value[0] = value[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-    //VoiCoi fixed
-    if (value[0].indexOf(thousandSeparator) > 0){      
-      var temp = value[0];
-      var res = temp.substr(temp.indexOf(",")-1,temp.length - 1);
-      res = res.substr(res.indexOf(",")-1,res.indexOf(","));    
-      if  (isNaN(res)){
-        value[0] = temp.substr(0, temp.indexOf(",")) + temp.substr(temp.indexOf(",")+1);
-      }      
-    }
+    value[0] = value[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);   
     return value.join(fractionSeparator);
   }
 
@@ -447,11 +438,7 @@
     }
     var cursorPosition = getCaretPosition(element[0]);
     if(prepend) {
-      cursorPosition--;
-      //VoiCoi fixed
-      if  (prepend.length > 1){
-        cursorPosition += prepend.length - 1;
-      }
+      cursorPosition--;     
     }
     var valBeforeCursor = parsedValue.slice(0,cursorPosition);
     valBeforeCursor = removeThousandSeparators(valBeforeCursor, thousandSeparator);
