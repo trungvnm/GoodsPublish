@@ -1,4 +1,5 @@
-﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService, $state,$ionicPopover){
+﻿angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, 
+	$ionicSideMenuDelegate, tokenService, utilService, $state,$ionicPopover){
 	$scope.disabled = {};
 	$scope.mainActions = [];
 	$scope.subActions = [];
@@ -97,24 +98,16 @@
 			if (navigator.notification) {
 				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
 					if (result == 1) {
-						$ionicHistory.backView().go();
 						$rootScope.hasChanged = false;
+						//$ionicHistory.goBack(-1);
+						utilService.goDirectView($ionicHistory.backView().viewId);
 					}
 				})
 			}
-			
 		} else {
-			$ionicHistory.backView().go();
+			//$ionicHistory.goBack(-1);
+			utilService.goDirectView($ionicHistory.backView().viewId);
 		}
-
-		//$ionicHistory.goBack();
-		/* if ($ionicHistory.backView().url.indexOf('app/complete')) {
-			$ionicHistory.clearCache().then(function () {
-				$state.go('app.completes');
-			});
-		} else { */
-		//	$ionicHistory.backView().go();
-		//}
 	};
 	
 	// when click search button, open search box on header
@@ -158,4 +151,3 @@
 		});
 	}
 })
-

@@ -1,5 +1,5 @@
 angular.module('LelongApp.services')
-	.service('utilService',function ($window) {
+	.service('utilService',function ($window, $ionicHistory) {
 		var self = this;		
 		self.getCurrencyUnit = function(){
 			var currency = $window.localStorage.getItem("Lelong_CurrencyUnit");
@@ -33,5 +33,25 @@ angular.module('LelongApp.services')
 					break;
 			}				 
 			return strategy + tail;      
-		}		
+		};
+		self.goDirectView = function(viewID){
+			var backView = $ionicHistory.viewHistory().views[viewID];
+			$ionicHistory.forcedNav = {
+				viewId:     backView.viewId,
+				navAction: 'moveBack',
+				navDirection: 'back'
+			};
+			backView && backView.go();
+		};
+		self.unsavedConfirm = function() {
+			if (navigator.notification) {
+				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
+					if (result == 1) {
+						$scope.hasChange = false;
+						//$ionicHistory.goBack(-1);
+						self.goDirectView($ionicHistory.backView().viewId);
+					}
+				})
+			}
+		}
 	})

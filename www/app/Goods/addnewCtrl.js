@@ -74,10 +74,11 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
       function () {
           console.log("Back to list goods by press BACK button home.");
           if ($scope.hasChange) {
-                popupConfirm();
+                utilService.unsavedConfirm();
            } 
           else {
-              $ionicHistory.goBack();
+              //$ionicHistory.goBack(-1);
+              utilService.goDirectView($ionicHistory.backView().viewId)
           }
         
       }, 100
@@ -652,28 +653,6 @@ function popupShow() {
         }
    }]
   });
-}
-
-function popupConfirm(){
-    if (navigator.notification) {
-        navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
-            if (result == 1) {
-                /** $state.go('app.completes.syncedtab'); */
-                $ionicHistory.goBack();
-                $scope.hasChange = false;
-            }
-        })
-    }
-//     var confirmPopup = $ionicPopup.confirm({
-//      title: 'Confirm',
-//      template: 'You have unsaved changes, are you sure that you want to leave?'
-//    });
-
-//    confirmPopup.then(function(res) {
-//      if(res) {
-//        $state.go('app.completes');
-//      }
-//    });
 }
 /**end helper method */
 
