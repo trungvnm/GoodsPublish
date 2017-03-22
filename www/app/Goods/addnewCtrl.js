@@ -56,7 +56,8 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 $scope.imgURI= res.listPhoto;                
                 updateSlide();               
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
-                    $rootScope.$broadcast('disableSubAction','Sync')
+                    $rootScope.$broadcast('disableSubAction','Sync');
+                    $rootScope.$broadcast('enableMainAction','upload');
                 }
                 watchGoodsObject(2000);         
             });
