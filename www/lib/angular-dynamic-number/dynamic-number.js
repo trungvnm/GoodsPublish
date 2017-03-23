@@ -293,7 +293,7 @@
         if (elem.selectionStart) {
           elem.focus();
           if (isAndroid) {
-            setTimeout(()=>elem.setSelectionRange(caretPos, caretPos),0);
+              setTimeout(function () { elem.setSelectionRange(caretPos, caretPos); }, 0);
           } else {
             elem.setSelectionRange(caretPos, caretPos);
           }
