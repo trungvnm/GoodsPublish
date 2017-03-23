@@ -4,7 +4,6 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 	$scope.mainActions = [];
 	$scope.subActions = [];
 	$scope.$on("setMainActions", function(event, actionsList){
-		$scope.mainActions = [];
 		$scope.mainActions = actionsList;
 	});
 	$scope.$on("setSubActions", function(event, actionsList){
@@ -105,6 +104,8 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 	
 	// back to referrer
 	$scope.goBack = function(){
+		$scope.mainActions = [];
+		$scope.subActions = [];
 		if ($rootScope.hasChanged) {
 			if (navigator.notification) {
 				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
