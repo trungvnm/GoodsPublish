@@ -1,12 +1,12 @@
 <ion-side-menus enable-menu-with-back-views="false" ng-controller="NavbarCtrl" ng-init="init()">
   <ion-side-menu-content>
     <ion-nav-bar class="bar bar-header bar-positive" align-title="left">
-		<ion-nav-back-button>
-		</ion-nav-back-button>
+		<!-- ion-nav-back-button>
+			
+		</ion-nav-back-button -->
 		<ion-nav-buttons side="left">
-			<button class="button button-icon button-clear ion-android-arrow-back" menu-toggle="left" ng-hide="isHasAction('home')" ng-click="goBack()">
-			</button>
-			<i class="fa fa-home button icon button-icon ng-hide" aria-hidden="true" ng-show="isHasAction('home')" ng-click="goHome()"></i>
+			<i class="fa fa-arrow-left icon button button-icon global-action" aria-hidden="true" ng-show="!isHasAction('home')" ng-click="goBack()"></i>
+			<i class="fa fa-home icon button-icon ng-hide" aria-hidden="true" ng-show="isHasAction('home')" ng-click="goHome()"></i>
 		</ion-nav-buttons>
 		<ion-nav-buttons side="right" id="global-head-actions">
 			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
@@ -18,8 +18,7 @@
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			
-			<button class="button button-icon icon ion-android-more-vertical ng-hide" ng-click="popover.show($event)" ng-show="subActions.length > 0"></button>
-			
+			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>
 			
 			<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="isHasAction('news') && news > 0" ng-click="goNewsPage()">
 				<span class="counter">{{news}}</span>

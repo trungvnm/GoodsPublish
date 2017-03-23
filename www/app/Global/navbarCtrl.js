@@ -4,6 +4,7 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 	$scope.mainActions = [];
 	$scope.subActions = [];
 	$scope.$on("setMainActions", function(event, actionsList){
+		$scope.mainActions = [];
 		$scope.mainActions = actionsList;
 	});
 	$scope.$on("setSubActions", function(event, actionsList){
