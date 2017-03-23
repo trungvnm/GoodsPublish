@@ -14,14 +14,11 @@
 }(window, function(angular) {
   'use strict';
 
+  const isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent)
   var wasPasted = false;
 
   function convModelToView(modelValue, viewSeparator, prepend, append){
-    // if(modelValue === undefined || modelValue === null || modelValue === "") {
-    //   return 0;
-    // }
-    // VoiCoi fixed
-    if(modelValue === undefined || modelValue === null || modelValue === "" || modelValue === 0) {
+    if(modelValue === undefined || modelValue === null || modelValue === "") {
       return "";
     }
     var newViewValue = '';
@@ -195,7 +192,7 @@
   }
   function addThousandSeparator(value, fractionSeparator, thousandSeparator){
     value = String(value).split(fractionSeparator);
-    value[0] = value[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);   
+    value[0] = value[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
     return value.join(fractionSeparator);
   }
 
@@ -295,7 +292,11 @@
       } else {
         if (elem.selectionStart) {
           elem.focus();
-          elem.setSelectionRange(caretPos, caretPos);
+          if (isAndroid) {
+            setTimeout(()=>elem.setSelectionRange(caretPos, caretPos),0);
+          } else {
+            elem.setSelectionRange(caretPos, caretPos);
+          }
         } else
           elem.focus();
       }
@@ -438,7 +439,7 @@
     }
     var cursorPosition = getCaretPosition(element[0]);
     if(prepend) {
-      cursorPosition--;     
+      cursorPosition--;
     }
     var valBeforeCursor = parsedValue.slice(0,cursorPosition);
     valBeforeCursor = removeThousandSeparators(valBeforeCursor, thousandSeparator);
@@ -508,8 +509,7 @@
         }
       }
       changeViewValue(ngModelController, parsedValue, parameters, state);
-      //VoiCoi fixed
-      setCaretPosition(element[0], currentPosition + dots + 1);
+      setCaretPosition(element[0], currentPosition + dots);
       return convViewToModel(parsedValue, fractionSeparator, thousandSeparator);
     }
   }
