@@ -86,14 +86,15 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                     function (result) {
                         if (result == 1) {
                             $scope.hasChange = false;
-                            $ionicHistory.goBack(-1);
-                            //utilService.directGoBack();
+                            //$ionicHistory.goBack(-1);
+                            utilService.directGoBack();
                         }
                     })
                 }
            } 
           else {
-              $ionicHistory.goBack(-1);
+              //$ionicHistory.goBack(-1);
+              utilService.directGoBack();
           }
         
       }, 100

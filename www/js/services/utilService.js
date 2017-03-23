@@ -43,10 +43,24 @@ angular.module('LelongApp.services')
 			backView && backView.go();
 		};
 		self.directGoBack = function(){
-			$ionicHistory.viewHistory().views.forEach(function(vw) {
-				if(vw.viewId == ionicHistory.currentView().viewId){
-					alert('hien tai');
+			var currView = $ionicHistory.currentView();
+			var data = $ionicHistory.viewHistory().views;
+			var arr = $.map(data, function(el) { return el; })
+
+			if(arr[arr.length - 2].url != currView.url) $ionicHistory.goBack();
+			else{
+				for(var i = arr.length - 2; i--; i >= 0){
+					if(currView.stateName != arr[i].stateName){
+						var backView = $ionicHistory.viewHistory().views[arr[i].viewId];
+						$ionicHistory.forcedNav = {
+							viewId:     backView.viewId,
+							navAction: 'moveBack',
+							navDirection: 'back'
+						};
+						backView && backView.go();
+						break;
+					}
 				}
-			}, this);
-		}
+			}
+		};
 	})
