@@ -314,6 +314,16 @@ ion-popover-view.fit ion-content {
 	box-shadow: -1px 1px 1px 0px #5f5f5f;
 	font-family: -apple-system, "Helvetica Neue", Roboto, "Segoe UI", sans-serif;
 }
+.global-action.actived{color: #525252;
+    background: #ffffff !important;
+    position: relative;
+    padding-bottom: 5px;
+    border-radius: 2px 2px 0 0;
+    box-shadow: -1px -1px 2px -1px black;}
+	
+.global-action.actived .counter{
+	color: white;
+}
 
 #gallery{position: fixed; top: 45px}
 .detail-form{top:160px}

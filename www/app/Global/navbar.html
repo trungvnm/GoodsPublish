@@ -9,21 +9,21 @@
 			<i class="fa fa-home icon button-icon ng-hide" aria-hidden="true" ng-show="isHasAction('home')" ng-click="goHome()"></i>
 		</ion-nav-buttons>
 		<ion-nav-buttons side="right" id="global-head-actions">
-			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
-			<i class="button global-action button-icon icon fa fa-refresh ng-hide" aria-hidden="true" ng-click="exeMainAction('sync')" ng-show="isHasAction('sync')"></i>
-			<i class="button global-action button-icon icon fa fa-floppy-o ng-hide" aria-hidden="true" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></i>
-			<i class="button button-icon global-action icon fa fa-trash-o ng-hide" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></i>
-			<i class="button global-action button-icon icon fa fa-pencil ng-hide" aria-hidden="true" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></i>
-			<button class="button global-action button-icon icon ion-android-cancel ng-hide" ng-click="exeMainAction('discard')" ng-show="isHasAction('discard')"></button>
-			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
-			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
+			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-class="activates['upload']" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
+			<i class="button global-action button-icon icon fa fa-refresh ng-hide" ng-class="activates['sync']" aria-hidden="true" ng-click="exeMainAction('sync')" ng-show="isHasAction('sync')"></i>
+			<i class="button global-action button-icon icon fa fa-floppy-o ng-hide" ng-class="activates['save']" aria-hidden="true" ng-click="exeMainAction('save')" ng-show="isHasAction('save')"></i>
+			<i class="button button-icon global-action icon fa fa-trash-o ng-hide" ng-class="activates['delete']" ng-disabled="disabled['delete']" ng-click="exeMainAction('delete')" ng-show="isHasAction('delete')"></i>
+			<i class="button global-action button-icon icon fa fa-pencil ng-hide" ng-class="activates['edit']" aria-hidden="true" ng-click="exeMainAction('edit')" ng-show="isHasAction('edit')"></i>
+			<button class="button global-action button-icon icon ion-android-cancel ng-hide" ng-class="activates['discard']" ng-click="exeMainAction('discard')" ng-show="isHasAction('discard')"></button>
+			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" ng-class="activates['prev']" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
+			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" ng-class="activates['next']" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			
 			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>
 			<div style="position: relative;right: 65px">
-			<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="isHasAction('news') && news > 0" ng-click="goNewsPage()">
+			<i class="fa fa-file-o button icon button-icon global-action ng-hide" ng-class="activates['news']" aria-hidden="true" ng-show="isHasAction('news') && news > 0" ng-click="goNewsPage()">
 				<span class="counter">{{news}}</span>
 			</i>
-			<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="isHasAction('modifications') && modified > 0" ng-click="goModificationPage()">
+			<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" ng-class="activates['modifications']" aria-hidden="true" ng-show="isHasAction('modifications') && modified > 0" ng-click="goModificationPage()">
 				<span class="counter">{{modified}}</span>
 			</i>
 			</div>
