@@ -1,4 +1,9 @@
 /* Empty. Add your own CSS if you like */
+
+.bar .title{
+    left: 40px !important;
+    right: 60px !important;
+}
 .small{font-size: 12px}
 #goods-list{top:93px}
 #menulist .icon{font-size: 26px; opacity: 0.8}
