@@ -268,6 +268,7 @@
 								$rootScope.$broadcast('updateIsQuickActions', params);
 								
 	                            messageReuslt = 'Delete successful!';
+								resetCounter();
 	                            $scope.quickactions = false;
 	                            $scope.$evalAsync();
 	                            $scope.init();
@@ -350,7 +351,8 @@
 									params.list = args.listName;
 									$rootScope.$broadcast('updateIsQuickActions', params);
 									
-	                                messageReuslt = 'Post successful!'
+	                                messageReuslt = 'Post successful!';
+									resetCounter();
 	                                $scope.init();
 	                                $scope.quickactions = false;
 	                                $scope.$evalAsync();
