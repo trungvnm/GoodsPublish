@@ -25,11 +25,11 @@
 		}
 		else{
 			$scope.searchkey = '';
-			//$scope.cancelSearchingg();
+			//$scope.cancelSearching();
 		}
 	});
 	
-	$scope.cancelSearchingg = function(){
+	$scope.cancelSearching = function(){
 		$scope.searchaction = false;
 		var params = {};
 		params.issearch = false;

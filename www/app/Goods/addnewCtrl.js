@@ -54,9 +54,15 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 getFolderUploadImg(res.Guid);               
                 $scope.CatesName = convertCateIdToName(res.Category);
                 $scope.imgURI= res.listPhoto;                
-                updateSlide();               
+                updateSlide();    
+                /*Good is new then sync button disabled and enabled upload button */           
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
                     $rootScope.$broadcast('disableSubAction','Sync');
+                    $rootScope.$broadcast('enableMainAction','upload');
+                }else if((res.LastSync != undefined && res.LastEdited !=undefined) 
+                    && (res.LastSync.trim().length >0 && res.LastEdited.trim().length >0)
+                    && (!angular.equals(res.LastSync.trim(),res.LastEdited.trim()))){
+                    /*Good modified then enabled upload button */      
                     $rootScope.$broadcast('enableMainAction','upload');
                 }
                 watchGoodsObject(2000);         
@@ -75,11 +81,19 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
       function () {
           console.log("Back to list goods by press BACK button home.");
           if ($scope.hasChange) {
-                utilService.unsavedConfirm();
+                if (navigator.notification) {
+                    navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', 
+                    function (result) {
+                        if (result == 1) {
+                            $scope.hasChange = false;
+                            $ionicHistory.goBack(-1);
+                            //utilService.directGoBack();
+                        }
+                    })
+                }
            } 
           else {
-              //$ionicHistory.goBack(-1);
-              utilService.goDirectView($ionicHistory.backView().viewId)
+              $ionicHistory.goBack(-1);
           }
         
       }, 100

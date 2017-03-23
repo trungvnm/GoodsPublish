@@ -270,11 +270,7 @@
 	                            messageReuslt = 'Delete successful!';
 	                            $scope.quickactions = false;
 	                            $scope.$evalAsync();
-	                            $scope.init().then(function () {
-	                                // update new total of goods to menu
-	                                resetCounter();
-									$scope.countGoodsInTabs($scope.representer);
-	                            });
+	                            $scope.init();
 	                        }
 	                        else {
 	                            messageReuslt = 'Delete failed!';
