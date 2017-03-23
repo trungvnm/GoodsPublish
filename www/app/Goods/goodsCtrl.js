@@ -317,6 +317,7 @@
                             function () {
                                 $scope.init();
                                 $ionicLoading.hide();
+								resetCounter();
                                 $cordovaToast.showLongTop(messageReuslt);
                             });
 	                    },function(err){
