@@ -508,8 +508,7 @@
         }
       }
       changeViewValue(ngModelController, parsedValue, parameters, state);
-      //VoiCoi fixed
-      setCaretPosition(element[0], currentPosition + dots + 1);
+      setCaretPosition(element[0], currentPosition + dots);
       return convViewToModel(parsedValue, fractionSeparator, thousandSeparator);
     }
   }
