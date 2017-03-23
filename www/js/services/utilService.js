@@ -33,15 +33,7 @@ angular.module('LelongApp.services')
 			}				 
 			return strategy;      
 		};
-		self.goDirectView = function(viewId){
-			var backView = $ionicHistory.viewHistory().views[viewId];
-			$ionicHistory.forcedNav = {
-				viewId:     backView.viewId,
-				navAction: 'moveBack',
-				navDirection: 'back'
-			};
-			backView && backView.go();
-		};
+		
 		self.directGoBack = function(){
 			var currView = $ionicHistory.currentView();
 			var data = $ionicHistory.viewHistory().views;
