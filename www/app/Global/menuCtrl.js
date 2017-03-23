@@ -69,6 +69,7 @@
 	$scope.goodMenuClick = function(){
 		$ionicHistory.clearCache().then(function(){
 			$state.go('app.completes');
+			$ionicSideMenuDelegate.toggleLeft();
 		});
 	}
 
