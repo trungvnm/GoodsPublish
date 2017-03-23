@@ -33,8 +33,8 @@ angular.module('LelongApp.services')
 			}				 
 			return strategy;      
 		};
-		self.goDirectView = function(viewID){
-			var backView = $ionicHistory.viewHistory().views[viewID];
+		self.goDirectView = function(viewId){
+			var backView = $ionicHistory.viewHistory().views[viewId];
 			$ionicHistory.forcedNav = {
 				viewId:     backView.viewId,
 				navAction: 'moveBack',
@@ -42,15 +42,11 @@ angular.module('LelongApp.services')
 			};
 			backView && backView.go();
 		};
-		self.unsavedConfirm = function() {
-			if (navigator.notification) {
-				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
-					if (result == 1) {
-						$scope.hasChange = false;
-						//$ionicHistory.goBack(-1);
-						self.goDirectView($ionicHistory.backView().viewId);
-					}
-				})
-			}
+		self.directGoBack = function(){
+			$ionicHistory.viewHistory().views.forEach(function(vw) {
+				if(vw.viewId == ionicHistory.currentView().viewId){
+					alert('hien tai');
+				}
+			}, this);
 		}
 	})

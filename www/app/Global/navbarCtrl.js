@@ -109,14 +109,13 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
 					if (result == 1) {
 						$rootScope.hasChanged = false;
-						//$ionicHistory.goBack(-1);
-						utilService.goDirectView($ionicHistory.backView().viewId);
+						$ionicHistory.goBack(-1);
+						//utilService.directGoBack();
 					}
 				})
 			}
 		} else {
-			//$ionicHistory.goBack(-1);
-			utilService.goDirectView($ionicHistory.backView().viewId);
+			$ionicHistory.goBack(-1);
 		}
 	};
 	
@@ -126,7 +125,7 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 	};
 	
 	// action for cancel searching button
-	$scope.cancelSearchingg = function(){
+	$scope.cancelSearching = function(){
 		$scope.isSearchEnabled = false;
 	};
 
