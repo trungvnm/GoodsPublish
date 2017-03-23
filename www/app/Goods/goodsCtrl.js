@@ -113,16 +113,22 @@
 	$scope.init = function(){
 		// determine type of goods
 		$scope.type = $stateParams.type;
+		var activeName = '';
 		if (!$scope.type || $scope.type == null){
 			$scope.type = $scope.contextRepresenters[0].order; // set value as default type
 		}
-		if ($scope.type != 0){
-			actions.push({name: 'news'});
+		actions.push({name: 'news'});
+		actions.push({name: 'modifications'});
+		if ($scope.type == 0){
+			activeName = "news";
 		}
-		if ($scope.type != 2){
-			actions.push({name: 'modifications'});
+		if ($scope.type == 2){
+			activeName = "modifications";
 		}
 		$rootScope.$broadcast("setMainActions", actions);
+		if (activeName != ''){
+			$rootScope.$broadcast("setActive", activeName);
+		}
 		
 		//get representer object of current context
 		$scope.representer = null;

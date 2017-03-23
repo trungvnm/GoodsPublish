@@ -1,6 +1,7 @@
 angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService,utilService, $state,$ionicPopover, goodsService, $stateParams){
 	// reset data when view start change
 	$rootScope.$on('$stateChangeStart', function(ev, toState, toParams, fromState, fromParams){
+		$scope.activates = {};
 		$scope.mainActions = [];
 		$scope.subActions = [];
 	});
@@ -63,6 +64,28 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 		}
 	});
 	
+	//set active status to an icon
+	$scope.$on("setActive", function(event, name){
+		$scope.activates = {};
+		for (var i = 0; i < $scope.mainActions.length; i++){
+			var action = $scope.mainActions[i];
+			if (action.name == name){
+				$scope.activates[name] = 'actived';
+				return;
+			}
+		}
+	})
+	$scope.$on("unsetActive", function(event, name){
+		$scope.activates = {};
+		for (var i = 0; i < $scope.mainActions.length; i++){
+			var action = $scope.mainActions[i];
+			if (action.name == name){
+				$scope.activates[name] = '';
+				return;
+			}
+		}
+	})
+	
 	$scope.$on("reset", function(event){
 		$scope.init();
 	});
@@ -83,6 +106,11 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 			}
 		}
 		return false;
+	}
+	
+	// check an icon whether is actived now
+	$scope.isActivate = function(name){
+		return $scope.activates && $scope.activates[name];
 	}
 	
 	$scope.exeMainAction = function(name){
