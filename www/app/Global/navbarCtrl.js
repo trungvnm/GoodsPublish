@@ -1,5 +1,9 @@
 angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $ionicHistory, $rootScope, $ionicModal, $timeout,$location, $ionicSideMenuDelegate, tokenService,utilService, $state,$ionicPopover, goodsService, $stateParams){
-
+	// reset data when view start change
+	$rootScope.$on('$stateChangeStart', function(ev, toState, toParams, fromState, fromParams){
+		$scope.mainActions = [];
+		$scope.subActions = [];
+	});
 	$scope.disabled = {};
 	$scope.mainActions = [];
 	$scope.subActions = [];
@@ -104,8 +108,6 @@ angular.module("LelongApp.Goods").controller('NavbarCtrl', function ($scope, $io
 	
 	// back to referrer
 	$scope.goBack = function(){
-		$scope.mainActions = [];
-		$scope.subActions = [];
 		if ($rootScope.hasChanged) {
 			if (navigator.notification) {
 				navigator.notification.confirm('You have unsaved changes, are you sure that you want to leave?', function (result) {
