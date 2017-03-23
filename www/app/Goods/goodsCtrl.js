@@ -1,4 +1,4 @@
-﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate,$stateParams) {
+﻿angular.module("LelongApp.Goods").controller('GoodsCtrl', function ($scope,$q, $rootScope, $ionicModal, $timeout, $dbHelper, $window, tokenService, goodsService,utilService, $cordovaToast, $ionicHistory, $state, $ionicTabsDelegate, xhttpService,$ionicLoading, $ionicSideMenuDelegate,$stateParams,$ionicNavBarDelegate) {
 	
 	function openSearch(){
 		var params = {};
