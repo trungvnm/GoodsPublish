@@ -139,7 +139,7 @@
 		$scope.hasRemainGoods = false;
 
 		$scope.CurrencyUnit = utilService.getCurrencyUnit();
-		$scope.strategy = utilService.getFormatCurrency(true);
+		$scope.strategy = utilService.getFormatCurrency();
 		
 		if ($scope.representer == null){
 			return;

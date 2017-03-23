@@ -23,7 +23,7 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
         if ($window.localStorage.getItem("Lelong_CurrencyUnit") != undefined)
         {
             $scope.CurrencyUnit = utilService.getCurrencyUnit();
-            $scope.strategy = utilService.getFormatCurrency(false);
+            $scope.strategy = utilService.getFormatCurrency();
         }        
 
         $scope.step = 1;

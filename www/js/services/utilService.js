@@ -17,10 +17,9 @@ angular.module('LelongApp.services')
 			}				 
 			return currencyunit;
 		};
-		self.getFormatCurrency = function(isSymbol){
+		self.getFormatCurrency = function(){
 			var currency = $window.localStorage.getItem("Lelong_CurrencyUnit");
 			var strategy = "";
-			var tail = isSymbol ? "" : "_NoSymbol";			
 			switch (currency){
 				case "VND":
 					strategy = 'priceVND';
@@ -32,7 +31,7 @@ angular.module('LelongApp.services')
 					strategy= 'priceMYR';
 					break;
 			}				 
-			return strategy + tail;      
+			return strategy;      
 		};
 		self.goDirectView = function(viewID){
 			var backView = $ionicHistory.viewHistory().views[viewID];
