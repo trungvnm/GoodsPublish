@@ -430,6 +430,7 @@
 	function resetCounter(){
 		$ionicLoading.hide();
 		$rootScope.$broadcast('reset');
+		$scope.countGoodsInTabs($scope.representer);
 	}
 	
 	
