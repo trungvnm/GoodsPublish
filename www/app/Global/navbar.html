@@ -6,7 +6,7 @@
 		</ion-nav-back-button -->
 		<ion-nav-buttons side="left">
 			<i class="fa fa-arrow-left icon button button-icon global-action ng-hide" aria-hidden="true" ng-show="!isHasAction('home')" ng-click="goBack()"></i>
-			<i class="fa fa-home icon button-icon ng-hide" aria-hidden="true" ng-show="isHasAction('home')" ng-click="goHome()"></i>
+			<i class="ion-ios-home icon button button-icon global-action ng-hide" aria-hidden="true" ng-show="isHasAction('home')" ng-click="goHome()"></i>
 		</ion-nav-buttons>
 		<ion-nav-buttons side="right" id="global-head-actions">
 			<i class="button global-action button-icon icon fa fa-upload ng-hide" ng-class="activates['upload']" ng-disabled="disabled['upload']" aria-hidden="true" ng-click="exeMainAction('upload')" ng-show="isHasAction('upload')"></i>
@@ -18,7 +18,7 @@
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" ng-class="activates['prev']" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" ng-class="activates['next']" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			
-			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>			
+			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>		
 			<button class="button icon button-icon ion-ios-search-strong ng-hide" ng-click="exeMainAction('search')" ng-show="isHasAction('search')"></button>
 		</ion-nav-buttons>
 	</ion-nav-bar>

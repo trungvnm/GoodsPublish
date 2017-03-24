@@ -43,7 +43,7 @@
                                     background-position: center, center;
                                 }
                             </style>
-                            <div class="modal image-modal ng-click="closeZoomView()" transparent" on-swipe-down="closeZoomView()">
+                            <div class="modal image-modal transparent" ng-click="closeZoomView()" on-swipe-down="closeZoomView()">
                               <ion-slide-box active-slide="ngSrc">
                                 <ion-slide ng-repeat="image in imgURI">
                                   <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
