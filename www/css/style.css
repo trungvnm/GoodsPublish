@@ -1,5 +1,5 @@
 /* Empty. Add your own CSS if you like */
-
+.bar-positive:hover{background:#387ef5 !important}
 .bar .title{
     left: 35px !important;
     right: 60px !important;
