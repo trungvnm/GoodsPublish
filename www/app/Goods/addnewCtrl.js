@@ -178,13 +178,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
            showSpinner();
             goodsService.sync([$scope.goodItem]).then(function(){
                 $cordovaToast.showLongTop('Sync successfully!').then(function () {
+                    $rootScope.$broadcast('disableMainAction', 'upload');
+                    $scope.hasChange = false;
                     $ionicHistory.clearCache().then(function () {
-                            $rootScope.$broadcast('disableMainAction', 'upload');
-                            $scope.hasChange = false;
-                            $ionicHistory.clearCache().then(function () {
-                                $scope.init();
-                            });
-                           
+                            $scope.init();
                         });
                     });
                 $ionicLoading.hide();
