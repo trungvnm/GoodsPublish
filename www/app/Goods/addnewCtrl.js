@@ -457,7 +457,11 @@ function saveClick (isShowToast) {
                 if (isShowToast) {
                     $cordovaToast.showLongTop('Update successfully!').then(function () {
                         $ionicHistory.clearCache().then(function () {
-                            $state.go('navbar.goods', {type: '2'});
+                            if ($scope.goodItem.LastSync)
+                            {
+                               $state.go('navbar.goods', { type: 2 })
+                            } else $state.go('navbar.goods', { type: 0 });
+                            
                         });
                     });
                 }
