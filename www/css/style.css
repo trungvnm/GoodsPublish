@@ -1,8 +1,9 @@
 /* Empty. Add your own CSS if you like */
 
 .bar .title{
-    left: 40px !important;
+    left: 30px !important;
     right: 60px !important;
+    padding-top: 1px;
 }
 .small{font-size: 12px}
 #goods-list{top:93px}
