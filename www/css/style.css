@@ -261,7 +261,11 @@ a.item-grid img.inlay{position: absolute !important;top:0;left:0;}
 .swiper-pagination-bullet{
     background:#4966f9
 }
-
+#addeditpage-headerbar{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 34px;
+}
 /*End Addnew page*/
 
 /*popover menu*/
