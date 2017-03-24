@@ -3,8 +3,8 @@
     <ion-header-bar class="add-new-headerbar" align-title="center">
         <div id="addnew-step2" style="width: 100%">
             <div id="addnew-photo-preview">
-                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" style="width: 130px;height: 150px;padding-top: 10px">
-                <ion-slides options="galleryOptions" slider="data.slider" ng-show="imgURI.length >2">
+                <img ng-show="imgURI.length==0" src="./img/nophoto.jpg" class="ng-hide" style="width: 130px;height: 150px;padding-top: 10px">
+                <ion-slides options="galleryOptions" class="ng-hide" slider="data.slider" ng-show="imgURI.length >2">
                     <ion-slide-page ng-repeat="image in imgURI" style="width: 130px !important">
                         <div>
                             <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
@@ -12,7 +12,7 @@
                         </div>
                     </ion-slide-page>
                 </ion-slides>          
-                <div style="width: 100%;text-align: center;" ng-show="imgURI.length >0 && imgURI.length <= 2">
+                <div style="width: 100%;text-align: center;" class="ng-hide" ng-show="imgURI.length >0 && imgURI.length <= 2">
                     <div class="gallery-custom-imagecenter" ng-repeat="image in imgURI">
                         <div class="ion-slides-delete" ng-click="deleteImg(image.PhotoUrl,image.Photoid)"></div>
                         <img style="width: 130px;height: 130px" zoom-src="{{$index}}" ng-src="{{image.PhotoUrl}}" zoom-view>

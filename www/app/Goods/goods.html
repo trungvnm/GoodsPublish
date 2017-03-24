@@ -2,10 +2,10 @@
 	<ion-nav-title>
 		<span>{{representer.title}}  ({{pubCounter}})</span>
 		<span>
-		<i class="fa fa-file-o button icon button-icon global-action" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
+		<i class="fa fa-file-o button icon button-icon global-action ng-hide" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
 			<span class="counter">{{news}}</span>
 		</i>
-		<i class="fa fa-file-text-o button icon button-icon global-action" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="modified > 0 && type != 2" ng-click="goModificationPage()">
+		<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="modified > 0 && type != 2" ng-click="goModificationPage()">
 			<span class="counter">{{modified}}</span>
 		</i>
 	 </span>
