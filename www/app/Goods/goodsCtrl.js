@@ -63,6 +63,7 @@
 	$scope.CurrencyUnit = '';
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
+	$scope.activates = {}
 	
 	// Get goods from local database and push them into a tab specified by its index
 	$scope.getGoodsInTabs = function(curRepresenter, condition, overwrite){
@@ -127,7 +128,8 @@
 		}
 		$rootScope.$broadcast("setMainActions", actions);
 		if (activeName != ''){
-			$rootScope.$broadcast("setActive", activeName);
+			$scope.activates[activeName] = 'actived';
+			//$rootScope.$broadcast("setActive", activeName);
 		}
 		
 		//get representer object of current context

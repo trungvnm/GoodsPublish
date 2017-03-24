@@ -1,14 +1,14 @@
 <ion-view ng-init="init()">
 	<ion-nav-title>
 		<span>{{representer.title}}  ({{pubCounter}})</span>
-		<span style="padding-left: 5px">
-		<i class="fa fa-file-o button icon button-icon global-action ng-hide" style="margin-left: 0px;margin-top: 3px;padding: 0px" aria-hidden="true" ng-show="news > 0  && type != 0" ng-click="goNewsPage()">
-			<span class="counter">{{news}}</span>
-		</i>
-		<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" style="margin-left: 0px;margin-top: 3px;padding: 0px" aria-hidden="true" ng-show="modified > 0 && type != 2" ng-click="goModificationPage()">
-			<span class="counter">{{modified}}</span>
-		</i>
-	 </span>
+		<span class="counter-tabs">
+			<i class="fa fa-file-o button icon button-icon global-action ng-hide" ng-class="activates['news']" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="news > 0" ng-click="goNewsPage()">
+				<span class="counter">{{news}}</span>
+			</i>
+			<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" ng-class="activates['modifications']" style="margin-left: 0px;margin-top: 5px;padding: 0px" aria-hidden="true" ng-show="modified > 0 " ng-click="goModificationPage()">
+				<span class="counter">{{modified}}</span>
+			</i>
+		 </span>
 	</ion-nav-title>
 	<ion-content class="has-header tab-content" lazy-scroll>
 		<span class="filter-caption" ng-show="filterMessage && filterMessage != ''">
