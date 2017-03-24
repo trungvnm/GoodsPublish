@@ -406,3 +406,6 @@ span.avt > div > .spinner svg{
     left: 40%;
 	position: absolute
 }
+.ng-hide.ng-hide-animate{
+     display: none !important;
+}

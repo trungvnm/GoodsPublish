@@ -101,11 +101,15 @@
 
 	$scope.countGoodsInTabs = function(cuRepresenter){
 		goodsService.countInTab(cuRepresenter.type).then(function(quantity){
+			if (quantity == 0){
+				// if has no items here, go to homepage
+				$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
+			}
 			$scope.unpubCounter = quantity;
 		});
-		goodsService.countInTab(cuRepresenter.type).then(function(qty){
-			$scope.pubCounter = qty;
-		});
+		// goodsService.countInTab(cuRepresenter.type).then(function(qty){
+			// $scope.pubCounter = qty;
+		// });
 	}
 
 	$scope.strategy = '';
