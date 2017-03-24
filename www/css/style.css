@@ -330,7 +330,11 @@ ion-popover-view.fit ion-content {
     border-radius: 2px 2px 0 0;
     box-shadow: -1px -1px 2px -1px black;
     border: none;
-    }
+}
+
+.global-action.actived:hover{
+	color: #525252
+}
 	
 .global-action.actived .counter{
 	color: white;
