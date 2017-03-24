@@ -156,10 +156,11 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                     if (result == 1) {
                      showSpinner();
                      goodsService.sync([$scope.goodItem]).then(function(){
-                        $cordovaToast.showLongTop('Sync successfully!').then(function(){
-                            $ionicHistory.clearCache().then(function(){
-                                $state.go('app.completes');
-                            });
+                         $cordovaToast.showLongTop('Sync successfully!').then(function () {
+                             $rootScope.$broadcast('disableMainAction', 'upload');
+                             $scope.hasChange = false;
+                             $scope.init();
+
                         });
                         $ionicLoading.hide();
                     },function(err){
@@ -175,8 +176,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
            showSpinner();
             goodsService.sync([$scope.goodItem]).then(function(){
                 $cordovaToast.showLongTop('Sync successfully!').then(function () {
-                        $ionicHistory.clearCache().then(function(){
-                                $state.go('app.completes');
+                    $ionicHistory.clearCache().then(function () {
+                            $rootScope.$broadcast('disableMainAction', 'upload');
+                            $scope.hasChange = false;
+                            $scope.init();
                         });
                     });
                 $ionicLoading.hide();
