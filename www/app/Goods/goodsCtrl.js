@@ -58,8 +58,8 @@
 	
 	$scope.viewmode = 'grid';
 	$scope.limit = 12;
-	$scope.unpubCounter = 0;
-	$scope.pubCounter = 0;
+	$scope.counter = 0;
+	//$scope.pubCounter = 0;
 	$scope.CurrencyUnit = '';
 	$scope.popButton = 'addnew';
 	$rootScope.$broadcast('showSearch');
@@ -105,7 +105,7 @@
 				// if has no items here, go to homepage
 				$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
 			}
-			$scope.unpubCounter = quantity;
+			$scope.counter = quantity;
 		});
 		// goodsService.countInTab(cuRepresenter.type).then(function(qty){
 			// $scope.pubCounter = qty;
