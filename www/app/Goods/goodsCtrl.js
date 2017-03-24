@@ -101,7 +101,7 @@
 
 	$scope.countGoodsInTabs = function(cuRepresenter){
 		goodsService.countInTab(cuRepresenter.type).then(function(quantity){
-			if (quantity == 0){
+			if ($scope.representer.type != 'synced' && quantity == 0){
 				// if has no items here, go to homepage
 				$ionicHistory.clearCache().then(function(){ $state.go('app.completes'); });
 			}
