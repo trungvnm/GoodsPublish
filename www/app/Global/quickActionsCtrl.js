@@ -1,4 +1,9 @@
 ﻿angular.module("LelongApp.Goods").controller('QuickActionsCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
+	// reset data when view start change
+	$rootScope.$on('$stateChangeStart', function(ev, toState, toParams, fromState, fromParams){
+		$scope.cancelSearching();
+	});
+	
     $scope.updateQuickActions = function(isQuickActions, list){
 		$scope.quickactions = isQuickActions;//globalService.getQuickAction();
 		$scope.list = list;
