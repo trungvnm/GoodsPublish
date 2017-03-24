@@ -159,7 +159,9 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                          $cordovaToast.showLongTop('Sync successfully!').then(function () {
                              $rootScope.$broadcast('disableMainAction', 'upload');
                              $scope.hasChange = false;
-                             $scope.init();
+                             $ionicHistory.clearCache().then(function () {
+                                 $scope.init();
+                             });
 
                         });
                         $ionicLoading.hide();
@@ -179,7 +181,10 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                     $ionicHistory.clearCache().then(function () {
                             $rootScope.$broadcast('disableMainAction', 'upload');
                             $scope.hasChange = false;
-                            $scope.init();
+                            $ionicHistory.clearCache().then(function () {
+                                $scope.init();
+                            });
+                           
                         });
                     });
                 $ionicLoading.hide();
