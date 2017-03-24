@@ -18,15 +18,7 @@
 			<i class="button global-action button-icon icon fa fa-angle-left ng-hide" ng-class="activates['prev']" aria-hidden="true" ng-click="exeMainAction('prev')" ng-show="isHasAction('prev')"></i>
 			<i class="button global-action button-icon icon fa fa-angle-right ng-hide" ng-class="activates['next']" aria-hidden="true" ng-click="exeMainAction('next')" ng-show="isHasAction('next')"></i>
 			
-			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>
-			<div style="position: relative;right: 65px">
-			<i class="fa fa-file-o button icon button-icon global-action ng-hide" ng-class="activates['news']" aria-hidden="true" ng-show="isHasAction('news') && news > 0" ng-click="goNewsPage()">
-				<span class="counter">{{news}}</span>
-			</i>
-			<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" ng-class="activates['modifications']" aria-hidden="true" ng-show="isHasAction('modifications') && modified > 0" ng-click="goModificationPage()">
-				<span class="counter">{{modified}}</span>
-			</i>
-			</div>
+			<i class="button global-action button-icon icon fa fa-ellipsis-v ng-hide" aria-hidden="true" ng-click="popover.show($event)" ng-show="subActions.length > 0"></i>			
 			<button class="button icon button-icon ion-ios-search-strong ng-hide" ng-click="exeMainAction('search')" ng-show="isHasAction('search')"></button>
 		</ion-nav-buttons>
 	</ion-nav-bar>

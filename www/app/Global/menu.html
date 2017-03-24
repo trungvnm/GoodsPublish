@@ -6,19 +6,9 @@
 
 			<ion-nav-buttons side="left">
 				<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-        </button>
+        		</button>
 			</ion-nav-buttons>
-			<ion-nav-buttons side="right">
-				<div style="position: relative;right: 65px">
-					<i class="fa fa-file-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="news > 0  && type != 0"
-					 ng-click="goNewsPage()">
-						<span class="counter">{{news}}</span>
-					</i>
-					<i class="fa fa-file-text-o button icon button-icon global-action ng-hide" aria-hidden="true" ng-show="modified > 0 && type != 2"
-					 ng-click="goModificationPage()">
-						<span class="counter">{{modified}}</span>
-					</i>
-				</div>
+			<ion-nav-buttons side="right">				
 				<button class="button icon button-icon ion-ios-search-strong" ng-show="showSearch" ng-click="openSearch()"></button>
 			</ion-nav-buttons>
 		</ion-nav-bar>
