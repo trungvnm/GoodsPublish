@@ -59,11 +59,15 @@ angular.module("LelongApp.Goods").controller("addnewCtrl", function ($scope, $wi
                 if(res.LastSync == undefined || res.LastSync.trim().length <=0){
                     $rootScope.$broadcast('disableSubAction','Sync');
                     $rootScope.$broadcast('enableMainAction','upload');
-                }else if((res.LastSync != undefined && res.LastEdited !=undefined) 
+                }
+                else{
+                    $rootScope.$broadcast('enableSubAction','Sync');
+                } 
+                if((res.LastSync != undefined && res.LastEdited !=undefined) 
                     && (res.LastSync.trim().length >0 && res.LastEdited.trim().length >0)
                     && (!angular.equals(res.LastSync.trim(),res.LastEdited.trim()))){
                     /*Good modified then enabled upload button */      
-                    $rootScope.$broadcast('enableMainAction','upload');
+                    $rootScope.$broadcast('enableMainAction','upload');                    
                 }
                 watchGoodsObject(2000);         
             });
