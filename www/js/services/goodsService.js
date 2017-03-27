@@ -8,28 +8,12 @@ angular.module('LelongApp.services')
 		var syncAllApi = "http://d00dd351.ngrok.io/api/goods/getall";
 
 		// Delete all photos of a good
-		function deletePhotosByGood(goodId, callBack) {
-			$dbHelper.select('GoodsPublishPhoto', '*', "GoodPublishId='" + goodId + "'").then(function (result) {
-				try {
-					var photoPaths = [];
-					//if (result && result.length > 0) {
-					result.forEach(function (photo) {
-						photoPaths.push(photo.PhotoUrl);
-					});
-
-					$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
-						if (callBack) {
-							callBack();
-						}
-					});
-					//}
-				}
-				catch (err){
-					if (callBack){
-						callBack(err);
-					}
-				}
-			})
+		function deletePhotosByGood(goodId) {
+			var deffered=$q.defer();
+			$dbHelper.delete("GoodsPublishPhoto", "GoodPublishId = '" + goodId + "'").then(function (res) {
+				deffered.resolve(true);
+			});
+			return deffered.promise;
 		}
 
 		// download photos of a good from server 
@@ -677,7 +661,7 @@ angular.module('LelongApp.services')
 												var cId = goods[i].GoodPublishId;
 
 												// clear old photos
-												//deletePhotosByGood(cId, function () {
+												deletePhotosByGood(cId).then(function (result) {
 												// download photos
 													if ((!listPhoto || listPhoto.length == 0) && finish){
 														deffered.resolve(true);
@@ -692,7 +676,7 @@ angular.module('LelongApp.services')
 															downloadPhotosOfGood(cId, goods[i], listPhoto);
 														}
 													}
-												//});
+												});
 												goods[i] = newGood;
 												break;
 											};
@@ -731,8 +715,10 @@ angular.module('LelongApp.services')
 						$q.all(goodPros).then(function (result) {
 							deffered.resolve(result);
 
-							//download all image that not exist in local
-							downloadPhotos(result);
+							deletePhotosByGood(cId).then(function (res) {
+								//download all image that not exist in local
+								downloadPhotos(result);
+							});
 						},function(err){
 							deffered.reject(err);
 						});
